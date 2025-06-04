@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/date_info.dart';
 import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/progress_view.dart';
+import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/project_name.dart';
 
 
 class ProjectTitleSection extends StatelessWidget{
@@ -11,12 +12,7 @@ class ProjectTitleSection extends StatelessWidget{
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('프로젝트 1',
-              style : TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
+            ProjectName(title: '프로젝트 2'), // 추후 변경
             Padding(padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,3 +26,4 @@ class ProjectTitleSection extends StatelessWidget{
     );
   }
 }
+
