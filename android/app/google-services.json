@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "717972600889",
+    "project_id": "todomodu-4c419",
+    "storage_bucket": "todomodu-4c419.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717972600889:android:e9e000f21abad1499935e8",
+        "android_client_info": {
+          "package_name": "com.todomodu.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717972600889-l1sl9bjt48lq72c0p7nps62jecttr7o7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdcEuLR_hSoLZ2-XunHGwaKrBsfBr9-Uc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717972600889-l1sl9bjt48lq72c0p7nps62jecttr7o7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "717972600889-5d5k62lc0a97v0a6r2kb2gggifeqcl7c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.todomoduApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
