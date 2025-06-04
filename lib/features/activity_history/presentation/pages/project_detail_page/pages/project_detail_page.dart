@@ -79,10 +79,30 @@ class ProjectDetailPage extends StatelessWidget{
                 ),
               ],
             ),),
+            const SizedBox(height: 16,),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
+            const Text('팀원',
+            style: TextStyle(fontSize: 18,
+            fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 2,),
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: Colors.orange[400],
+                ),
+                const Spacer(),
+                OutlinedButton(
+                  onPressed: () {}, 
+                child: const Text('팀원 초대 +'),
+                ),
+              ],
+            )
+
           ],
         ),)],
         ),
