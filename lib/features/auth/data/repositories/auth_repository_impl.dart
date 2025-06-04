@@ -10,9 +10,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  @override
-  Future<UserCredential?> signInWithGoogle() async {
-    final credential = await _authDataSource.signInWithGoogle();
+  Future<UserCredential?> signInWithCredential(
+    OAuthCredential? credential,
+  ) async {
     if (credential == null) {
       return null;
     }
@@ -21,12 +21,16 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<UserCredential?> signInWithGoogle() async {
+    final credential = await _authDataSource.signInWithGoogle();
+    final userCredential = signInWithCredential(credential);
+    return userCredential;
+  }
+
+  @override
   Future<UserCredential?> signInWithKakao() async {
     final credential = await _authDataSource.signInWithKakao();
-    if (credential == null) {
-      return null;
-    }
-    final userCredential = await _firebaseAuth.signInWithCredential(credential);
+    final userCredential = signInWithCredential(credential);
     return userCredential;
   }
 
