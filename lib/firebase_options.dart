@@ -66,4 +66,5 @@ class DefaultFirebaseOptions {
     androidClientId: '717972600889-pqghflsta6kv06s5m5smusv2mlp9r6th.apps.googleusercontent.com',
     iosBundleId: 'com.todomodu.app',
   );
+
 }
