@@ -11,11 +11,9 @@ class DateInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-        style: TextStyle(color: Colors.black87)),
+        Text(label, style: TextStyle(color: Colors.black87)),
         const SizedBox(height: 2),
-        Text(date,
-        style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(date, style: TextStyle(fontWeight: FontWeight.bold)),
       ],
     );
   }
