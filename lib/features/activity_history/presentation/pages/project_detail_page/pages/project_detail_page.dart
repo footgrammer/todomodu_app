@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/project_title_section.dart';
 
 class ProjectDetailPage extends StatelessWidget{
   const ProjectDetailPage({super.key});
@@ -19,66 +20,7 @@ class ProjectDetailPage extends StatelessWidget{
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('프로젝트 1',
-              style : TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('시작일',
-                    style: TextStyle(color: Colors.black87),),
-                    const SizedBox(height: 2,),
-                    Text('년.월.일',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('종료일',
-                    style: TextStyle(color: Colors.black87),),
-                    const SizedBox(height: 2,),
-                    Text('년.월.일',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('진척도', //진행도?
-                    style: TextStyle(color: Colors.black87),),
-                    const SizedBox(height: 2,),
-                    Row(
-                      children: [
-                        Text('50%',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 8,),
-                        SizedBox(
-                          width: 60,
-                          height: 6,
-                          child: LinearProgressIndicator(
-                            value: 0.5,
-                            backgroundColor: Colors.grey[300],
-                            color: Colors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                    
-                  ],
-                ),
-              ],
-            ),),
+            const ProjectTitleSection(),
             const SizedBox(height: 16,),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
