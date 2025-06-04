@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/project_tab_bar.dart';
 import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/project_title_section.dart';
 import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/team_member_section.dart';
 
@@ -23,25 +24,12 @@ class ProjectDetailPage extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ProjectTitleSection(),
+            ProjectTitleSection(), //프로젝트 제목, 시작일, 종료일, 진척도
             const SizedBox(
               height: 16,
             ),
-            TeamMemberSection(),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: const TabBar(
-                labelColor: Colors.black87,
-                unselectedLabelColor: Colors.grey,
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicatorColor: Colors.black87,
-                tabs: [
-                  Tab(text: '할일'),
-                  Tab(text: '공지'),
-                  Tab(text: '타임라인'),
-                ],
-              ),
-            ),
+            TeamMemberSection(), // 팀원 표시, 팀원 초대
+            ProjectTabBar(),
           ],
         ),
       ),
