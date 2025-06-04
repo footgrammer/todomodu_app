@@ -85,7 +85,7 @@ class ProjectDetailPage extends StatelessWidget{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('팀원',
-            style: TextStyle(fontSize: 18,
+            style: TextStyle(fontSize: 16,
             fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 2,),
@@ -101,10 +101,25 @@ class ProjectDetailPage extends StatelessWidget{
                 child: const Text('팀원 초대 +'),
                 ),
               ],
-            )
+            ),
 
           ],
-        ),)],
+        ),
+        ),
+        
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: const TabBar(
+            labelColor: Colors.black87,
+            unselectedLabelColor: Colors.grey,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorColor: Colors.black87,
+            tabs: [
+              Tab(text: '할일'),
+              Tab(text: '공지'),
+              Tab(text: '타임라인'),
+            ],),
+        ),],
         ),
       ),
     );
