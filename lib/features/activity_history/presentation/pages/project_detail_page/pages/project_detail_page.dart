@@ -10,7 +10,7 @@ class ProjectDetailPage extends StatelessWidget{
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('프로젝트 상세'), // 나중에는 프로젝트 각 명칭으로 바꿔도 좋을 듯
+          title: const Text('프로젝트 상세'), // 나중에는 프로젝트 로고?
           leading: const BackButton(),
           actions: const [
             Icon(Icons.more_vert),
