@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todomodu_app/features/auth/data/datasources/auth_data_source.dart';
 import 'package:todomodu_app/features/auth/domain/repositories/auth_repository.dart';
@@ -9,6 +10,7 @@ class AuthRepositoryImpl implements AuthRepository {
     : _authDataSource = authDataSource;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<UserCredential?> signInWithCredential(
     OAuthCredential? credential,
@@ -20,17 +22,41 @@ class AuthRepositoryImpl implements AuthRepository {
     return userCredential;
   }
 
+  Future<void> createUserData(User user) async {
+    final docRef = _firestore.collection('users').doc(user.uid);
+    await docRef.set({
+      'userId': user.uid,
+      'email': user.email ?? '',
+      'name': user.displayName ?? '',
+      'profileImageUrl': user.photoURL ?? '',
+    });
+  }
+
   @override
   Future<UserCredential?> signInWithGoogle() async {
     final credential = await _authDataSource.signInWithGoogle();
-    final userCredential = signInWithCredential(credential);
+    final userCredential = await signInWithCredential(credential);
+    final user = userCredential?.user;
+    if (user == null) return null;
+
+    final userDoc = await _firestore.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+      createUserData(user);
+    }
     return userCredential;
   }
 
   @override
   Future<UserCredential?> signInWithKakao() async {
     final credential = await _authDataSource.signInWithKakao();
-    final userCredential = signInWithCredential(credential);
+    final userCredential = await signInWithCredential(credential);
+    final user = userCredential?.user;
+    if (user == null) return null;
+
+    final userDoc = await _firestore.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+      createUserData(user);
+    }
     return userCredential;
   }
 
