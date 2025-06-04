@@ -27,7 +27,10 @@ class _NoticeCreateFormState extends State<NoticeCreateForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('공지 제목',
-              style: TextStyle(),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+              ),
             ),
             TextFormField(
               controller: titleInputController,
@@ -38,7 +41,10 @@ class _NoticeCreateFormState extends State<NoticeCreateForm> {
             ),
             SizedBox(height: 30,),
             Text('공지 내용',
-              style: TextStyle(),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+              ),
             ),
             TextFormField(
               controller: contentInputController,
