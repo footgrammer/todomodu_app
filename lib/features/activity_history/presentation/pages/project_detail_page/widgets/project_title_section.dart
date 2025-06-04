@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/date_info.dart';
+import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/progress_view.dart';
+
 
 class ProjectTitleSection extends StatelessWidget{
   const ProjectTitleSection({super.key});
@@ -21,32 +23,7 @@ class ProjectTitleSection extends StatelessWidget{
               children: [
                 DateInfo(label: '시작일', date: '년.월.일'), // entity 데이터 교체
                 DateInfo(label: '종료일', date: '년.월.일'), // 추후 데이터 교체
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('진척도', //진행도?
-                    style: TextStyle(color: Colors.black87),),
-                    const SizedBox(height: 2,),
-                    Row(
-                      children: [
-                        Text('50%',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 8,),
-                        SizedBox(
-                          width: 60,
-                          height: 6,
-                          child: LinearProgressIndicator(
-                            value: 0.5,
-                            backgroundColor: Colors.grey[300],
-                            color: Colors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                    
-                  ],
-                ),
+                const ProgressView(progress: 0.6) // 추후 데이터 교체
               ],
             ),),
       ],
