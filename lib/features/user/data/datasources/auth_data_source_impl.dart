@@ -10,11 +10,9 @@ class AuthDataSourceImpl implements AuthDataSource {
     : _firebaseAuth = firebaseAuth;
 
   final FirebaseAuth _firebaseAuth;
-
+  final GoogleSignIn googleSignIn = GoogleSignIn();
   @override
   Future<OAuthCredential?> signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-
     try {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) return null;
@@ -56,7 +54,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
-    await GoogleSignIn().signOut();
+    await googleSignIn.signOut();
     if (await AuthApi.instance.hasToken()) {
       await UserApi.instance.logout();
     }
