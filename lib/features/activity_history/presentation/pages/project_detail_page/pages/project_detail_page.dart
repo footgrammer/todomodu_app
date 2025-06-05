@@ -29,10 +29,24 @@ class ProjectDetailPage extends StatelessWidget {
               height: 16,
             ),
             TeamMemberSection(), // 팀원 표시, 팀원 초대
-            ProjectTabBar(),
+            ProjectTabBar(), // 프로젝트 상세페이지 하단 탭 바
           ],
         ),
-      ),
+floatingActionButton: Container(
+  height: 50,
+  child: FloatingActionButton.extended(
+            backgroundColor: Colors.grey[700],
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(44)
+            ),
+            onPressed: () {
+              debugPrint('할 일 추가 버튼 클릭');
+            },
+            label: const Text('할 일 추가 +'),
+          ),
+),
+    )
     );
   }
 }
