@@ -15,13 +15,17 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Stream<UserDto?> getCurrentUser() {
-    return _firebaseAuth.authStateChanges().asyncMap((user) async {
-      if (user == null) return null;
-
-      final doc = await _firestore.collection('users').doc(user.uid).get();
-      if (!doc.exists) return null;
-
-      return UserDto.fromJson(doc.data()!);
+    return _firebaseAuth.authStateChanges().asyncExpand((user) {
+      if (user == null) {
+        return Stream.value(null);
+      } else {
+        return _firestore.collection('users').doc(user.uid).snapshots().map((
+          doc,
+        ) {
+          if (!doc.exists) return null;
+          return UserDto.fromJson(doc.data()!);
+        });
+      }
     });
   }
 }
