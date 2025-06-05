@@ -8,7 +8,30 @@ class AddTodoPage extends StatefulWidget {
 }
 
 class _AddTodoPageState extends State<AddTodoPage> {
-  
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now();
+
+  Future<void> _pickDate(bool isStart) async {
+    final DateTime initial = isStart ? _startDate : _endDate;
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        if (isStart) {
+          _startDate = picked;
+        } else {
+          _endDate = picked;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,37 +84,43 @@ class _AddTodoPageState extends State<AddTodoPage> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('2025.05.40',
-                        style: TextStyle(fontSize: 16)),
-                        Icon(Icons.calendar_today_outlined, size: 18,)
-                      ],
+                  child: InkWell(
+                    onTap: () => _pickDate(true),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${_startDate.year}.${_startDate.month.toString().padLeft(2, '0')}.${_startDate.day.toString().padLeft(2, '0')}',
+                          style: TextStyle(fontSize: 16)),
+                          Icon(Icons.calendar_today_outlined, size: 18,)
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(width: 24),
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('2025.05.40',
-                        style: TextStyle(fontSize: 16)),
-                        Icon(Icons.calendar_today_outlined, size: 18,)
-                      ],
+                  child: InkWell(
+                    onTap: () => _pickDate(false),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${_endDate.year}.${_endDate.month.toString().padLeft(2, '0')}.${_endDate.day.toString().padLeft(2, '0')}',
+                          style: TextStyle(fontSize: 16)),
+                          Icon(Icons.calendar_today_outlined, size: 18,)
+                        ],
+                      ),
                     ),
                   ),
                 ),
