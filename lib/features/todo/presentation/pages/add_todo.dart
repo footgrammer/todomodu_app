@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/date_picker_box.dart';
 
 class AddTodoPage extends StatefulWidget {
   const AddTodoPage({super.key});
@@ -32,11 +33,11 @@ class _AddTodoPageState extends State<AddTodoPage> {
           if (picked.isBefore(_startDate)) {
             _endDate = _startDate;
           } else {
-          _endDate = picked;
+            _endDate = picked;
+          }
         }
-      }
-    });
-  }
+      });
+    }
   }
 
   @override
@@ -49,92 +50,60 @@ class _AddTodoPageState extends State<AddTodoPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              '할 일 이름',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            '할 일 이름',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            decoration: InputDecoration(
+              hintText: '할 일 1',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              filled: true,
+              fillColor: Colors.grey[300],
             ),
-            const SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                hintText: '할 일 1',
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                filled: true,
-                fillColor: Colors.grey[300],
+          ),
+          const SizedBox(height: 24),
+          Row(
+            children: [
+              Expanded(
+                child: const Text(
+                  '시작일',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: const Text(
-                    '시작일',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+              SizedBox(
+                width: 24,
+              ),
+              Expanded(
+                child: const Text(
+                  '종료일',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 24,),
-                Expanded(
-                  child: const Text(
-                    '종료일',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: DatePickerBox(
+                  date: _startDate,
+                  onTap: () => _pickDate(true),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () => _pickDate(true),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('${_startDate.year}.${_startDate.month.toString().padLeft(2, '0')}.${_startDate.day.toString().padLeft(2, '0')}',
-                          style: TextStyle(fontSize: 16)),
-                          Icon(Icons.calendar_today_outlined, size: 18,)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 24),
-                Expanded(
-                  child: InkWell(
-                    onTap: () => _pickDate(false),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('${_endDate.year}.${_endDate.month.toString().padLeft(2, '0')}.${_endDate.day.toString().padLeft(2, '0')}',
-                          style: TextStyle(fontSize: 16)),
-                          Icon(Icons.calendar_today_outlined, size: 18,)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
+              ),
+              SizedBox(width: 24),
+              Expanded(
+                  child: DatePickerBox(
+                      date: _endDate, onTap: () => _pickDate(false)))
+            ],
+          ),
+        ]),
       ),
     );
   }
