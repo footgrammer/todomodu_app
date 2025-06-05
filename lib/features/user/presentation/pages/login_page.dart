@@ -21,9 +21,13 @@ class LoginPage extends ConsumerWidget {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const Text('USERID'),
                   Text(user.userId),
+                  const Text('NAME'),
                   Text(user.name),
+                  const Text('URL'),
                   Text(user.profileImageUrl),
+                  const Text('EMAIL'),
                   Text(user.email),
                   ElevatedButton(
                     onPressed: () async {
