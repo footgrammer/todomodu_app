@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/notice/presentation/pages/notice_create_page.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_page.dart';
 
 class TodomoduApp extends StatelessWidget {
@@ -12,7 +14,47 @@ class TodomoduApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: ProjectPage(),
+      home: SafeArea(
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              children: [
+                Builder(
+                  builder: (context) {
+                    return moveToPage(context, ProjectPage(), 'projectPage');
+                  }
+                ),
+                Builder(
+                  builder: (context) {
+                    return moveToPage(context, NoticeCreatePage(), 'noticeCreatePage');
+                  }
+                ),
+                Builder(
+                  builder: (context) {
+                    return moveToPage(context, ProjectDetailPage(), 'projectDetailPage');
+                  }
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  ElevatedButton moveToPage(BuildContext context, Widget page, String text) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return page;
+            },
+          ),
+        );
+      },
+      child: Text(text),
     );
   }
 }
