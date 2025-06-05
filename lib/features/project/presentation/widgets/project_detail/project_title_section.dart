@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/date_info.dart';
-import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/progress_view.dart';
-import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/widgets/project_name.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/date_info.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/progress_view.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/project_name.dart';
 
 class ProjectTitleSection extends StatelessWidget {
   const ProjectTitleSection({super.key});

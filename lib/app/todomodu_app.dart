@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_create_page.dart';
-import 'package:todomodu_app/features/activity_history/presentation/pages/project_detail_page/pages/project_detail_page.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_page.dart';
 
 class TodomoduApp extends StatelessWidget {
@@ -27,6 +27,11 @@ class TodomoduApp extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     return moveToPage(context, NoticeCreatePage(), 'noticeCreatePage');
+                  }
+                ),
+                Builder(
+                  builder: (context) {
+                    return moveToPage(context, ProjectDetailPage(), 'projectDetailPage');
                   }
                 ),
               ],
