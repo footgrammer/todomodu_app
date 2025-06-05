@@ -13,7 +13,7 @@ class TodomoduApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: ProjectDetailPage(),
+      home: ProjectPage(),
     );
   }
 }
