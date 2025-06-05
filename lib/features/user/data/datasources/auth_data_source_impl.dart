@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
-import 'package:todomodu_app/features/auth/data/datasources/auth_data_source.dart';
+import 'package:todomodu_app/features/user/data/datasources/auth_data_source.dart';
 
 class AuthDataSourceImpl implements AuthDataSource {
   AuthDataSourceImpl({required FirebaseAuth firebaseAuth})
