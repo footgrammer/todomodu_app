@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 
 class TodomoduApp extends StatelessWidget {
   const TodomoduApp({super.key});
@@ -19,6 +20,11 @@ class TodomoduApp extends StatelessWidget {
           body: Center(
             child: Column(
               children: [
+                Builder(
+                  builder: (context) {
+                    return moveToPage(context, LoginPage(), 'LoginPage');
+                  }
+                ),
                 Builder(
                   builder: (context) {
                     return moveToPage(context, ProjectPage(), 'projectPage');
