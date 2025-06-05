@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todomodu_app/features/project/presentation/pages/project_detail_page/widgets/project_tab_bar.dart';
-import 'package:todomodu_app/features/project/presentation/pages/project_detail_page/widgets/project_title_section.dart';
-import 'package:todomodu_app/features/project/presentation/pages/project_detail_page/widgets/team_member_section.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/project_tab_bar.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/project_title_section.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/team_member_section.dart';
 
 class ProjectDetailPage extends StatelessWidget {
   const ProjectDetailPage({super.key});

@@ -1,4 +1,4 @@
-import 'package:todomodu_app/features/sub_task/domain/entities/sub_task.dart';
+import 'package:todomodu_app/features/todo/domain/entities/sub_task.dart';
 
 class Todo {
   String id;
