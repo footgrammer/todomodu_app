@@ -25,7 +25,13 @@ class _AddTodoPageState extends State<AddTodoPage> {
       setState(() {
         if (isStart) {
           _startDate = picked;
+          if (_startDate.isAfter(_endDate)) {
+            _endDate = _startDate;
+          }
         } else {
+          if (picked.isBefore(_startDate)) {
+            _endDate = _startDate;
+          } else {}
           _endDate = picked;
         }
       });
