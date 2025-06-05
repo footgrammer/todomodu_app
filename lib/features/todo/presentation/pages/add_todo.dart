@@ -31,11 +31,12 @@ class _AddTodoPageState extends State<AddTodoPage> {
         } else {
           if (picked.isBefore(_startDate)) {
             _endDate = _startDate;
-          } else {}
+          } else {
           _endDate = picked;
         }
-      });
-    }
+      }
+    });
+  }
   }
 
   @override
