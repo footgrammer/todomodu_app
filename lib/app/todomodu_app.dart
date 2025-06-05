@@ -3,6 +3,7 @@ import 'package:todomodu_app/features/notice/presentation/pages/notice_create_pa
 import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
 
 class TodomoduApp extends StatelessWidget {
   const TodomoduApp({super.key});
@@ -38,6 +39,11 @@ class TodomoduApp extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     return moveToPage(context, ProjectDetailPage(), 'projectDetailPage');
+                  }
+                ),
+                Builder(
+                  builder: (context) {
+                    return moveToPage(context, MyPage(), 'MyPage');
                   }
                 ),
               ],
