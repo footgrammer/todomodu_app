@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/providers/auth_providers.dart';
@@ -32,6 +33,7 @@ class LoginPage extends ConsumerWidget {
                   ElevatedButton(
                     onPressed: () async {
                       await auth.signOut();
+                      ref.invalidate(userProvider);
                     },
                     child: Text('로그아웃'),
                   ),

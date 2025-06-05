@@ -15,7 +15,7 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Stream<UserDto?> getCurrentUser() {
-    return _firebaseAuth.authStateChanges().asyncExpand((user) {
+    return _firebaseAuth.userChanges().asyncExpand((user) {
       if (user == null) {
         return Stream.value(null);
       } else {
