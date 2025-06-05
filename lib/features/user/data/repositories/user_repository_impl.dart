@@ -11,12 +11,7 @@ class UserRepositoryImpl implements UserRepository {
   Stream<UserEntity?> getCurrentUser() {
     return _userDataSource.getCurrentUser().map((userDto) {
       if (userDto == null) return null;
-      return UserEntity(
-        userId: userDto.userId,
-        name: userDto.name,
-        profileImageUrl: userDto.profileImageUrl,
-        email: userDto.email,
-      );
+      return userDto.toEntity();
     });
   }
 }

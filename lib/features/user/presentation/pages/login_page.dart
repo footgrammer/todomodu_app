@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/user/providers/auth_providers.dart';
-import 'package:todomodu_app/features/user/providers/user_providers.dart';
+import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
+import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});

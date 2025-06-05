@@ -1,3 +1,5 @@
+import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
+
 class UserDto {
   final String userId;
   final String name;
@@ -26,5 +28,14 @@ class UserDto {
       'profileImageUrl': profileImageUrl,
       'email': email,
     };
+  }
+
+  UserEntity toEntity() {
+    return UserEntity(
+      userId: userId,
+      name: name,
+      profileImageUrl: profileImageUrl,
+      email: email,
+    );
   }
 }
