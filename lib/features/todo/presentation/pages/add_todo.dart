@@ -12,6 +12,8 @@ class _AddTodoPageState extends State<AddTodoPage> {
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
 
+  List<TextEditingController> _subTaskControllers = [];
+
   Future<void> _pickDate(bool isStart) async {
     final DateTime initial = isStart ? _startDate : _endDate;
 
@@ -39,6 +41,13 @@ class _AddTodoPageState extends State<AddTodoPage> {
       });
     }
   }
+
+  void _addSubTask() {
+    setState(() {
+      _subTaskControllers.add(TextEditingController());
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
