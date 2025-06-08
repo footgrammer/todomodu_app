@@ -42,9 +42,17 @@ class _AddTodoPageState extends State<AddTodoPage> {
     }
   }
 
+//할 일 추가 함수
   void _addSubTask() {
     setState(() {
       _subTaskControllers.add(TextEditingController());
+    });
+  }
+
+  void _removeSubTask(int index) {
+    setState(() {
+      _subTaskControllers[index].dispose();
+      _subTaskControllers.removeAt(index);
     });
   }
 
