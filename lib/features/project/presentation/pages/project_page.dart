@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/data/models/Project.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project/project_search_bar.dart';
 
 class User {
   final String id;
@@ -103,7 +104,7 @@ class ProjectPage extends ConsumerWidget {
   const ProjectPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final codeController = ref.watch(projectCodeControllerProvider);
+    final controller = ref.watch(projectCodeControllerProvider);
 
     return GestureDetector(
       onTap: () {
@@ -115,7 +116,7 @@ class ProjectPage extends ConsumerWidget {
           padding: EdgeInsets.all(20),
           child: Column(
             children: [
-              getProjectSearchBar(codeController),
+              ProjectSearchBar(controller: controller),
               SizedBox(height: 16),
               ProjectCardList(projects: projects),
             ],
@@ -131,33 +132,6 @@ class ProjectPage extends ConsumerWidget {
           icon: Icon(Icons.add, color: Colors.white),
           backgroundColor: Color(0xFF5752EA),
         ),
-      ),
-    );
-  }
-
-  Container getProjectSearchBar(TextEditingController codeController) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Color.fromRGBO(0, 0, 0, 0.05),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.search, size: 24),
-          SizedBox(width: 8),
-          Expanded(
-            child: TextFormField(
-              controller: codeController,
-              style: TextStyle(fontSize: 16),
-              decoration: InputDecoration(
-                hintText: '프로젝트 코드를 입력하세요',
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
