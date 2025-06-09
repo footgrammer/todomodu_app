@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/project_tab_bar.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/project_title_section.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/team_member_section.dart';
-import 'package:todomodu_app/features/todo/presentation/pages/add_todo.dart';
+import 'package:todomodu_app/features/todo/presentation/pages/add_todo_page.dart';
 
 class ProjectDetailPage extends StatelessWidget {
   const ProjectDetailPage({super.key});
