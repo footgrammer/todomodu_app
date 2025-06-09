@@ -20,13 +20,27 @@ class NoticeDto {
 
   Map<String, dynamic> toJson() {
     return {
-      'id' : id,
-      'projectId' : projectId,
-      'title' : title,
-      'content' : content,
-      'checkedUsers' : checkedUsers.map((e) => e.toJson()).toList(),
-      'createdAt' : createdAt,
+      'id': id,
+      'projectId': projectId,
+      'title': title,
+      'content': content,
+      'checkedUsers': checkedUsers.map((e) => e.toJson()).toList(),
+      'createdAt': createdAt,
     };
+  }
+
+  factory NoticeDto.fromJson(Map<String, dynamic> map) {
+    return NoticeDto(
+      id: map['id'] as String,
+      projectId: map['projectId'] as String,
+      title: map['title'] as String,
+      content: map['content'] as String,
+      checkedUsers:
+          (map['checkedUsers'] as List<dynamic>)
+              .map((e) => UserDto.fromJson(e as Map<String, dynamic>))
+              .toList(),
+      createdAt: DateTime.parse(map['createdAt']),
+    );
   }
 
   Notice toEntity() {
