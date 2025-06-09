@@ -23,7 +23,7 @@ final _openaiUsercaseProvider = Provider<FetchOpenaiResponseUsecase>((ref) {
 });
 
 final openaiResponseProvider = FutureProvider.autoDispose
-    .family<OpenaiResponse?, String>((ref, prompt) {
+    .family<OpenaiResponse?, String>((ref, prompt) async {
       final openaiUsecase = ref.read(_openaiUsercaseProvider);
-      return openaiUsecase.execute(prompt);
+      return await openaiUsecase.execute(prompt);
     });
