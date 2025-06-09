@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/date_picker_box.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/submit_button.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_sub_task_list.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
@@ -95,27 +96,11 @@ class _AddTodoPageState extends State<AddTodoPage> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 70),
-        child: SizedBox(
-          width: double.infinity,
-          height: 52,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey[300],
-              textStyle: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                )
-              ),
-            onPressed: () {},
-            child: const Text('완료'),
-          ),
-        ),
-      ),
+      bottomNavigationBar: SubmitButton(
+        label: '완료',
+        onPressed: () {},),
     );
   }
 }
+
 
