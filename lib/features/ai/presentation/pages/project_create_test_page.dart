@@ -38,7 +38,7 @@ class _ProjectCreateTestPageState extends ConsumerState<ProjectCreateTestPage> {
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formkey,
-            child: Column(
+            child: ListView(
               children: [
                 TextFormField(
                   controller: _titleController,
@@ -46,11 +46,17 @@ class _ProjectCreateTestPageState extends ConsumerState<ProjectCreateTestPage> {
                 ),
                 TextFormField(
                   controller: _starDateController,
-                  decoration: InputDecoration(labelText: '프로젝트 시작 날짜 입력'),
+                  decoration: InputDecoration(
+                    labelText: '프로젝트 시작 날짜 입력',
+                    hintText: 'ex) 2025-01-01',
+                  ),
                 ),
                 TextFormField(
                   controller: _endDateController,
-                  decoration: InputDecoration(labelText: '프로젝트 종료 날짜 입력'),
+                  decoration: InputDecoration(
+                    labelText: '프로젝트 종료 날짜 입력',
+                    hintText: '2025-12-31',
+                  ),
                 ),
                 TextFormField(
                   controller: _promptController,
@@ -76,44 +82,40 @@ class _ProjectCreateTestPageState extends ConsumerState<ProjectCreateTestPage> {
                 if (responseAsyncValue != null) ...[
                   responseAsyncValue.when(
                     data: (response) {
-                      return Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("프로젝트 타이틀: ${response!.projectTitle}"),
-                              Text('프로젝트 설명: ${response.projectDescription}'),
-                              Text(
-                                '프로젝트 기간: ${response.projectStartDate} ~ ${response.projectEndDate}',
-                              ),
-                              ...List.generate(response.todos.length, (index) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '투두${index + 1} 타이틀: ${response.todos[index].todoTitle}',
-                                    ),
-                                    Text(
-                                      '투두 기간: ${response.todos[index].todoStartDate} ~ ${response.todos[index].todoEndDate}',
-                                    ),
-                                    Text(
-                                      'subTasks: ${response.todos[index].subTasks}',
-                                    ),
-                                  ],
-                                );
-                              }),
-                            ],
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Project Title: ${response!.projectTitle}"),
+                          Text(
+                            'Project Descreption: ${response.projectDescription}',
                           ),
-                        ),
+                          Text(
+                            'Project Period: ${response.projectStartDate} ~ ${response.projectEndDate}',
+                          ),
+                          const Divider(),
+                          ...List.generate(response.todos.length, (index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Todo${index + 1} Title: ${response.todos[index].todoTitle}',
+                                ),
+                                Text(
+                                  'Todo Period: ${response.todos[index].todoStartDate} ~ ${response.todos[index].todoEndDate}',
+                                ),
+                                Text(
+                                  'SubTasks: ${response.todos[index].subTasks}',
+                                ),
+                                const Divider(),
+                              ],
+                            );
+                          }),
+                        ],
                       );
                     },
                     loading: () => const CircularProgressIndicator(),
                     error: (e, stack) {
-                      return Expanded(
-                        child: SingleChildScrollView(
-                          child: Text("오류: $e, $stack"),
-                        ),
-                      );
+                      return Text("오류: $e, $stack");
                     },
                   ),
                 ],
