@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/date_picker_box.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/todo_sub_task_list.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
 
 class AddTodoPage extends StatefulWidget {
@@ -84,38 +85,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
               const SizedBox(
                 height: 8,
               ),
-              Column(
-                children: List.generate(_subTaskControllers.length, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _subTaskControllers[index],
-                            decoration: InputDecoration(
-                                hintText: '세부 할일',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                filled: true,
-                                fillColor: Colors.grey[300],
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 14, vertical: 14)),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        IconButton(
-                            onPressed: () => _removeSubTask(index),
-                            icon: const Icon(Icons.remove_circle_outline)),
-                      ],
-                    ),
-                  );
-                }),
-              ),
+              TodoSubTaskList(controllers: _subTaskControllers, onRemove: _removeSubTask),
               Center(
                 child: IconButton(
                     onPressed: _addSubTask,
