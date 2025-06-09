@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/date_picker_box.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/submit_button.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
-import 'package:todomodu_app/features/todo/presentation/widgets/todo_sub_task_list.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/sub_task/sub_task_list.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
 
 class AddTodoPage extends StatefulWidget {
@@ -86,7 +86,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
               const SizedBox(
                 height: 8,
               ),
-              TodoSubTaskList(controllers: _subTaskControllers, onRemove: _removeSubTask),
+              TodoSubTaskList(controllers: _subTaskControllers, onRemove: _removeSubTask,),
               Center(
                 child: IconButton(
                     onPressed: _addSubTask,
