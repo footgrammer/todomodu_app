@@ -12,18 +12,18 @@ final _openaiDataSourceProvider = Provider<OpenaiDataSource>((ref) {
   return OpenaiDataSourceImpl(dio: Dio());
 });
 
-final openaiRepositoryProvider = Provider<OpenaiRepository>((ref) {
+final _openaiRepositoryProvider = Provider<OpenaiRepository>((ref) {
   final openaiDataSource = ref.read(_openaiDataSourceProvider);
   return OpenaiRepositoryImpl(openaiDataSource: openaiDataSource);
 });
 
-final openaiUsercaseProvider = Provider<FetchOpenaiResponseUsecase>((ref) {
-  final openaiRepository = ref.read(openaiRepositoryProvider);
+final _openaiUsercaseProvider = Provider<FetchOpenaiResponseUsecase>((ref) {
+  final openaiRepository = ref.read(_openaiRepositoryProvider);
   return FetchOpenaiResponseUsecaseImpl(openaiRepository: openaiRepository);
 });
 
 final openaiResponseProvider = FutureProvider.autoDispose
     .family<OpenaiResponse?, String>((ref, prompt) {
-      final openaiUsecase = ref.read(openaiUsercaseProvider);
+      final openaiUsecase = ref.read(_openaiUsercaseProvider);
       return openaiUsecase.execute(prompt);
     });
