@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/data/models/Project.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_search_bar.dart';
 
@@ -124,7 +125,12 @@ class ProjectPage extends ConsumerWidget {
         ),
         // ➕ 플로팅 버튼
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProjectCreatePage()),
+            );
+          },
           label: Text(
             '프로젝트 추가',
             style: TextStyle(color: Colors.white, fontSize: 18),
