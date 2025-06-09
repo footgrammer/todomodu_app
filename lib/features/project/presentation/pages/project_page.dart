@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/data/models/Project.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
 
 class User {
   final String id;
@@ -104,6 +105,7 @@ class ProjectPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final codeController = ref.watch(projectCodeControllerProvider);
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus(); // ✅ 현재 포커스 해제
@@ -116,14 +118,7 @@ class ProjectPage extends ConsumerWidget {
             children: [
               getProjectSearchBar(codeController),
               SizedBox(height: 16),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: projects.length,
-                  itemBuilder: (context, index) {
-                    return ProjectCard(index: index, project: projects[index]);
-                  },
-                ),
-              ),
+              ProjectCardList(projects: projects),
             ],
           ),
         ),
