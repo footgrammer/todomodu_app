@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project/member_icon.dart';
 
 class ProjectMemberIcons extends ConsumerWidget {
   ProjectMemberIcons({super.key});
@@ -18,19 +19,7 @@ class ProjectMemberIcons extends ConsumerWidget {
             children: List.generate(3, (i) {
               return Positioned(
                 left: i * 18, // 겹치는 정도 조절
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white, // 실제 이미지 대신 배경색
-                    border: Border.all(color: Colors.white, width: 2),
-                    image: DecorationImage(
-                      image: AssetImage('assets/avatar_placeholder.png'), // 예시
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                child: MemberIcon(name: 'Junseok Yang'),
               );
             })..add(
               // +n 동그라미
@@ -41,8 +30,8 @@ class ProjectMemberIcons extends ConsumerWidget {
                   height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: Colors.white, width: 2),
+                    color: Colors.grey.shade300,
+                    border: Border.all(color: Colors.white, width: 1),
                   ),
                   child: Center(
                     child: Text(

@@ -11,11 +11,12 @@ class ProjectCardList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
-      child: ListView.builder(
+      child: ListView.separated(
         itemCount: projects == null ? 0 : projects!.length,
         itemBuilder: (context, index) {
           return ProjectCard(index: index, project: projects![index]);
         },
+        separatorBuilder: (context, index) => SizedBox(height: 12),
       ),
     );
   }
