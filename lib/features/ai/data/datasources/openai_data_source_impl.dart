@@ -13,35 +13,37 @@ class OpenaiDataSourceImpl implements OpenaiDataSource {
   final Dio _dio;
   final String _apiKey = dotenv.env['OPENAI_API_KEY']!;
   @override
-  Future<List<OpenaiResponseDto>?> fetchOpenaiResponse(String prompt) async {
-    final systemPrompt = await rootBundle.loadString(
-      'assets/prompts/prompt.txt',
-    );
+  Future<OpenaiResponseDto?> fetchOpenaiResponse(String prompt) async {
+    try {
+      final systemPrompt = await rootBundle.loadString(
+        'assets/prompts/prompt.txt',
+      );
 
-    final response = await _dio.post(
-      'https://api.openai.com/v1/chat/completions',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $_apiKey',
-          'Content-Type': 'application/json',
+      final response = await _dio.post(
+        'https://api.openai.com/v1/chat/completions',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $_apiKey',
+            'Content-Type': 'application/json',
+          },
+        ),
+        data: {
+          'model': 'gpt-3.5-turbo',
+          'messages': [
+            {'role': 'system', 'content': systemPrompt},
+            {'role': 'user', 'content': prompt},
+          ],
+          'max_tokens': 1000,
         },
-      ),
-      data: {
-        'model': 'gpt-3.5-turbo',
-        'messages': [
-          {'role': 'system', 'content': systemPrompt},
-          {'role': 'user', 'content': prompt},
-        ],
-        'max_tokens': 100,
-      },
-    );
-    log('${response.statusCode}');
+      );
+      log('${response.statusCode}');
 
-    if (response.statusCode == 200) {
-      final result = response.data;
-      return List.from(jsonDecode(result)).map((e) {
-        return OpenaiResponseDto.fromJson(e);
-      }).toList();
+      if (response.statusCode == 200) {
+        final result = response.data;
+        return OpenaiResponseDto.fromJson(result);
+      }
+    } catch (e, stack) {
+      log('$e, $stack');
     }
     return null;
   }
