@@ -11,9 +11,9 @@ class OpenaiRepositoryImpl implements OpenaiRepository {
 
   @override
   Future<OpenaiResponse?> fetchOpenaiResponse(String prompt) async {
-    final List<OpenaiResponseDto>? openaiDto = await _openaiDataSource
+    final OpenaiResponseDto? openaiDto = await _openaiDataSource
         .fetchOpenaiResponse(prompt);
     if (openaiDto == null) return null;
-    return openaiDto.first.toEntity();
+    return openaiDto.toEntity();
   }
 }
