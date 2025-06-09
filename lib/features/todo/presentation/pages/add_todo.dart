@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/date_picker_box.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
 
 class AddTodoPage extends StatefulWidget {
@@ -74,42 +75,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
             children: [
               TodoTitleInput(),
               const SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: const Text(
-                      '시작일',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 24,
-                  ),
-                  Expanded(
-                    child: const Text(
-                      '종료일',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerBox(
-                      date: _startDate,
-                      onTap: () => _pickDate(true),
-                    ),
-                  ),
-                  SizedBox(width: 24),
-                  Expanded(
-                      child: DatePickerBox(
-                          date: _endDate, onTap: () => _pickDate(false)))
-                ],
-              ),
+              TodoDateSection(startDate: _startDate, endDate: _endDate, onStartTap: () => _pickDate(true), onEndTap: () => _pickDate(false)),
               const SizedBox(height: 24),
               const Text(
                 '할 일 목록',
