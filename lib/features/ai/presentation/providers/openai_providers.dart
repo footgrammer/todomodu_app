@@ -6,8 +6,8 @@ import 'package:todomodu_app/features/ai/data/repositories/openai_repository_imp
 import 'package:todomodu_app/features/ai/domain/models/openai_params.dart';
 import 'package:todomodu_app/features/ai/domain/models/openai_response.dart';
 import 'package:todomodu_app/features/ai/domain/repositories/openai_repository.dart';
-import 'package:todomodu_app/features/ai/domain/usecases/fetch_openai_response_usecase.dart';
-import 'package:todomodu_app/features/ai/domain/usecases/fetch_openai_response_usecase_impl.dart';
+import 'package:todomodu_app/features/ai/domain/usecases/create_project_plan_usecase.dart';
+import 'package:todomodu_app/features/ai/domain/usecases/create_project_plan_usecase_impl.dart';
 
 final _openaiDataSourceProvider = Provider<OpenaiDataSource>((ref) {
   return OpenaiDataSourceImpl(dio: Dio());
@@ -18,7 +18,7 @@ final _openaiRepositoryProvider = Provider<OpenaiRepository>((ref) {
   return OpenaiRepositoryImpl(openaiDataSource: openaiDataSource);
 });
 
-final _openaiUsercaseProvider = Provider<FetchOpenaiResponseUsecase>((ref) {
+final _openaiUsercaseProvider = Provider<CreateProjectPlanUsecase>((ref) {
   final openaiRepository = ref.read(_openaiRepositoryProvider);
   return FetchOpenaiResponseUsecaseImpl(openaiRepository: openaiRepository);
 });

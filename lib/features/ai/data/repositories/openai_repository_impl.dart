@@ -11,7 +11,7 @@ class OpenaiRepositoryImpl implements OpenaiRepository {
   final OpenaiDataSource _openaiDataSource;
 
   @override
-  Future<OpenaiResponse?> fetchOpenaiResponse(OpenaiParams openaiParams) async {
+  Future<OpenaiResponse?> createProjectPlan(OpenaiParams openaiParams) async {
     final OpenaiResponseDto? openaiDto = await _openaiDataSource
         .fetchOpenaiResponse(openaiParams);
     if (openaiDto == null) return null;
