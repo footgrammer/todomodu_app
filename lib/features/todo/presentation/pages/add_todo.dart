@@ -42,20 +42,20 @@ class _AddTodoPageState extends State<AddTodoPage> {
     }
   }
 
-//할 일 추가 함수
+//세부 할 일 추가 함수
   void _addSubTask() {
     setState(() {
       _subTaskControllers.add(TextEditingController());
     });
   }
 
+//세부 할 일 삭제 함수
   void _removeSubTask(int index) {
     setState(() {
       _subTaskControllers[index].dispose();
       _subTaskControllers.removeAt(index);
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,60 +67,108 @@ class _AddTodoPageState extends State<AddTodoPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text(
-            '할 일 이름',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              hintText: '할 일 1',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              filled: true,
-              fillColor: Colors.grey[300],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '할 일 이름',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-          ),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              Expanded(
-                child: const Text(
-                  '시작일',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            const SizedBox(height: 8),
+            TextField(
+              decoration: InputDecoration(
+                hintText: '할 일 1',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                filled: true,
+                fillColor: Colors.grey[300],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: const Text(
+                    '시작일',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 24,
-              ),
-              Expanded(
-                child: const Text(
-                  '종료일',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                SizedBox(
+                  width: 24,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: DatePickerBox(
-                  date: _startDate,
-                  onTap: () => _pickDate(true),
+                Expanded(
+                  child: const Text(
+                    '종료일',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              SizedBox(width: 24),
-              Expanded(
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
                   child: DatePickerBox(
-                      date: _endDate, onTap: () => _pickDate(false)))
-            ],
-          ),
-        ]),
+                    date: _startDate,
+                    onTap: () => _pickDate(true),
+                  ),
+                ),
+                SizedBox(width: 24),
+                Expanded(
+                    child: DatePickerBox(
+                        date: _endDate, onTap: () => _pickDate(false)))
+              ],
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              '할 일 목록',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Column(
+              children: List.generate(_subTaskControllers.length, (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _subTaskControllers[index],
+                          decoration: InputDecoration(
+                              hintText: '세부 할일',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey[300],
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 14)),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      IconButton(
+                          onPressed: () => _removeSubTask(index),
+                          icon: const Icon(Icons.remove_circle_outline)),
+                    ],
+                  ),
+                );
+              }),
+            ),
+            Center(
+              child: IconButton(
+                  onPressed: _addSubTask,
+                  icon: const Icon(Icons.add_circle_outline, size: 36)),
+            )
+          ],
+        ),
       ),
     );
   }
