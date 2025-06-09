@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/data/datasources/user_data_source.dart';
 import 'package:todomodu_app/features/user/data/datasources/user_data_source_impl.dart';
 import 'package:todomodu_app/features/user/data/repositories/user_repository_impl.dart';
-import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/domain/repositories/user_repository.dart';
 import 'package:todomodu_app/features/user/domain/usecases/get_current_user_usecase_impl.dart';
 

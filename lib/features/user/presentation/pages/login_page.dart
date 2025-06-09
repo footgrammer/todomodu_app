@@ -22,7 +22,7 @@ class LoginPage extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('USERID'),
-                  Text(user.userId),
+                  Text(user.id),
                   const Text('NAME'),
                   Text(user.name),
                   const Text('URL'),
