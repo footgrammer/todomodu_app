@@ -1,5 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/data/models/Project.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project/project_card.dart';
+
+class User {
+  final String id;
+  final String name;
+
+  User({required this.id, required this.name});
+}
+
+class Todo {
+  final String id;
+  final String content;
+  final bool isDone;
+
+  Todo({required this.id, required this.content, required this.isDone});
+}
+
+final dummyOwner = User(id: 'u1', name: '홍길동');
+final dummyMembers = [User(id: 'u2', name: '김철수'), User(id: 'u3', name: '이영희')];
+
+final dummyTodos = [
+  Todo(id: 't1', content: '첫 번째 할 일', isDone: true),
+  Todo(id: 't2', content: '두 번째 할 일', isDone: false),
+];
+
+final List<Project> projects = [
+  Project(
+    id: 'p1',
+    title: '프로젝트 1의 제목입니다',
+    description: '이것은 첫 번째 프로젝트입니다.',
+    color: Color(0xFF9FB2DA), // 연한 파란색
+    startDate: DateTime(2025, 5, 29),
+    endDate: DateTime(2025, 7, 4),
+    // owner: dummyOwner,
+    // members: dummyMembers,
+    // todos: dummyTodos,
+    invitationCode: 'INV123',
+    isDone: false,
+  ),
+  Project(
+    id: 'p2',
+    title: '프로젝트 2의 제목입니다',
+    description: '두 번째 프로젝트에 대한 설명입니다.',
+    color: Color(0xFFB769A3), // 연한 초록색
+    startDate: DateTime(2025, 6, 1),
+    endDate: DateTime(2025, 7, 15),
+    // owner: dummyOwner,
+    // members: dummyMembers,
+    // todos: dummyTodos,
+    invitationCode: 'INV456',
+    isDone: false,
+  ),
+  Project(
+    id: 'p3',
+    title: '프로젝트 3의 제목입니다',
+    description: '세 번째 프로젝트를 위한 테스트 데이터입니다.',
+    color: Color(0xFF706FBF), // 연한 주황색
+    startDate: DateTime(2025, 6, 10),
+    endDate: DateTime(2025, 8, 1),
+    // owner: dummyOwner,
+    // members: dummyMembers,
+    // todos: dummyTodos,
+    invitationCode: 'INV789',
+    isDone: true,
+  ),
+  Project(
+    id: 'p3',
+    title: '프로젝트 4의 제목입니다',
+    description: '세 번째 프로젝트를 위한 테스트 데이터입니다.',
+    color: Color(0xFF706FBF), // 연한 주황색
+    startDate: DateTime(2025, 6, 10),
+    endDate: DateTime(2025, 8, 1),
+    // owner: dummyOwner,
+    // members: dummyMembers,
+    // todos: dummyTodos,
+    invitationCode: 'INV789',
+    isDone: true,
+  ),
+  Project(
+    id: 'p3',
+    title: '프로젝트 5의 제목입니다',
+    description: '세 번째 프로젝트를 위한 테스트 데이터입니다.',
+    color: Color(0xFF706FBF), // 연한 주황색
+    startDate: DateTime(2025, 6, 10),
+    endDate: DateTime(2025, 8, 1),
+    // owner: dummyOwner,
+    // members: dummyMembers,
+    // todos: dummyTodos,
+    invitationCode: 'INV789',
+    isDone: true,
+  ),
+];
 
 final projectCodeControllerProvider =
     Provider.autoDispose<TextEditingController>(
@@ -21,35 +114,56 @@ class ProjectPage extends ConsumerWidget {
           padding: EdgeInsets.all(20),
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Color.fromRGBO(0, 0, 0, 0.05),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search, size: 24),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextFormField(
-                        controller: codeController,
-                        style: TextStyle(fontSize: 16),
-                        decoration: InputDecoration(
-                          hintText: '프로젝트 코드를 입력하세요',
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
+              getProjectSearchBar(codeController),
+              SizedBox(height: 16),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: projects.length,
+                  itemBuilder: (context, index) {
+                    return ProjectCard(index: index, project: projects[index]);
+                  },
                 ),
               ),
-              SizedBox(height: 16),
-              Expanded(child: ListView(children: [Text('haha')])),
             ],
           ),
         ),
+        // ➕ 플로팅 버튼
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {},
+          label: Text(
+            '프로젝트 추가',
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          icon: Icon(Icons.add, color: Colors.white),
+          backgroundColor: Color(0xFF5752EA),
+        ),
+      ),
+    );
+  }
+
+  Container getProjectSearchBar(TextEditingController codeController) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Color.fromRGBO(0, 0, 0, 0.05),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.search, size: 24),
+          SizedBox(width: 8),
+          Expanded(
+            child: TextFormField(
+              controller: codeController,
+              style: TextStyle(fontSize: 16),
+              decoration: InputDecoration(
+                hintText: '프로젝트 코드를 입력하세요',
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
