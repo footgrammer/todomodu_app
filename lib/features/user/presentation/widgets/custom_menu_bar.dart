@@ -9,22 +9,19 @@ class CustomMenuBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(text, style: TextStyle(fontSize: 18)),
-            IconButton(
-              onPressed: () {
-                log('메뉴바 버튼 클릭');
-              },
-              icon: Icon(Icons.chevron_right, size: 24),
-            ),
-          ],
-        ),
+    return SizedBox(
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(text, style: TextStyle(fontSize: 18)),
+          IconButton(
+            onPressed: () {
+              log('메뉴바 버튼 클릭');
+            },
+            icon: Icon(Icons.chevron_right, size: 24),
+          ),
+        ],
       ),
     );
   }

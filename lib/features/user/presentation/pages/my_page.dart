@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/custom_menu_bar.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/profile_image.dart';
+import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
 class MyPage extends ConsumerWidget {
   const MyPage({super.key});
@@ -25,54 +26,50 @@ class MyPage extends ConsumerWidget {
                 onPressed: () {
                   log('알림 버튼 클릭');
                 },
-                icon: Icon(CupertinoIcons.bell),
+                icon: CustomIcon(name: 'bell'),
               ),
             ],
           ),
           body: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 8),
-                ProfileImage(),
-                const SizedBox(height: 8),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox.square(dimension: 20),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        user!.name,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ProfileImage(profileImageUrl: user!.profileImageUrl),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 4, 4, 0),
+                        child: Text(user.name, style: TextStyle(fontSize: 22)),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          log('닉네임 변경 버튼 클릭');
+                        },
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          color: Colors.transparent,
+                          child: CustomIcon(
+                            name: 'Edit_Pencil_Line_01',
+                            size: 18,
+                            color: Colors.grey[700],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 2),
-                    GestureDetector(
-                      onTap: () {
-                        log('닉네임 변경 버튼 클릭');
-                      },
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        color: Colors.transparent,
-                        child: Icon(Icons.edit_outlined),
-                      ),
-                    ),
-                  ],
-                ),
-                Text(user.email),
-                const SizedBox(height: 18),
-                CustomMenuBar(text: '종료된 프로젝트'),
-                CustomMenuBar(text: '알림 설정'),
-                const SizedBox(height: 18),
-                CustomMenuBar(text: '이용약관 및 개인정보 처리방침'),
-                CustomMenuBar(text: '버전 정보'),
-                CustomMenuBar(text: '로그아웃'),
-              ],
+                    ],
+                  ),
+                  Text(user.email),
+                  const SizedBox(height: 18),
+                  CustomMenuBar(text: '종료된 프로젝트'),
+                  CustomMenuBar(text: '알림 설정'),
+                  const SizedBox(height: 18),
+                  CustomMenuBar(text: '이용약관 및 개인정보 처리방침'),
+                  CustomMenuBar(text: '버전 정보'),
+                  CustomMenuBar(text: '로그아웃'),
+                ],
+              ),
             ),
           ),
         );
