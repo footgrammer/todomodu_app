@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart' as kakao;
 import 'package:todomodu_app/features/user/data/datasources/auth_data_source.dart';
 import 'package:todomodu_app/features/user/domain/repositories/auth_repository.dart';
 
@@ -52,7 +55,9 @@ class AuthRepositoryImpl implements AuthRepository {
     final userCredential = await signInWithCredential(credential);
     final user = userCredential?.user;
     if (user == null) return null;
-
+    final profile = await kakao.TalkApi.instance.profile();
+    await user.updateDisplayName(profile.nickname);
+    await user.updatePhotoURL(profile.profileImageUrl);
     final userDoc = await _firestore.collection('users').doc(user.uid).get();
     if (!userDoc.exists) {
       createUserData(user);
