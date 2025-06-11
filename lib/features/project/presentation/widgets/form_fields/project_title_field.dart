@@ -4,8 +4,13 @@ import 'package:todomodu_app/features/project/presentation/widgets/project/proje
 
 class ProjectTitleField extends ConsumerWidget {
   TextEditingController titleController;
+  FocusNode titleFocusNode;
 
-  ProjectTitleField({super.key, required this.titleController});
+  ProjectTitleField({
+    super.key,
+    required this.titleController,
+    required this.titleFocusNode,
+  });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -24,6 +29,8 @@ class ProjectTitleField extends ConsumerWidget {
           child: Expanded(
             child: TextFormField(
               controller: titleController,
+              focusNode: titleFocusNode,
+              maxLength: 30,
               style: TextStyle(fontSize: 16),
               decoration: InputDecoration(
                 hintText: '프로젝트 이름을 입력하세요',
