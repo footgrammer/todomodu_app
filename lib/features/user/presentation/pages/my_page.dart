@@ -44,15 +44,10 @@ class MyPage extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ProfileImage(
-                        profileImageUrl: user?.profileImageUrl ?? '',
-                      ),
+                      ProfileImage(user: user!),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 4, 4, 0),
-                        child: Text(
-                          user?.name ?? '',
-                          style: TextStyle(fontSize: 22),
-                        ),
+                        child: Text(user.name, style: TextStyle(fontSize: 22)),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -60,9 +55,8 @@ class MyPage extends ConsumerWidget {
                           showDialog(
                             context: context,
                             builder:
-                                (context) => EditNicknameDialog(
-                                  userId: user?.userId ?? '',
-                                ),
+                                (context) =>
+                                    EditNicknameDialog(userId: user.userId),
                           );
                         },
                         child: Container(
