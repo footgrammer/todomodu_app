@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TodoTitleInput extends StatelessWidget {
+  final TextEditingController controller;
+
   const TodoTitleInput({
     super.key,
+    required this.controller,
   });
 
   @override

@@ -15,11 +15,22 @@ class AddTodoPage extends StatefulWidget {
   State<AddTodoPage> createState() => _AddTodoPageState();
 }
 
+
 class _AddTodoPageState extends State<AddTodoPage> {
+    final _titleController = TextEditingController();
+
+
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
 
   List<TextEditingController> _subTaskControllers = [];
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
 
   Future<void> _pickDate(bool isStart) async {
     final DateTime initial = isStart ? _startDate : _endDate;
@@ -78,7 +89,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TodoTitleInput(),
+              TodoTitleInput(controller: _titleController,),
               const SizedBox(height: 24),
               TodoDateSection(startDate: _startDate, endDate: _endDate, onStartTap: () => _pickDate(true), onEndTap: () => _pickDate(false)),
               const SizedBox(height: 24),
