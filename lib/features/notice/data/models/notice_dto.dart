@@ -63,4 +63,22 @@ class NoticeDto {
       createdAt: entity.createdAt,
     );
   }
+
+  NoticeDto copyWith({
+    String? id,
+    String? projectId,
+    String? title,
+    String? content,
+    List<String>? checkedUsers,
+    DateTime? createdAt,
+  }) {
+    return NoticeDto(
+      id: id ?? this.id,
+      projectId: projectId ?? this.projectId,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      checkedUsers: checkedUsers ?? List.from(this.checkedUsers),
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }
