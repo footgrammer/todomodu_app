@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/features/user/presentation/widgets/dual_action_buttons.dart';
 
 class EditNicknameDialog extends StatefulWidget {
   const EditNicknameDialog({super.key, required this.userId});
@@ -26,7 +27,7 @@ class _EditNicknameDialogState extends State<EditNicknameDialog> {
       child: Dialog(
         backgroundColor: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 32, 20, 0),
+          padding: const EdgeInsets.only(top: 32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +37,10 @@ class _EditNicknameDialogState extends State<EditNicknameDialog> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 24,
+                ),
                 child: TextField(
                   controller: _nickNameController,
                   decoration: InputDecoration(
@@ -59,49 +63,22 @@ class _EditNicknameDialogState extends State<EditNicknameDialog> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  return DualActionButtons(
+                    onCancel: () {
                       Navigator.pop(context);
                     },
-                    child: Text(
-                      '취소',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0XFFCAC7DA),
-                      ),
-                    ),
-                  ),
-                  Consumer(
-                    builder: (
-                      BuildContext context,
-                      WidgetRef ref,
-                      Widget? child,
-                    ) {
-                      return TextButton(
-                        onPressed: () {
-                          final userRepo = ref.read(userRepositoryProvider);
-                          userRepo.changeUserNickname(
-                            widget.userId,
-                            _nickNameController.text.trim(),
-                          );
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '확인',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0XFF5752EA),
-                          ),
-                        ),
+                    onConfirm: () {
+                      final userRepo = ref.read(userRepositoryProvider);
+                      userRepo.changeUserNickname(
+                        widget.userId,
+                        _nickNameController.text.trim(),
                       );
+                      Navigator.pop(context);
                     },
-                  ),
-                ],
+                  );
+                },
               ),
             ],
           ),
