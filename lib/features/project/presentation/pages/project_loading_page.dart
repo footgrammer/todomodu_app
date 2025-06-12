@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_todo_page.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_loading_progress.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_loading_task_text.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_loading_text.dart';
 
 class ProjectLoadingPage extends ConsumerWidget {
   final Future<void> requestChatGPTApi;
@@ -16,11 +19,13 @@ class ProjectLoadingPage extends ConsumerWidget {
     // API 대기 시작 (최초 한 번만 실행)
     ref.listen<ProjectProgressState>(projectProgressProvider, (prev, next) {
       if (next.percent == 0.25) {
-        controller.waitForApi(requestChatGPTApi, () {
+        controller.waitForApi(requestChatGPTApi, () async {
           if (context.mounted) {
             Navigator.of(
               context,
             ).push(MaterialPageRoute(builder: (_) => ProjectCreateTodoPage()));
+            await Future.delayed(Duration(seconds: 1));
+            controller.reset();
           }
         });
       }
@@ -33,7 +38,6 @@ class ProjectLoadingPage extends ConsumerWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -49,98 +53,13 @@ class ProjectLoadingPage extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: 180,
-                    height: 180,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox.expand(
-                          child: CircularProgressIndicator(
-                            value: progress.percent,
-                            strokeWidth: 8,
-                            valueColor: AlwaysStoppedAnimation(
-                              Color(0xFF5752EA),
-                            ),
-                            backgroundColor: Colors.grey.shade300,
-                          ),
-                        ),
-                        Text(
-                          '${(progress.percent * 100).round()}%',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ProjectLoadingProgress(progress: progress),
                   SizedBox(height: 48),
-
-                  Text(
-                    '할 일 목록 생성 중...',
-                    style: TextStyle(
-                      color: Color(0xFF403F4B),
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '프로젝트에 딱 맞는 할 일을 찾고 있어요',
-                    style: TextStyle(
-                      color: Color(0xFF8C8AA0),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  ProjectLoadingText(),
                   SizedBox(height: 48),
-                  Column(
-                    children: List.generate(stepMessages.length, (i) {
-                      final active = i <= progress.stepIndex;
-                      final icon =
-                          active
-                              ? Icon(
-                                Icons.check_circle,
-                                color: Color(0xFF5752EA),
-                              )
-                              : Icon(
-                                Icons.radio_button_unchecked,
-                                color: Colors.grey,
-                              );
-                      return Container(
-                        height: 64,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 20,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          children: [
-                            icon,
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                stepMessages[i],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight:
-                                      active
-                                          ? FontWeight.w600
-                                          : FontWeight.normal,
-                                  color:
-                                      active ? Color(0xFF403F4B) : Colors.grey,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
+                  ProjectLoadingTaskText(
+                    stepMessages: stepMessages,
+                    progress: progress,
                   ),
                 ],
               ),

@@ -24,8 +24,9 @@ final descriptionFocusNodeProvider = Provider.autoDispose<FocusNode>(
   (ref) => FocusNode(),
 );
 
-final startDateProvider = StateProvider<DateTime?>((ref) => null);
-final endDateProvider = StateProvider<DateTime?>((ref) => null);
+// 시작일, 종료일 provider
+final startDateProvider = StateProvider.autoDispose<DateTime?>((ref) => null);
+final endDateProvider = StateProvider.autoDispose<DateTime?>((ref) => null);
 
 class ProjectCreatePage extends ConsumerWidget {
   const ProjectCreatePage({super.key});

@@ -75,6 +75,10 @@ class ProgressController extends Notifier<ProjectProgressState> {
     await Future.delayed(Duration(seconds: 1));
     onComplete();
   }
+
+  void reset() {
+    state = ProjectProgressState.initial();
+  }
 }
 
 class _StepInfo {

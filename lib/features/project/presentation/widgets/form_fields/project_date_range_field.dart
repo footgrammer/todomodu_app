@@ -4,8 +4,8 @@ import 'package:todomodu_app/features/project/presentation/widgets/form_fields/p
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_label.dart';
 
 class ProjectDateRangeField extends ConsumerWidget {
-  final StateProvider<DateTime?> startDateProvider;
-  final StateProvider<DateTime?> endDateProvider;
+  final AutoDisposeStateProvider<DateTime?> startDateProvider;
+  final AutoDisposeStateProvider<DateTime?> endDateProvider;
 
   const ProjectDateRangeField({
     super.key,
