@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 
@@ -44,13 +45,25 @@ class LoginPage extends ConsumerWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      await auth.signInWithGoogle();
+                      final userCred = await auth.signInWithGoogle();
+                      if(userCred != null){
+                        // 임시로 마이페이지로 이동
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return MyPage();
+                        }));
+                      }
                     },
                     child: Text('구글 로그인'),
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      await auth.signInWithKakao();
+                      final userCred = await auth.signInWithKakao();
+                         if(userCred != null){
+                        // 임시로 마이페이지로 이동
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return MyPage();
+                        }));
+                      }
                     },
                     child: Text('카카오 로그인'),
                   ),
