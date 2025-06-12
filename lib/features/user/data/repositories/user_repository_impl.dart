@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
 import 'package:todomodu_app/features/user/data/datasources/user_data_source.dart';
 import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
 import 'package:todomodu_app/features/user/domain/repositories/user_repository.dart';
