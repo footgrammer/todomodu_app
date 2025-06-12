@@ -1,3 +1,4 @@
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/application/usecases/create_todo_usecase.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/date_picker_box.dart';
@@ -34,18 +35,6 @@ class _AddTodoPageState extends State<AddTodoPage> {
     super.dispose();
   }
 
-  void _addSubTask() {
-    setState(() {
-      _subTaskControllers.add(TextEditingController());
-    });
-  }
-
-  void _removeSubTask(int index) {
-    setState(() {
-      _subTaskControllers[index].dispose();
-      _subTaskControllers.removeAt(index);
-    });
-  }
 
 
   Future<void> _pickDate(bool isStart) async {
