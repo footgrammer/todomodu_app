@@ -1,10 +1,9 @@
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/custom_menu_bar.dart';
+import 'package:todomodu_app/features/user/presentation/widgets/edit_nickname_dialog.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/profile_image.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
@@ -20,19 +19,22 @@ class MyPage extends ConsumerWidget {
       data: (user) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('마이', style: TextStyle(fontWeight: FontWeight.bold)),
+            title: const Text(
+              '마이',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             actions: [
               IconButton(
                 onPressed: () {
                   log('알림 버튼 클릭');
                 },
-                icon: CustomIcon(name: 'bell'),
+                icon: const CustomIcon(name: 'bell'),
               ),
             ],
           ),
           body: Center(
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
                   Row(
@@ -46,6 +48,12 @@ class MyPage extends ConsumerWidget {
                       GestureDetector(
                         onTap: () {
                           log('닉네임 변경 버튼 클릭');
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) =>
+                                    EditNicknameDialog(userId: user.userId),
+                          );
                         },
                         child: Container(
                           width: 28,
@@ -60,7 +68,6 @@ class MyPage extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  Text(user.email),
                   const SizedBox(height: 18),
                   CustomMenuBar(text: '종료된 프로젝트'),
                   CustomMenuBar(text: '알림 설정'),
