@@ -42,16 +42,19 @@ class NoticeDataSourceImpl implements NoticeDatasource {
 
   @override
   Future<Result<NoticeDto>> createNotice(NoticeDto notice) async {
+    print('projectId: ${notice.projectId}');
     try {
-      final docRef = _firestore
-          .collection('projects')
-          .doc(notice.projectId)
-          .collection('notices')
-          .doc(notice.id);
+      final docRef =
+          _firestore
+              .collection('projects')
+              .doc(notice.projectId)
+              .collection('notices')
+              .doc(); // <- 여기 인자를 넣지 않으면 Firestore가 자동 ID 생성
 
-      await docRef.set(notice.toJson());
+      final noticeWithId = notice.copyWith(id: docRef.id);
+      await docRef.set(noticeWithId.toJson());
 
-      return Result.ok(notice);
+      return Result.ok(noticeWithId);
     } catch (e) {
       return Result.error(Exception('Failed to create notice: $e'));
     }
