@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/todo/application/usecases/create_todo_usecase.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/date_picker_box.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/submit_button.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
@@ -6,7 +7,9 @@ import 'package:todomodu_app/features/todo/presentation/widgets/sub_task/sub_tas
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
 
 class AddTodoPage extends StatefulWidget {
-  const AddTodoPage({super.key});
+  final CreateTodoUseCase createTodoUseCase;
+
+  const AddTodoPage({super.key, required this.createTodoUseCase});
 
   @override
   State<AddTodoPage> createState() => _AddTodoPageState();
