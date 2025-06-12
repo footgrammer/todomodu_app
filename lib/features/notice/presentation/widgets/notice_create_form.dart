@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class NoticeCreateForm extends StatefulWidget {
-  const NoticeCreateForm({super.key});
+  const NoticeCreateForm({required this.onContentChanged, required this.onTitleChanged, super.key});
+  final void Function(String) onTitleChanged;
+  final void Function(String) onContentChanged;
 
   @override
   State<NoticeCreateForm> createState() => _NoticeCreateFormState();
@@ -34,6 +36,9 @@ class _NoticeCreateFormState extends State<NoticeCreateForm> {
             ),
             TextFormField(
               controller: titleInputController,
+              onChanged: (value) {
+                widget.onTitleChanged(value);
+              },
               decoration: InputDecoration(
                 hintText: '공지 제목을 입력하세요',
                 border: OutlineInputBorder()
@@ -47,6 +52,9 @@ class _NoticeCreateFormState extends State<NoticeCreateForm> {
               ),
             ),
             TextFormField(
+              onChanged: (value) {
+                widget.onContentChanged(value);
+              },
               controller: contentInputController,
               decoration: InputDecoration(
                 hintText: '공지 내용을 입력하세요',

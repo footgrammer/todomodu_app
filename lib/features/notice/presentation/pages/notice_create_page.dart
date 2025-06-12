@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_create_form.dart';
 
-class NoticeCreatePage extends StatelessWidget {
-  const NoticeCreatePage({super.key});
+class NoticeCreatePage extends ConsumerWidget {
+  const NoticeCreatePage({required this.projectId, super.key});
+  final String projectId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewmodel = ref.watch(noticeCreateViewModelProvider(projectId).notifier);
+    final state = ref.watch(noticeCreateViewModelProvider(projectId));
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(title: Text('공지 작성하기')),
@@ -15,10 +21,19 @@ class NoticeCreatePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                NoticeCreateForm(),
+                NoticeCreateForm(
+                  onTitleChanged: (title) {
+                    viewmodel.setTitle(title);
+                  },
+                  onContentChanged: (content) {
+                    viewmodel.setContent(content);
+                  },
+                ),
                 Spacer(),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    viewmodel.submit();
+                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 56),
                     padding: EdgeInsets.all(10),

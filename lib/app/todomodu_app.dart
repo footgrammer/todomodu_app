@@ -33,7 +33,7 @@ class TodomoduApp extends StatelessWidget {
                 ),
                 Builder(
                   builder: (context) {
-                    return moveToPage(context, NoticeCreatePage(), 'noticeCreatePage');
+                    return moveToPage(context, NoticeCreatePage(projectId: 'VcVvriWkKw7nheYmkbxF'), 'noticeCreatePage');
                   }
                 ),
                 Builder(
