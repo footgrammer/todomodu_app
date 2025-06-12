@@ -1,12 +1,12 @@
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
-import 'package:todomodu_app/features/user/data/models/user_dto.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class NoticeDto {
   String id;
   String projectId;
   String title;
   String content;
-  List<UserDto> checkedUsers;
+  List<String> checkedUsers;
   DateTime createdAt;
 
   NoticeDto({
@@ -24,8 +24,8 @@ class NoticeDto {
       'projectId': projectId,
       'title': title,
       'content': content,
-      'checkedUsers': checkedUsers.map((e) => e.toJson()).toList(),
-      'createdAt': createdAt,
+      'checkedUsers': checkedUsers,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
@@ -35,21 +35,20 @@ class NoticeDto {
       projectId: map['projectId'] as String,
       title: map['title'] as String,
       content: map['content'] as String,
-      checkedUsers:
-          (map['checkedUsers'] as List<dynamic>)
-              .map((e) => UserDto.fromJson(e as Map<String, dynamic>))
-              .toList(),
+      checkedUsers: List<String>.from(map['checkedUsers'] ?? []),
       createdAt: DateTime.parse(map['createdAt']),
     );
   }
 
-  Notice toEntity() {
+  /// `checkedUsers`에는 userId만 있으므로,
+  /// 실제 UserEntity 리스트는 외부에서 주입받아야 함
+  Notice toEntity({required List<UserEntity> fullCheckedUsers}) {
     return Notice(
       id: id,
       projectId: projectId,
       title: title,
       content: content,
-      checkedUsers: checkedUsers.map((e) => e.toEntity()).toList(),
+      checkedUsers: fullCheckedUsers,
       createdAt: createdAt,
     );
   }
@@ -60,8 +59,7 @@ class NoticeDto {
       projectId: entity.projectId,
       title: entity.title,
       content: entity.content,
-      checkedUsers:
-          entity.checkedUsers.map((e) => UserDto.fromEntity(e)).toList(),
+      checkedUsers: entity.checkedUsers.map((e) => e.id).toList(),
       createdAt: entity.createdAt,
     );
   }
