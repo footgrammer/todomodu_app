@@ -1,11 +1,11 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 class CustomMenuBar extends StatelessWidget {
-  const CustomMenuBar({super.key, required this.text});
+  const CustomMenuBar({super.key, required this.text, this.onPressed});
 
   final String text;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +18,7 @@ class CustomMenuBar extends StatelessWidget {
           IconButton(
             onPressed: () {
               log('메뉴바 버튼 클릭');
+              onPressed?.call();
             },
             icon: Icon(Icons.chevron_right, size: 24),
           ),
