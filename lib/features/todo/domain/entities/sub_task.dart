@@ -5,12 +5,12 @@ class SubTask {
   String todoId;
   String title;
   bool isDone;
-  UserEntity assignee;
+  // UserEntity assignee;
   SubTask({
     required this.id,
     required this.todoId,
     required this.title,
     required this.isDone,
-    required this.assignee,
+    // required this.assignee,
   });
 }

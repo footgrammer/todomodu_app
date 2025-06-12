@@ -1,3 +1,5 @@
+import 'package:todomodu_app/features/todo/domain/entities/sub_task.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/application/usecases/create_todo_usecase.dart';
@@ -16,10 +18,8 @@ class AddTodoPage extends StatefulWidget {
   State<AddTodoPage> createState() => _AddTodoPageState();
 }
 
-
 class _AddTodoPageState extends State<AddTodoPage> {
-    final _titleController = TextEditingController();
-
+  final _titleController = TextEditingController();
 
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
@@ -34,8 +34,6 @@ class _AddTodoPageState extends State<AddTodoPage> {
     }
     super.dispose();
   }
-
-
 
   Future<void> _pickDate(bool isStart) async {
     final DateTime initial = isStart ? _startDate : _endDate;
@@ -65,19 +63,51 @@ class _AddTodoPageState extends State<AddTodoPage> {
     }
   }
 
-//세부 할 일 추가 함수
+  //세부 할 일 추가 함수
   void _addSubTask() {
     setState(() {
       _subTaskControllers.add(TextEditingController());
     });
   }
 
-//세부 할 일 삭제 함수
+  //세부 할 일 삭제 함수
   void _removeSubTask(int index) {
     setState(() {
       _subTaskControllers[index].dispose();
       _subTaskControllers.removeAt(index);
     });
+  }
+
+  Future<void> _submit() async {
+    final uuid = Uuid();
+
+    final List<SubTask> subTasks =
+        _subTaskControllers.map((controller) {
+          return SubTask(
+            id: uuid.v4(),
+            todoId: 'temp',
+            title: controller.text,
+            isDone: false,
+            // assignee: assignee,
+          );
+        }).toList();
+
+    final todo = Todo(
+      id: uuid.v4(),
+      projectId: '임시프로젝토',
+      title: _titleController.text,
+      subTasks: subTasks,
+      startDate: _startDate,
+      endDate: _endDate,
+      isDone: false,
+    );
+
+    await widget.createTodoUseCase(todo);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('할 일이 추가되었습니다!')),);
+
+      Navigator.pop(context);
   }
 
   @override
@@ -94,32 +124,35 @@ class _AddTodoPageState extends State<AddTodoPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TodoTitleInput(controller: _titleController,),
+              TodoTitleInput(controller: _titleController),
               const SizedBox(height: 24),
-              TodoDateSection(startDate: _startDate, endDate: _endDate, onStartTap: () => _pickDate(true), onEndTap: () => _pickDate(false)),
+              TodoDateSection(
+                startDate: _startDate,
+                endDate: _endDate,
+                onStartTap: () => _pickDate(true),
+                onEndTap: () => _pickDate(false),
+              ),
               const SizedBox(height: 24),
               const Text(
                 '할 일 목록',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(
-                height: 8,
+              const SizedBox(height: 8),
+              TodoSubTaskList(
+                controllers: _subTaskControllers,
+                onRemove: _removeSubTask,
               ),
-              TodoSubTaskList(controllers: _subTaskControllers, onRemove: _removeSubTask,),
               Center(
                 child: IconButton(
-                    onPressed: _addSubTask,
-                    icon: const Icon(Icons.add_circle_outline, size: 36)),
+                  onPressed: _addSubTask,
+                  icon: const Icon(Icons.add_circle_outline, size: 36),
+                ),
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: SubmitButton(
-        label: '완료',
-        onPressed: () {},),
+      bottomNavigationBar: SubmitButton(label: '완료', onPressed: _submit),
     );
   }
 }
-
-
