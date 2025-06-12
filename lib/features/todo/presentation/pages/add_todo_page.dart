@@ -23,12 +23,28 @@ class _AddTodoPageState extends State<AddTodoPage> {
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
 
-  List<TextEditingController> _subTaskControllers = [];
+  final List<TextEditingController> _subTaskControllers = [];
 
   @override
   void dispose() {
     _titleController.dispose();
+    for (final controller in _subTaskControllers) {
+      controller.dispose();
+    }
     super.dispose();
+  }
+
+  void _addSubTask() {
+    setState(() {
+      _subTaskControllers.add(TextEditingController());
+    });
+  }
+
+  void _removeSubTask(int index) {
+    setState(() {
+      _subTaskControllers[index].dispose();
+      _subTaskControllers.removeAt(index);
+    });
   }
 
 
