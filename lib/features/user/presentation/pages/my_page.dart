@@ -9,6 +9,7 @@ import 'package:todomodu_app/features/user/presentation/widgets/custom_menu_bar.
 import 'package:todomodu_app/features/user/presentation/widgets/edit_nickname_dialog.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/logout_dialog.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/profile_image.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
 class MyPage extends ConsumerWidget {
@@ -22,9 +23,7 @@ class MyPage extends ConsumerWidget {
       error: (error, stack) => Center(child: Text('$error')),
       data: (user) {
         return user == null
-            ? Scaffold(
-              appBar: AppBar(),
-            ) // 자연스러운 화면 이동을 위해 추가
+            ? Scaffold(appBar: AppBar()) // 자연스러운 화면 이동을 위해 추가
             : Scaffold(
               appBar: AppBar(
                 title: const Text(
@@ -83,35 +82,20 @@ class MyPage extends ConsumerWidget {
                       CustomMenuBar(
                         text: '종료된 프로젝트',
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ClosedProjectListPage(),
-                            ),
-                          );
+                          navigateToPage(context, ClosedProjectListPage());
                         },
                       ),
                       CustomMenuBar(
                         text: '알림 설정',
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NotificationSettingsPage(),
-                            ),
-                          );
+                          navigateToPage(context, NotificationSettingsPage());
                         },
                       ),
                       const SizedBox(height: 18),
                       CustomMenuBar(
                         text: '이용약관 및 개인정보 처리방침',
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TermsAndPrivacyPage(),
-                            ),
-                          );
+                          navigateToPage(context, TermsAndPrivacyPage());
                         },
                       ),
                       SizedBox(
