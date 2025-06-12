@@ -160,10 +160,16 @@ class ProjectCreatePage extends ConsumerWidget {
       return;
     }
 
+    // chat GPT API 함수
+    Future<void> requestChatGPTApi = Future.delayed(Duration(seconds: 10));
+
     // 모든 검증 통과 시 수행할 로직 추가
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => ProjectLoadingPage()));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder:
+            (_) => ProjectLoadingPage(requestChatGPTApi: requestChatGPTApi),
+      ),
+    );
   }
 
   void _showErrorDialog(
