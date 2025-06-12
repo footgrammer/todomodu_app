@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/ai/presentation/pages/project_create_test_page.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_create_page.dart';
+import 'package:todomodu_app/features/notice/presentation/pages/notice_list_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
@@ -43,7 +45,20 @@ class TodomoduApp extends StatelessWidget {
                 ),
                 Builder(
                   builder: (context) {
-                    return moveToPage(context, MyPage(), 'MyPage');
+                    
+                    return moveToPage(context, NoticeListPage(), 'noticeListPage');
+                  }
+                ),
+                Builder(
+                  builder: (context) {
+                    return moveToPage(context, ProjectCreateTestPage(), 'projectCreateTestPage');
+                    
+                  }
+                ),
+                Builder(
+                  builder: (context) {
+                 return moveToPage(context, MyPage(), 'MyPage');
+                    
                   }
                 ),
               ],
