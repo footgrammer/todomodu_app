@@ -58,7 +58,6 @@ class TodomoduApp extends StatelessWidget {
                 Builder(
                   builder: (context) {
                  return moveToPage(context, MyPage(), 'MyPage');
-                    
                   }
                 ),
               ],
