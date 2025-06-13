@@ -19,6 +19,7 @@ class TodoTitleInput extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextField(
+          controller: controller,
           decoration: InputDecoration(
             hintText: '할 일 1',
             border: OutlineInputBorder(
