@@ -26,15 +26,29 @@ class TodoCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color: Colors.grey[100],
       margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Text(dateRange, style: const TextStyle(color: Colors.grey),)
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              Text(dateRange, style: const TextStyle(color: Colors.grey),),
+              const SizedBox(height: 12,),
+            ...subTasks.map((subTaskTitle) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.circle_outlined, size: 16),
+                      const SizedBox(width: 8),
+                      Expanded(child: Text(subTaskTitle)),
+                    ],
+                  ),
+                ))
+          ],
+        ),
       ),
     );
   }
