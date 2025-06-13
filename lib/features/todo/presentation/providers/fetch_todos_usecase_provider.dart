@@ -1,0 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/todo/application/fetch_todos_usecase.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/todo_repository_provider.dart';
+
+final fetchTodosUsecaseProvider = Provider<FetchTodosUsecase>((ref) {
+  final repository = ref.read(todoRepositoryProvider);
+  return FetchTodosUsecase(repository);
+});
