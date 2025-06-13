@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/login_button.dart';
@@ -32,13 +33,19 @@ class LoginPage extends ConsumerWidget {
               style: TextStyle(color: AppColors.grey500),
             ),
             Spacer(),
-            LoginButton(
-              path: 'assets/images/apple_login.svg',
-              onPressed: () async {
-                final userCred = await auth.signInWithApple();
-                if (userCred != null) {
-                  replaceAllWithPage(context, MainPage());
-                }
+            Builder(
+              builder: (context) {
+                return LoginButton(
+                  path: 'assets/images/apple_login.svg',
+                  onPressed: () async {
+                    final userCred = await auth.signInWithApple();
+                    if (userCred != null) {
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString('accessToken', 'your_token_here');
+                      replaceAllWithPage(context, const MainPage());
+                    }
+                  },
+                );
               },
             ),
             const SizedBox(height: 8),
@@ -47,7 +54,9 @@ class LoginPage extends ConsumerWidget {
               onPressed: () async {
                 final userCred = await auth.signInWithKakao();
                 if (userCred != null) {
-                  replaceAllWithPage(context, MainPage());
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.setString('accessToken', 'your_token_here');
+                  replaceAllWithPage(context, const MainPage());
                 }
               },
             ),
@@ -57,7 +66,9 @@ class LoginPage extends ConsumerWidget {
               onPressed: () async {
                 final userCred = await auth.signInWithGoogle();
                 if (userCred != null) {
-                  replaceAllWithPage(context, MainPage());
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.setString('accessToken', 'your_token_here');
+                  replaceAllWithPage(context, const MainPage());
                 }
               },
             ),

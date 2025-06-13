@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/onboarding/onboarding_screen.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
@@ -89,8 +90,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     log('시작하기 버튼 클릭');
+                    final prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('onboardingSeen', true);
                     replaceAllWithPage(context, LoginPage());
                   },
                   style: ElevatedButton.styleFrom(
