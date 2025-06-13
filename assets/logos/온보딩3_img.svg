@@ -1,0 +1,31 @@
+<svg width="163" height="218" viewBox="0 0 163 218" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_557_8151)">
+<mask id="path-1-inside-1_557_8151" fill="white">
+<path d="M0 32C0 14.3269 14.3269 0 32 0H131C148.673 0 163 14.3269 163 32V218H0V32Z"/>
+</mask>
+<path d="M0 32C0 14.3269 14.3269 0 32 0H131C148.673 0 163 14.3269 163 32V218H0V32Z" fill="white"/>
+<rect x="70" y="80" width="23" height="13" rx="2" fill="#E9E9EC"/>
+<rect x="49" y="132" width="65" height="13" rx="2" fill="#E9E9EC"/>
+<rect x="37" y="149" width="89" height="7" rx="2" fill="#E9E9EC"/>
+<rect x="16" y="172" width="131" height="26" rx="4" fill="#E5E3FC"/>
+<rect opacity="0.6" x="34" y="182" width="69" height="6" rx="2" fill="white"/>
+<g opacity="0.2">
+<rect x="23" y="181" width="8" height="8" rx="4" fill="#130F7B" style="mix-blend-mode:color-burn"/>
+</g>
+<path d="M25.5 185L26.5607 186.061L28.6818 183.939" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="16" y="202" width="131" height="26" rx="4" fill="#E5E3FC"/>
+<rect opacity="0.6" x="34" y="212" width="69" height="6" rx="2" fill="white"/>
+<g opacity="0.2">
+<rect x="23" y="211" width="8" height="8" rx="4" fill="#130F7B" style="mix-blend-mode:color-burn"/>
+</g>
+<path d="M25.5 215L26.5607 216.061L28.6818 213.939" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="81.5" cy="86.5" r="31.5" stroke="#DCDBE4" stroke-width="6"/>
+<path d="M50 86.5C50 92.7301 51.8474 98.8203 55.3087 104C58.77 109.181 63.6896 113.218 69.4455 115.602C75.2013 117.986 81.5349 118.61 87.6453 117.395C93.7557 116.179 99.3685 113.179 103.774 108.774C108.179 104.369 111.179 98.7557 112.395 92.6453C113.61 86.5349 112.986 80.2013 110.602 74.4455C108.218 68.6896 104.181 63.77 99.0005 60.3087C93.8203 56.8474 87.7301 55 81.5 55" stroke="#7570FA" stroke-width="6" stroke-linecap="round"/>
+</g>
+<path d="M-6 32C-6 11.0132 11.0132 -6 32 -6H131C151.987 -6 169 11.0132 169 32H157C157 17.6406 145.359 6 131 6H32C17.6406 6 6 17.6406 6 32H-6ZM163 218H0H163ZM-6 218V32C-6 11.0132 11.0132 -6 32 -6V6C17.6406 6 6 17.6406 6 32V218H-6ZM131 -6C151.987 -6 169 11.0132 169 32V218H157V32C157 17.6406 145.359 6 131 6V-6Z" fill="#DCDBE4" mask="url(#path-1-inside-1_557_8151)"/>
+<defs>
+<clipPath id="clip0_557_8151">
+<path d="M0 32C0 14.3269 14.3269 0 32 0H131C148.673 0 163 14.3269 163 32V218H0V32Z" fill="white"/>
+</clipPath>
+</defs>
+</svg>
