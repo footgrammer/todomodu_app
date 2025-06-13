@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/login_button.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
@@ -35,7 +37,7 @@ class LoginPage extends ConsumerWidget {
               onPressed: () async {
                 final userCred = await auth.signInWithApple();
                 if (userCred != null) {
-                  // 페이지 이동
+                  replaceAllWithPage(context, MainPage());
                 }
               },
             ),
@@ -45,7 +47,7 @@ class LoginPage extends ConsumerWidget {
               onPressed: () async {
                 final userCred = await auth.signInWithKakao();
                 if (userCred != null) {
-                  // 페이지 이동
+                  replaceAllWithPage(context, MainPage());
                 }
               },
             ),
@@ -55,7 +57,7 @@ class LoginPage extends ConsumerWidget {
               onPressed: () async {
                 final userCred = await auth.signInWithGoogle();
                 if (userCred != null) {
-                  // 페이지 이동
+                  replaceAllWithPage(context, MainPage());
                 }
               },
             ),

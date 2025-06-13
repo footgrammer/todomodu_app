@@ -5,9 +5,11 @@ import 'package:todomodu_app/features/notice/presentation/pages/notice_list_page
 import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/onboarding/onboarding_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/splash/splash_page.dart';
+import 'package:todomodu_app/shared/constants/app_colors.dart';
 
 class TodomoduApp extends StatelessWidget {
   const TodomoduApp({super.key});
@@ -18,65 +20,9 @@ class TodomoduApp extends StatelessWidget {
     return MaterialApp(
       title: 'Todomodu App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary500),
       ),
-      home: SafeArea(
-        child: Scaffold(
-          body: Center(
-            child: Column(
-              children: [
-                Builder(
-                  builder: (context) {
-                    return moveToPage(context, SplashPage(), 'SplashPage');
-                  }
-                ),
-                   Builder(
-                  builder: (context) {
-                    return moveToPage(context, OnboardingPage(), 'OnboardingPage');
-                  }
-                ),
-                Builder(
-                  builder: (context) {
-                    return moveToPage(context, LoginPage(), 'LoginPage');
-                  }
-                ),
-                Builder(
-                  builder: (context) {
-                    return moveToPage(context, ProjectPage(), 'projectPage');
-                  }
-                ),
-                Builder(
-                  builder: (context) {
-                    return moveToPage(context, NoticeCreatePage(), 'noticeCreatePage');
-                  }
-                ),
-                Builder(
-                  builder: (context) {
-                    return moveToPage(context, ProjectDetailPage(), 'projectDetailPage');
-                  }
-                ),
-                Builder(
-                  builder: (context) {
-                    
-                    return moveToPage(context, NoticeListPage(), 'noticeListPage');
-                  }
-                ),
-                Builder(
-                  builder: (context) {
-                    return moveToPage(context, ProjectCreateTestPage(), 'projectCreateTestPage');
-                    
-                  }
-                ),
-                Builder(
-                  builder: (context) {
-                 return moveToPage(context, MyPage(), 'MyPage');
-                  }
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      home: SplashPage(),
     );
   }
 

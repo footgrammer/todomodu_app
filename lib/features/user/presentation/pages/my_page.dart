@@ -26,9 +26,13 @@ class MyPage extends ConsumerWidget {
             ? Scaffold(appBar: AppBar()) // 자연스러운 화면 이동을 위해 추가
             : Scaffold(
               appBar: AppBar(
-                title: const Text(
-                  '마이',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                centerTitle: false,
+                title: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: const Text(
+                    '마이',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 actions: [
                   IconButton(
