@@ -46,7 +46,7 @@ floatingActionButton: Container(
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const AddTodoPage()
-              );
+              ));
             },
             label: const Text('할 일 추가 +'),
           ),
