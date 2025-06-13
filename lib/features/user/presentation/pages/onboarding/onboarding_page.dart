@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/onboarding/onboarding_screen.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -89,6 +91,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     log('시작하기 버튼 클릭');
+                    replaceAllWithPage(context, LoginPage());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary500,
