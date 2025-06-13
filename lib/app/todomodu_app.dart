@@ -6,6 +6,7 @@ import 'package:todomodu_app/features/project/presentation/pages/project_detail_
 import 'package:todomodu_app/features/project/presentation/pages/project_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/splash_page.dart';
 
 class TodomoduApp extends StatelessWidget {
   const TodomoduApp({super.key});
@@ -23,6 +24,11 @@ class TodomoduApp extends StatelessWidget {
           body: Center(
             child: Column(
               children: [
+                Builder(
+                  builder: (context) {
+                    return moveToPage(context, SplashPage(), 'SplashPage');
+                  }
+                ),
                 Builder(
                   builder: (context) {
                     return moveToPage(context, LoginPage(), 'LoginPage');
