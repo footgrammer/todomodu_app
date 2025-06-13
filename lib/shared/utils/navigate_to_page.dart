@@ -10,3 +10,11 @@ void replaceWithPage(BuildContext context, Widget page) {
     MaterialPageRoute(builder: (context) => page),
   );
 }
+
+void replaceAllWithPage(BuildContext context, Widget page) {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => page),
+    (route) => false, // 모든 이전 route 제거
+  );
+}
