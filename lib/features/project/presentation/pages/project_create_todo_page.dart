@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_todo_list.dart';
+import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 TextStyle subTitle1 = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
@@ -49,67 +51,18 @@ class ProjectCreateTodoPage extends ConsumerWidget {
               style: subTitle3.copyWith(color: grey500),
             ),
             const SizedBox(height: 48),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children:
-                  todos.map<Widget>((todo) {
-                    final title = todo['todoTitle'] as String;
-                    final isSelected = selectedTodos.contains(title);
-
-                    return GestureDetector(
-                      onTap: () => viewModel.toggleTodo(title),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isSelected ? Colors.white : grey75,
-                          border: Border.all(
-                            color: isSelected ? primary500 : Colors.transparent,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 4,
-                          children: [
-                            if (isSelected)
-                              Icon(Icons.check, size: 24, color: primary600),
-                            Text(
-                              title,
-                              style: subTitle2.copyWith(
-                                color: isSelected ? primary600 : grey300,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
+            ProjectTodoList(
+              todos: todos,
+              selectedTodos: selectedTodos,
+              viewModel: viewModel,
             ),
             const Spacer(),
             Padding(
               padding: EdgeInsets.only(bottom: 40, top: 10),
-              child: ElevatedButton(
+              child: CommonElevatedButton(
+                text: '다음',
+                buttonColor: primary500,
                 onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 56),
-                  backgroundColor: Color(0xFF5752EA),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
               ),
             ),
           ],
