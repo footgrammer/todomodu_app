@@ -1,1 +1,5 @@
-//Please delete this file
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
+
+abstract class TodoRepository {
+  Future<void> createTodo(Todo todo);
+}
