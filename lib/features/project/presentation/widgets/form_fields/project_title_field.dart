@@ -26,18 +26,16 @@ class ProjectTitleField extends ConsumerWidget {
             color: Color(0xFFF7F7F8),
             border: Border.all(color: Color(0xFFDCDBE4)),
           ),
-          child: Expanded(
-            child: TextFormField(
-              controller: titleController,
-              focusNode: titleFocusNode,
-              maxLength: 30,
-              style: TextStyle(fontSize: 16),
-              decoration: InputDecoration(
-                hintText: '프로젝트 이름을 입력하세요',
-                hintStyle: TextStyle(color: Color(0xFFA7A5B9)),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-              ),
+          child: TextFormField(
+            controller: titleController,
+            focusNode: titleFocusNode,
+            maxLength: 30,
+            style: TextStyle(fontSize: 16),
+            decoration: InputDecoration(
+              hintText: '프로젝트 이름을 입력하세요',
+              hintStyle: TextStyle(color: Color(0xFFA7A5B9)),
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
             ),
           ),
         ),

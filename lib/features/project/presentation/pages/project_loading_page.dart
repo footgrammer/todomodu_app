@@ -7,7 +7,7 @@ import 'package:todomodu_app/features/project/presentation/widgets/form_fields/p
 import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_loading_text.dart';
 
 class ProjectLoadingPage extends ConsumerWidget {
-  final Future<void> requestChatGPTApi;
+  final Future<Map<String, dynamic>> Function(String) requestChatGPTApi;
 
   const ProjectLoadingPage({super.key, required this.requestChatGPTApi});
 
@@ -19,15 +19,20 @@ class ProjectLoadingPage extends ConsumerWidget {
     // API 대기 시작 (최초 한 번만 실행)
     ref.listen<ProjectProgressState>(projectProgressProvider, (prev, next) {
       if (next.percent == 0.25) {
-        controller.waitForApi(requestChatGPTApi, () async {
-          if (context.mounted) {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => ProjectCreateTodoPage()));
-            await Future.delayed(Duration(seconds: 1));
-            controller.reset();
-          }
-        });
+        controller.waitForApi<Map<String, dynamic>>(
+          () => requestChatGPTApi('haha'),
+          (apiResult) async {
+            if (context.mounted) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProjectCreateTodoPage(apiResult: apiResult),
+                ),
+              );
+              await Future.delayed(Duration(seconds: 1));
+              controller.reset();
+            }
+          },
+        );
       }
     });
 

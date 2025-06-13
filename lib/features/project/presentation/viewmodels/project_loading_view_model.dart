@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,8 +63,11 @@ class ProgressController extends Notifier<ProjectProgressState> {
     }
   }
 
-  Future<void> waitForApi(Future<void> apiCall, VoidCallback onComplete) async {
-    await apiCall;
+  Future<void> waitForApi<T>(
+    Future<T> Function() apiCall,
+    void Function(T result) onComplete,
+  ) async {
+    final result = await apiCall();
     if (_isDisposed) return;
     state = ProjectProgressState(
       percent: 1.0,
@@ -73,7 +75,7 @@ class ProgressController extends Notifier<ProjectProgressState> {
       message: '완료되었습니다!',
     );
     await Future.delayed(Duration(seconds: 1));
-    onComplete();
+    onComplete(result);
   }
 
   void reset() {

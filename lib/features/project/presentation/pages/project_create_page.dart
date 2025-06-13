@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:todomodu_app/features/project/presentation/pages/project_loading_page.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_date_range_field.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_description_field.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_title_field.dart';
+
+TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 
 // 상태 관리용 Provider
 final titleControllerProvider = Provider.autoDispose<TextEditingController>(
@@ -46,14 +51,7 @@ class ProjectCreatePage extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              Text(
-                '프로젝트 추가하기',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-              ),
-            ],
-          ),
+          title: Row(children: [Text('프로젝트 추가하기', style: header2)]),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +160,75 @@ class ProjectCreatePage extends ConsumerWidget {
     }
 
     // chat GPT API 함수
-    Future<void> requestChatGPTApi = Future.delayed(Duration(seconds: 10));
+    // Future<void> requestChatGPTApi = Future.delayed(Duration(seconds: 10));
+    Future<Map<String, dynamic>> requestChatGPTApi(String prompt) async {
+      await Future.delayed(Duration(seconds: 6));
+      // final response = await http.post(
+      //   Uri.parse("https://api.openai.com/v1/chat/completions"),
+      //   headers: {
+      //     "Authorization": "Bearer YOUR_API_KEY",
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: jsonEncode({
+      //     "model": "gpt-4",
+      //     "messages": [
+      //       {"role": "user", "content": prompt},
+      //     ],
+      //   }),
+      // );
+
+      final data = {
+        "projectTitle": "프로젝트 이름",
+        "projectDescription": "프로젝트 설명",
+        "projectStart_date": "2025-06-01",
+        "projectEnd_date": "2025-06-30",
+        "todos": [
+          {
+            "todoTitle": "여행 일정 계획 세우기",
+            "todoStartDate": "2025-06-01",
+            "todoEndDate": "2025-06-02",
+            "subTasks": ["출발일 확정", "도시별 일정 조정"],
+          },
+          {
+            "todoTitle": "항공권 예약하기",
+            "todoStartDate": "2025-06-02",
+            "todoEndDate": "2025-06-03",
+            "subTasks": ["왕복 항공권 검색", "예약 완료 및 결제"],
+          },
+          {
+            "todoTitle": "환전 준비하기",
+            "todoStartDate": "2025-06-03",
+            "todoEndDate": "2025-06-04",
+            "subTasks": ["필요 금액 계산", "은행 또는 환전소 방문"],
+          },
+          {
+            "todoTitle": "로밍 및 인터넷 준비하기",
+            "todoStartDate": "2025-06-04",
+            "todoEndDate": "2025-06-05",
+            "subTasks": ["데이터 로밍 신청", "포켓 와이파이 또는 심카드 예약"],
+          },
+          {
+            "todoTitle": "맛집/관광지 리스트 만들기",
+            "todoStartDate": "2025-06-05",
+            "todoEndDate": "2025-06-06",
+            "subTasks": ["지역별 맛집 조사", "관광지 우선순위 정하기"],
+          },
+          {
+            "todoTitle": "숙소 정하기",
+            "todoStartDate": "2025-06-06",
+            "todoEndDate": "2025-06-07",
+            "subTasks": ["위치 비교", "예약 사이트 확인 및 결제"],
+          },
+          {
+            "todoTitle": "집 꾸리기",
+            "todoStartDate": "2025-06-07",
+            "todoEndDate": "2025-06-08",
+            "subTasks": ["청소하기", "반려식물 돌보기", "창문 닫기"],
+          },
+        ],
+      };
+      return data;
+    }
 
     // 모든 검증 통과 시 수행할 로직 추가
     Navigator.of(context).push(
