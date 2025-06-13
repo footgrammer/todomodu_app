@@ -64,6 +64,19 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<UserCredential?> signInWithApple() async {
+    final credential = await _authDataSource.signInWithApple();
+    final userCredential = await signInWithCredential(credential);
+    final user = userCredential?.user;
+    if (user == null) return null;
+    final userDoc = await _firestore.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+      createUserData(user);
+    }
+    return userCredential;
+  }
+
+  @override
   Future<void> signOut() {
     return _authDataSource.signOut();
   }
