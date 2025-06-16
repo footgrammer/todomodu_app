@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:todomodu_app/features/user/data/datasources/auth_data_source.dart';
 
 class AuthDataSourceImpl implements AuthDataSource {
@@ -11,6 +12,8 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+  final SignInWithApple appleSignIn = SignInWithApple();
+
   @override
   Future<OAuthCredential?> signInWithGoogle() async {
     try {
@@ -47,6 +50,28 @@ class AuthDataSourceImpl implements AuthDataSource {
       return credential;
     } catch (e, stack) {
       log('Kakao sign-in error: $e', stackTrace: stack);
+      return null;
+    }
+  }
+
+  @override
+  Future<OAuthCredential?> signInWithApple() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      final OAuthCredential authCredential = OAuthProvider(
+        "apple.com",
+      ).credential(
+        idToken: credential.identityToken,
+        accessToken: credential.authorizationCode,
+      );
+      return authCredential;
+    } catch (e) {
+      log('Apple sign-in error: $e');
       return null;
     }
   }
