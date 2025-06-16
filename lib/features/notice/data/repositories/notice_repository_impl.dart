@@ -2,6 +2,7 @@ import 'package:todomodu_app/features/notice/data/datasources/notice_data_source
 import 'package:todomodu_app/features/notice/data/models/notice_dto.dart';
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
 import 'package:todomodu_app/features/notice/domain/repositories/notice_repository.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
@@ -41,10 +42,10 @@ class NoticeRepositoryImpl implements NoticeRepository {
   }
 
   @override
-  Future<Result<List<Notice>>> fetchNoticesbyProjectIds(
-    List<String> projectIds,
+  Future<Result<List<Notice>>> fetchNoticesbyProjects(
+    List<Project> projects,
   ) async {
-    final result = await _datasource.getNoticesByProjectIds(projectIds);
+    final result = await _datasource.getNoticesByProjectIds(projects.map((e) => e.id,).toList());
 
     return switch (result) {
       Ok(value: final dtoList) => Result.ok(

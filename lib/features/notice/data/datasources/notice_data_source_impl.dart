@@ -11,8 +11,35 @@ class NoticeDataSourceImpl implements NoticeDatasource {
     : _firestore = firestore;
 
   @override
-  Future<Result<List<NoticeDto>>> getNoticesByProjectIds(List<String> ids) {
-    throw UnimplementedError();
+  Future<Result<List<NoticeDto>>> getNoticesByProjectIds(
+    List<String> ids,
+  ) async {
+    try {
+      final List<NoticeDto> allNotices = [];
+
+      // 각 projectId에 대해 병렬적으로 fetch 수행
+      final futures = ids.map((projectId) async {
+        final snapshot =
+            await _firestore
+                .collection('projects')
+                .doc(projectId)
+                .collection('notices')
+                .get();
+
+        final notices = snapshot.docs.map((doc) {
+          final data = doc.data()..['id'] = doc.id;
+          return NoticeDto.fromJson(data);
+        });
+
+        allNotices.addAll(notices);
+      });
+
+      await Future.wait(futures);
+
+      return Result.ok(allNotices);
+    } catch (e) {
+      return Result.error(Exception('Failed to fetch notices: $e'));
+    }
   }
 
   @override
