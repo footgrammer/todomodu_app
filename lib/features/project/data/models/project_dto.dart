@@ -9,7 +9,7 @@ class ProjectDto {
   DateTime startTime;
   DateTime endTime;
   String ownerId;
-  List<String> memberIds;
+  // List<String> memberIds;
   List<String> todoIds;
   String inviteCode;
   bool isDone;
@@ -21,7 +21,7 @@ class ProjectDto {
     required this.startTime,
     required this.endTime,
     required this.ownerId,
-    required this.memberIds,
+    // required this.memberIds,
     required this.todoIds,
     required this.inviteCode,
     required this.isDone,
@@ -35,7 +35,7 @@ class ProjectDto {
       startTime: DateTime.parse(json['startTime']),
       endTime: DateTime.parse(json['endTime']),
       ownerId: json['ownerId'] as String,
-      memberIds: List<String>.from(json['memberIds'] ?? []),
+      // memberIds: List<String>.from(json['memberIds'] ?? []),
       todoIds: List<String>.from(json['todoIds'] ?? []),
       inviteCode: json['inviteCode'] as String,
       isDone: json['isDone'] as bool,
@@ -50,7 +50,7 @@ class ProjectDto {
       'startTime': startTime.toIso8601String(),
       'endTime': endTime.toIso8601String(),
       'ownerId': ownerId,
-      'memberIds': memberIds,
+      // 'memberIds': memberIds,
       'todoIds': todoIds,
       'inviteCode': inviteCode,
       'isDone': isDone,
@@ -65,7 +65,7 @@ class ProjectDto {
       startTime: entity.startTime,
       endTime: entity.endTime,
       ownerId: entity.owner.id,
-      memberIds: entity.members.map((e) => e.id).toList(),
+      // memberIds: entity.members.map((e) => e.id).toList(),
       todoIds: entity.todos.map((e) => e.id).toList(),
       inviteCode: entity.inviteCode,
       isDone: entity.isDone,
