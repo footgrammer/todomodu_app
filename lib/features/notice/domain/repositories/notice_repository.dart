@@ -1,12 +1,13 @@
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
 abstract interface class NoticeRepository {
   Future<Result<Notice>> createNotice(Notice notice);
 
-  Future<Result<List<Notice>>> fetchNoticesbyProjectIds(
-    List<String> projectIds,
+  Future<Result<List<Notice>>> fetchNoticesbyProjects(
+    List<Project> projects,
   );
 
   Future<Result<Notice>> fetchNoticebyId({
