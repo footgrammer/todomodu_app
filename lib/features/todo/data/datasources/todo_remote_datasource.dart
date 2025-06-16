@@ -2,36 +2,63 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/todo.dart';
 import '../../domain/entities/sub_task.dart';
 
-class TodoRemoteDatasource {
+class TodoRemoteDataSource {
   final FirebaseFirestore firestore;
 
-  TodoRemoteDatasource(this.firestore);
+  TodoRemoteDataSource(this.firestore);
 
   Future<void> createTodo(Todo todo) async {
-    await firestore.collection('todos').add({
+    final todoDoc = firestore.collection('todos').doc(todo.id);
+
+    await todoDoc.set({
       'projectId': todo.projectId,
       'title': todo.title,
       'startDate': todo.startDate.toIso8601String(),
       'endDate': todo.endDate.toIso8601String(),
       'isDone': todo.isDone,
-      'subTasks': [],
     });
-  }
 
-    Future<List<Todo>> fetchTodos() async {
-      final snapshot = await firestore.collection('todos').get();
-
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return Todo(
-          id: doc.id,
-          projectId: data['projectId'],
-          title: data['title'],
-          startDate: DateTime.parse(data['startDate']),
-          endDate: DateTime.parse(data['endDate']),
-          isDone: data['isDone'],
-          subTasks: [],
-        );
-      }).toList();
+    for (final subTask in todo.subTasks) {
+      final subTaskDoc = todoDoc.collection('subTasks').doc(subTask.id);
+      await subTaskDoc.set({
+        'title': subTask.title,
+        'isDone': subTask.isDone,
+      });
     }
   }
+  Future<List<Todo>> fetchTodos() async {
+    final snapshot = await firestore.collection('todos').get();
+
+    List<Todo> todos = [];
+
+    for (final doc in snapshot.docs) {
+      final data = doc.data();
+
+      final subTaskSnapshot = await doc.reference.collection('subTasks').get();
+
+      final subTasks = subTaskSnapshot.docs.map((subDoc) {
+        final subData = subDoc.data();
+        return SubTask(
+          id: subDoc.id,
+          todoId: doc.id,
+          title: subData['title'],
+          isDone: subData['isDone'],
+        );
+      }).toList();
+
+      final todo = Todo(
+        id: doc.id,
+        projectId: data['projectId'],
+        title: data['title'],
+        startDate: DateTime.parse(data['startDate']),
+        endDate: DateTime.parse(data['endDate']),
+        isDone: data['isDone'],
+        subTasks: subTasks,
+      );
+
+      todos.add(todo);
+    }
+
+    return todos;
+  }
+}

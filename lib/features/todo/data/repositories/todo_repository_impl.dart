@@ -3,7 +3,7 @@ import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/todo/domain/repositories/todo_repository.dart';
 
 class TodoRepositoryImpl implements TodoRepository {
-  final TodoRemoteDatasource remoteDatasource;
+  final TodoRemoteDataSource remoteDatasource;
 
   TodoRepositoryImpl(this.remoteDatasource);
 
