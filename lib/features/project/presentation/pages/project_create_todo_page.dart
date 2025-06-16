@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_create_subtask_page.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_todo_list.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
@@ -30,7 +31,7 @@ class ProjectCreateTodoPage extends ConsumerWidget {
     // ✅ 상태 변경은 build 이후에 수행
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (selectedTodos.isEmpty) {
-        viewModel.selectAllTodo(todos);
+        viewModel.selectAllTodos(todos);
       }
     });
 
@@ -62,12 +63,29 @@ class ProjectCreateTodoPage extends ConsumerWidget {
               child: CommonElevatedButton(
                 text: '다음',
                 buttonColor: primary500,
-                onPressed: () {},
+                onPressed: () {
+                  goToProjectCreateSubtaskPage(context, viewModel, todos);
+                },
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void goToProjectCreateSubtaskPage(
+    BuildContext context,
+    ProjectCreateViewModel viewModel,
+    List<dynamic> todos,
+  ) {
+    //빌드 후에 상태를 변경할 수 있도록 함
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.selectAllSubtasks(todos); // 상태 변경
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProjectCreateSubtaskPage()),
+      );
+    });
   }
 }

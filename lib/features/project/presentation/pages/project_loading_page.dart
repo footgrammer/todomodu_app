@@ -20,7 +20,7 @@ class ProjectLoadingPage extends ConsumerWidget {
     ref.listen<ProjectProgressState>(projectProgressProvider, (prev, next) {
       if (next.percent == 0.25) {
         controller.waitForApi<Map<String, dynamic>>(
-          () => requestChatGPTApi('haha'),
+          () => requestChatGPTApi('chatGPT prompt'),
           (apiResult) async {
             if (context.mounted) {
               Navigator.of(context).push(

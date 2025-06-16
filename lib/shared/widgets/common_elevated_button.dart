@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 class CommonElevatedButton extends StatelessWidget {
   String text;
   Color buttonColor;
-  Function onPressed;
+  final VoidCallback onPressed;
 
   CommonElevatedButton({
     required this.text,
@@ -15,7 +15,7 @@ class CommonElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, 56),
         backgroundColor: buttonColor,

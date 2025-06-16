@@ -1,5 +1,16 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
+
+TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
+TextStyle subTitle1 = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
+TextStyle subTitle2 = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
+TextStyle subTitle3 = TextStyle(fontSize: 14, fontWeight: FontWeight.w500);
+Color grey800 = Color(0xFF403F4B);
+Color grey500 = Color(0xFF8C8AA0);
+Color grey300 = Color(0xFFCAC7DA);
+Color grey75 = Color(0xFFF0F0F3);
+Color primary600 = Color(0xFF342DE7);
+Color primary500 = Color(0xFF5752EA);
 
 class ProjectTodoList extends StatelessWidget {
   const ProjectTodoList({
