@@ -66,7 +66,7 @@ class MyPage extends ConsumerWidget {
                                 context: context,
                                 builder:
                                     (context) =>
-                                        EditNicknameDialog(userId: user.userId),
+                                        EditNicknameDialog(userId: user.id),
                               );
                             },
                             child: Container(
