@@ -47,7 +47,7 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     } else if (projectResult is Error) {
       state = state.copyWith(
         isLoading: false,
-        error: projectResult.error.toString(),
+        error: (projectResult as Error).error.toString(),
       );
     }
   }

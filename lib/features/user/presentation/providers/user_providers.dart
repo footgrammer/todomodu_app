@@ -20,7 +20,7 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepositoryImpl(userDataSource: userDataSource);
 });
 
-final _getCurrentUserUsecaseProvider = Provider<GetCurrentUserUsecaseImpl>((
+final getCurrentUserUsecaseProvider = Provider<GetCurrentUserUsecaseImpl>((
   ref,
 ) {
   final userRepository = ref.read(userRepositoryProvider);
@@ -28,6 +28,6 @@ final _getCurrentUserUsecaseProvider = Provider<GetCurrentUserUsecaseImpl>((
 });
 
 final userProvider = StreamProvider<UserEntity?>((ref) {
-  final usecase = ref.read(_getCurrentUserUsecaseProvider);
+  final usecase = ref.read(getCurrentUserUsecaseProvider);
   return usecase.execute();
 });

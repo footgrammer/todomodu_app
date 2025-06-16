@@ -9,6 +9,7 @@ import 'package:todomodu_app/features/notice/presentation/models/notice_create_m
 import 'package:todomodu_app/features/notice/presentation/models/notice_list_model.dart';
 import 'package:todomodu_app/features/notice/presentation/viewmodels/notice_create_view_model.dart';
 import 'package:todomodu_app/features/notice/presentation/viewmodels/notice_list_view_model.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 
 final _noticeDataSourceProvider = Provider<NoticeDataSourceImpl>((ref) {
@@ -55,8 +56,6 @@ final noticeListViewModel =
       return NoticeListViewModel(
         retrieveUsecase: ref.watch(retrieveNoticesByProjectsUsecase),
         markAsReadUsecase: ref.watch(markNoticeAsReadUsecase),
-        fetchProjectsUsecase: ref.watch(
-          
-        )
+        fetchProjectsUsecase: ref.watch(fetchProjectsByUserUsecase),
       );
     });
