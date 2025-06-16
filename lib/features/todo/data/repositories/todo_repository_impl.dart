@@ -1,19 +1,19 @@
-import 'package:todomodu_app/features/todo/data/datasources/todo_remote_datasource.dart';
-import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
-import 'package:todomodu_app/features/todo/domain/repositories/todo_repository.dart';
+import '../../domain/repositories/todo_repository.dart';
+import '../../domain/entities/todo.dart';
+import '../datasources/todo_remote_datasource.dart';
 
 class TodoRepositoryImpl implements TodoRepository {
-  final TodoRemoteDataSource remoteDatasource;
+  final TodoRemoteDataSource remoteDataSource;
 
-  TodoRepositoryImpl(this.remoteDatasource);
+  TodoRepositoryImpl(this.remoteDataSource);
 
   @override
   Future<void> createTodo(Todo todo) async {
-    await remoteDatasource.createTodo(todo);
+    await remoteDataSource.createTodo(todo);
   }
 
   @override
-  Future<List<Todo>> fetchTodos() async {
-    return await remoteDatasource.fetchTodos();
+  Stream<List<Todo>> streamTodos() {
+    return remoteDataSource.streamTodos();
   }
 }

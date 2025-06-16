@@ -26,8 +26,9 @@ class TodoRemoteDataSource {
       });
     }
   }
-  Future<List<Todo>> fetchTodos() async {
-    final snapshot = await firestore.collection('todos').get();
+
+  Stream<List<Todo>> streamTodos() {
+  return firestore.collection('todos').snapshots().asyncMap((snapshot) async {
 
     List<Todo> todos = [];
 
@@ -60,5 +61,6 @@ class TodoRemoteDataSource {
     }
 
     return todos;
-  }
+  });
+}
 }
