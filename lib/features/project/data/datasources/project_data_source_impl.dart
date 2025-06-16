@@ -4,11 +4,10 @@ import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
 class ProjectDataSourceImpl implements ProjectDataSource {
-
   final FirebaseFirestore _firestore;
 
   ProjectDataSourceImpl({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+    : _firestore = firestore;
 
   @override
   Future<Result<List<ProjectDto>>> getProjectsByUserId(String userId) async {
@@ -43,6 +42,23 @@ class ProjectDataSourceImpl implements ProjectDataSource {
       return Result.ok(validProjects);
     } catch (e) {
       return Result.error(Exception('Failed to load projects: $e'));
+    }
+  }
+
+  @override
+  Future<Result<List<String>>> getMemberIdsByProjectId(String projectId) async {
+    try {
+      final snapshot =
+          await _firestore
+              .collection('projects')
+              .doc(projectId)
+              .collection('members')
+              .get();
+
+      final ids = snapshot.docs.map((doc) => doc['userId'] as String).toList();
+      return Result.ok(ids);
+    } catch (e) {
+      return Result.error(Exception('Failed to fetch memberIds: $e'));
     }
   }
 }
