@@ -44,8 +44,12 @@ class ProjectTodoList extends StatelessWidget {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 4,
                   children: [
-                    if (isSelected)
-                      Icon(Icons.check, size: 24, color: AppColors.primary600),
+                    Icon(
+                      Icons.check,
+                      size: 24,
+                      color:
+                          isSelected ? AppColors.primary600 : AppColors.grey300,
+                    ),
                     Text(
                       title,
                       style: AppTextStyles.subtitle2.copyWith(

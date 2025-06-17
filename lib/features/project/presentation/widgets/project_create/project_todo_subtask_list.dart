@@ -33,27 +33,27 @@ class ProjectTodoSubtaskList extends StatelessWidget {
                       : state.expandedItems!.contains(todo);
               final subtasks = state.selectedSubtasks[todo] ?? <String>{};
 
-              return Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.grey200),
-                  borderRadius: BorderRadius.circular(12),
-                  color: AppColors.grey50,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                margin: const EdgeInsets.only(bottom: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        ref
-                            .read(projectCreateViewModelProvider.notifier)
-                            .toggleExpandedItems(todo);
-                      },
-                      child: Row(
+              return GestureDetector(
+                onTap: () {
+                  ref
+                      .read(projectCreateViewModelProvider.notifier)
+                      .toggleExpandedItems(todo);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.grey200),
+                    borderRadius: BorderRadius.circular(12),
+                    color: AppColors.grey50,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(todo, style: AppTextStyles.subtitle1),
@@ -63,17 +63,17 @@ class ProjectTodoSubtaskList extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ),
-                    if (isExpanded) SizedBox(height: 12),
-                    if (isExpanded)
-                      ProjectSubtaskList(
-                        todoToAllSubtasks: todoToAllSubtasks,
-                        subtasks: subtasks,
-                        state: state,
-                        viewModel: viewModel,
-                        todo: todo,
-                      ),
-                  ],
+                      if (isExpanded) SizedBox(height: 12),
+                      if (isExpanded)
+                        ProjectSubtaskList(
+                          todoToAllSubtasks: todoToAllSubtasks,
+                          subtasks: subtasks,
+                          state: state,
+                          viewModel: viewModel,
+                          todo: todo,
+                        ),
+                    ],
+                  ),
                 ),
               );
             }).toList(),
