@@ -7,25 +7,28 @@ class TodoRemoteDataSource {
 
   TodoRemoteDataSource(this.firestore);
 
-  Future<void> createTodo(Todo todo) async {
-    final todoDoc = firestore.collection('todos').doc(todo.id);
+Future<void> createTodo(Todo todo) async {
+  final todoDoc = firestore.collection('todos').doc(todo.id);
 
-    await todoDoc.set({
-      'projectId': todo.projectId,
-      'title': todo.title,
-      'startDate': todo.startDate.toIso8601String(),
-      'endDate': todo.endDate.toIso8601String(),
-      'isDone': todo.isDone,
+  await todoDoc.set({
+    'projectId': todo.projectId,
+    'title': todo.title,
+    'startDate': todo.startDate.toIso8601String(),
+    'endDate': todo.endDate.toIso8601String(),
+    'isDone': todo.isDone,
+  });
+
+  for (final subTask in todo.subTasks) {
+    final subTaskDoc = todoDoc.collection('subTasks').doc();
+    final generatedId = subTaskDoc.id;
+
+    await subTaskDoc.set({
+      'title': subTask.title,
+      'isDone': subTask.isDone,
     });
 
-    for (final subTask in todo.subTasks) {
-      final subTaskDoc = todoDoc.collection('subTasks').doc(subTask.id);
-      await subTaskDoc.set({
-        'title': subTask.title,
-        'isDone': subTask.isDone,
-      });
-    }
   }
+}
 
   Stream<List<Todo>> streamTodos() {
   return firestore.collection('todos').snapshots().asyncMap((snapshot) async {
