@@ -22,4 +22,16 @@ class TodoRepositoryImpl implements TodoRepository {
     await remoteDataSource.deleteTodo(todoId);
   }
   
+   @override
+  Future<void> toggleSubTaskDone({
+    required String todoId,
+    required String subTaskId,
+    required bool isDone,
+  }) async {
+    await remoteDataSource.toggleSubTaskDone(
+      todoId: todoId,
+      subTaskId: subTaskId,
+      isDone: isDone,
+    );
+  }
 }
