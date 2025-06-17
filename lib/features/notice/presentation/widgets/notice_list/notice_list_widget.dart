@@ -3,8 +3,9 @@ import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/notice_list_widget_element.dart';
 
 class NoticeListWidget extends StatelessWidget {
-  NoticeListWidget({required this.notices, super.key});
-  final notices;
+  const NoticeListWidget({required this.notices, super.key});
+
+  final List<Notice> notices;
 //   List<Notice> notices = [
 //     Notice(id: '1', projectId: '1', title: '타이틀이 엄청나게 길면 어떻게 할거야', 
 //     content:

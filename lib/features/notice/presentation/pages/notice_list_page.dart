@@ -4,6 +4,7 @@ import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/no
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_searchbar.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/project_chip_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 
 class NoticeListPage extends ConsumerStatefulWidget {
@@ -14,24 +15,19 @@ class NoticeListPage extends ConsumerStatefulWidget {
 }
 
 class _NoticeListPageState extends ConsumerState<NoticeListPage> {
-  final searchbarController = TextEditingController();
-
   bool _initialized = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // userProvider가 준비되었을 때 initialize 한 번만 호출
-    final user = ref.read(userProvider).asData?.value;
-    if (!_initialized && user != null) {
-      _initialized = true;
-      ref.read(noticeListViewModelProvider.notifier).initialize(user);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // build 내부에서만 ref.listen 사용!
+    ref.listen<AsyncValue<UserEntity?>>(userProvider, (prev, next) {
+      final user = next.asData?.value;
+      if (user != null && !_initialized) {
+        _initialized = true;
+        ref.read(noticeListViewModelProvider.notifier).initialize(user);
+      }
+    });
+
     final userAsync = ref.watch(userProvider);
     final noticeListState = ref.watch(noticeListViewModelProvider);
 
@@ -45,17 +41,14 @@ class _NoticeListPageState extends ConsumerState<NoticeListPage> {
             if (user == null) {
               return const Center(child: Text('로그인이 필요합니다.'));
             }
-
             if (noticeListState.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-
             if (noticeListState.error != null) {
               return Center(child: Text('에러: ${noticeListState.error}'));
             }
-
             return Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
                   NoticeSearchbar(),

@@ -10,7 +10,6 @@ class NoticeCreatePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewmodel = ref.watch(noticeCreateViewModelProvider(projectId).notifier);
-    final state = ref.watch(noticeCreateViewModelProvider(projectId));
 
     return SafeArea(
       child: Scaffold(
