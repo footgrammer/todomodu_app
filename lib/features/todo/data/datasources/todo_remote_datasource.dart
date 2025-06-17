@@ -104,7 +104,7 @@ Future<void> updateTodo(Todo todo) async {
     'endDate': todo.endDate.toIso8601String(),
     'isDone': todo.isDone,
   });
-  
+
   final subTasksSnapshot = await todoDoc.collection('subTasks').get();
   for (final subTaskDoc in subTasksSnapshot.docs) {
     await subTaskDoc.reference.delete();

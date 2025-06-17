@@ -27,5 +27,4 @@ class SubTask {
       isDone: isDone ?? this.isDone,
     );
   }
-  
 }
