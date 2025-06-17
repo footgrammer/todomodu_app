@@ -1,5 +1,5 @@
-import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
 
 class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   Map<String, Set<String>>? _initialSubtaskSnapshot;
