@@ -53,12 +53,7 @@ class ProjectDetailPage extends ConsumerWidget {
                     itemCount: todos.length,
                     itemBuilder: (context, index) {
                       final todo = todos[index];
-                      return TodoCard(
-                        title: todo.title,
-                        startDate: todo.startDate,
-                        endDate: todo.endDate,
-                        subTasks: todo.subTasks.map((e) => e.title).toList(),
-                      );
+                      return TodoCard(todo: todo);
                     },
                   );
                 },
