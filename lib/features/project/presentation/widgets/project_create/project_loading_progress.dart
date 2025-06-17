@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectLoadingProgress extends ConsumerWidget {
   const ProjectLoadingProgress({super.key, required this.progress});
@@ -19,13 +19,13 @@ class ProjectLoadingProgress extends ConsumerWidget {
             child: CircularProgressIndicator(
               value: progress.percent,
               strokeWidth: 8,
-              valueColor: AlwaysStoppedAnimation(Color(0xFF5752EA)),
-              backgroundColor: Colors.grey.shade300,
+              valueColor: AlwaysStoppedAnimation(AppColors.primary500),
+              backgroundColor: AppColors.grey200,
             ),
           ),
           Text(
             '${(progress.percent * 100).round()}%',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+            style: AppTextStyles.header1,
           ),
         ],
       ),

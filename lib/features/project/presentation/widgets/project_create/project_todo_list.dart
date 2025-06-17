@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
-
-TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
-TextStyle subTitle1 = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
-TextStyle subTitle2 = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
-TextStyle subTitle3 = TextStyle(fontSize: 14, fontWeight: FontWeight.w500);
-Color grey800 = Color(0xFF403F4B);
-Color grey500 = Color(0xFF8C8AA0);
-Color grey300 = Color(0xFFCAC7DA);
-Color grey75 = Color(0xFFF0F0F3);
-Color primary600 = Color(0xFF342DE7);
-Color primary500 = Color(0xFF5752EA);
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectTodoList extends StatelessWidget {
   const ProjectTodoList({
@@ -42,9 +32,10 @@ class ProjectTodoList extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.white : grey75,
+                  color: isSelected ? Colors.white : AppColors.grey75,
                   border: Border.all(
-                    color: isSelected ? primary500 : Colors.transparent,
+                    color:
+                        isSelected ? AppColors.primary500 : Colors.transparent,
                     width: 1.0,
                   ),
                   borderRadius: BorderRadius.circular(16),
@@ -54,11 +45,14 @@ class ProjectTodoList extends StatelessWidget {
                   spacing: 4,
                   children: [
                     if (isSelected)
-                      Icon(Icons.check, size: 24, color: primary600),
+                      Icon(Icons.check, size: 24, color: AppColors.primary600),
                     Text(
                       title,
-                      style: subTitle2.copyWith(
-                        color: isSelected ? primary600 : grey300,
+                      style: AppTextStyles.subtitle2.copyWith(
+                        color:
+                            isSelected
+                                ? AppColors.primary600
+                                : AppColors.grey300,
                       ),
                     ),
                   ],

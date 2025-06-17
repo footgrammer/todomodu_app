@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,6 +6,7 @@ import 'package:todomodu_app/features/project/data/models/Project.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_search_bar.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
@@ -155,7 +155,7 @@ class ProjectPage extends ConsumerWidget {
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),
           icon: Icon(Icons.add, color: Colors.white),
-          backgroundColor: Color(0xFF5752EA),
+          backgroundColor: AppColors.primary500,
         ),
       ),
     );

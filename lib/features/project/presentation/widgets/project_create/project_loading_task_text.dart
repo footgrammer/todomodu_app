@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectLoadingTaskText extends StatelessWidget {
   const ProjectLoadingTaskText({
@@ -18,8 +19,8 @@ class ProjectLoadingTaskText extends StatelessWidget {
         final active = i <= progress.stepIndex;
         final icon =
             active
-                ? Icon(Icons.check_circle, color: Color(0xFF5752EA))
-                : Icon(Icons.radio_button_unchecked, color: Colors.grey);
+                ? Icon(Icons.check_circle, color: AppColors.primary500)
+                : Icon(Icons.radio_button_unchecked, color: AppColors.grey400);
         return Container(
           height: 64,
           margin: EdgeInsets.symmetric(vertical: 8),
@@ -38,7 +39,7 @@ class ProjectLoadingTaskText extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: active ? FontWeight.w600 : FontWeight.normal,
-                    color: active ? Color(0xFF403F4B) : Colors.grey,
+                    color: active ? AppColors.grey800 : Colors.grey,
                   ),
                 ),
               ),

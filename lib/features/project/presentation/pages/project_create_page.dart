@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:http/http.dart' as http;
 import 'package:todomodu_app/features/project/presentation/pages/project_loading_page.dart';
 import 'package:todomodu_app/features/project/presentation/utils/project_validator.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_date_range_field.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_description_field.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_form_field.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_title_field.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/dialog_utils.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
@@ -79,7 +77,7 @@ class ProjectCreatePage extends ConsumerWidget {
                 top: 10,
               ),
               child: CommonElevatedButton(
-                buttonColor: Color(0xFF5752EA),
+                buttonColor: AppColors.primary500,
                 text: '프로젝트 추가하기',
                 onPressed: () {
                   _validateAndProceed(

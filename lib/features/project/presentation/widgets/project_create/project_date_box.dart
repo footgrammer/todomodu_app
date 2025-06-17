@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/date_utils.dart';
 
 class ProjectDateBox extends ConsumerWidget {
@@ -13,9 +14,9 @@ class ProjectDateBox extends ConsumerWidget {
       height: 56,
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0xFFF7F7F8),
+        color: AppColors.grey50,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Color(0xFFDCDBE4)),
+        border: Border.all(color: AppColors.grey200),
       ),
       width: double.infinity,
       child: Row(
@@ -23,11 +24,7 @@ class ProjectDateBox extends ConsumerWidget {
           Expanded(
             child: Text(
               formatDateYMD(date),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF403F4B),
-              ),
+              style: AppTextStyles.body2.copyWith(color: AppColors.grey800),
             ),
           ),
           SizedBox(width: 4),
