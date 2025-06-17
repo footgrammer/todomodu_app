@@ -21,7 +21,7 @@ class TodoRepositoryImpl implements TodoRepository {
   Future<void> deleteTodo(String todoId) async {
     await remoteDataSource.deleteTodo(todoId);
   }
-  
+
    @override
   Future<void> toggleSubTaskDone({
     required String todoId,
@@ -33,5 +33,7 @@ class TodoRepositoryImpl implements TodoRepository {
       subTaskId: subTaskId,
       isDone: isDone,
     );
-  }
+
+  Future<void> updateTodo(Todo todo);
+}
 }
