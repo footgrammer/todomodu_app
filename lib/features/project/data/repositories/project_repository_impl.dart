@@ -3,6 +3,7 @@ import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/domain/repositories/project_repository.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
+import 'package:todomodu_app/features/todo/domain/repositories/todo_repository.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/domain/repositories/user_repository.dart';
 import 'package:todomodu_app/shared/types/result.dart';
@@ -10,15 +11,15 @@ import 'package:todomodu_app/shared/types/result.dart';
 class ProjectRepositoryImpl implements ProjectRepository {
   final ProjectDataSource _dataSource;
   final UserRepository _userRepository;
-  // final TodoRepository _todoRepository;
+  final TodoRepository _todoRepository;
 
   ProjectRepositoryImpl({
     required ProjectDataSource dataSource,
     required UserRepository userRepository,
-    // required TodoRepository todoRepository,
+    required TodoRepository todoRepository,
   }) : _dataSource = dataSource,
-       _userRepository = userRepository;
-  // _todoRepository = todoRepository;
+       _userRepository = userRepository,
+       _todoRepository = todoRepository;
 
   @override
   Future<Result<List<Project>>> fetchProjectsByUser(UserEntity user) async {
@@ -49,9 +50,9 @@ class ProjectRepositoryImpl implements ProjectRepository {
           final members = membersResult.value;
 
           // 3. 투두 정보 가져오기 (현재 생략)
-          // final todosResult = await _todoRepository.getTodosByIds(dto.todoIds);
-          // if (todosResult is! Ok<List<Todo>>) return null;
-          // final todos = (todosResult as Ok<List<Todo>>).value;
+          final todosResult = await _todoRepository.getTodosWithSubtasksByProjectId(dto.id);
+          if (todosResult is! Ok<List<Todo>>) return null;
+          final todos = todosResult.value;
 
           // 4. Owner 찾기
           final owner = members.firstWhere(
@@ -67,7 +68,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
           return dto.toEntity(
             owner: owner,
             members: members,
-            todos: [], // 투두 연결 필요 시 주석 해제
+            todos: todos, // 투두 연결 필요 시 주석 해제
           );
         }),
       );

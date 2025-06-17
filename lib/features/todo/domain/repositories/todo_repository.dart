@@ -5,5 +5,6 @@ abstract class TodoRepository {
   Future<void> createTodo(Todo todo);
   Stream<List<Todo>> streamTodos();
   Future<Result<List<Todo>>> getTodosByProjectId(String projectId);
+  Future<Result<List<Todo>>> getTodosWithSubtasksByProjectId(String projectId);
 
 }

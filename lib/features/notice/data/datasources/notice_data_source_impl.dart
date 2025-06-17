@@ -115,7 +115,6 @@ class NoticeDataSourceImpl implements NoticeDatasource {
       if (!updatedCheckedUsers.contains(userDto.userId)) {
         updatedCheckedUsers.add(userDto.userId);
       } else {
-        // 이미 체크되어 있으면 그대로 반환
         return Result.ok(noticeDto);
       }
 
