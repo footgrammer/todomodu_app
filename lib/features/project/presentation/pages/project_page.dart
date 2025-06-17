@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:todomodu_app/features/ai/presentation/pages/project_create_test_page.dart';
 import 'package:todomodu_app/features/project/data/models/Project.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_search_bar.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
+import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
 class User {
   final String id;
@@ -112,7 +118,24 @@ class ProjectPage extends ConsumerWidget {
         FocusScope.of(context).unfocus(); // ✅ 현재 포커스 해제
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          centerTitle: false,
+          title: Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: SvgPicture.asset('assets/images/top_app_bar_logo_img.svg'),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: IconButton(
+                onPressed: () {
+                  log('알림 버튼 클릭');
+                },
+                icon: CustomIcon(name: 'bell'),
+              ),
+            ),
+          ],
+        ),
         body: Padding(
           padding: EdgeInsets.all(20),
           child: Column(
@@ -126,10 +149,7 @@ class ProjectPage extends ConsumerWidget {
         // ➕ 플로팅 버튼
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProjectCreatePage()),
-            );
+            navigateToPage(context, ProjectCreateTestPage());
           },
           label: Text(
             '프로젝트 추가',

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
-import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/features/user/presentation/widgets/login_button.dart';
+import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
@@ -9,55 +14,66 @@ class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.read(authProvider);
-    final user = ref.watch(userProvider);
 
     return Scaffold(
       body: Center(
-        child: user.when(
-          loading: () => CircularProgressIndicator(),
-          error: (error, stack) => Text('$error'),
-          data: (user) {
-            if (user != null) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('USERID'),
-                  Text(user.userId),
-                  const Text('NAME'),
-                  Text(user.name),
-                  const Text('URL'),
-                  Text(user.profileImageUrl),
-                  const Text('EMAIL'),
-                  Text(user.email),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await auth.signOut();
-                      ref.invalidate(userProvider);
-                    },
-                    child: Text('로그아웃'),
-                  ),
-                ],
-              );
-            } else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      await auth.signInWithGoogle();
-                    },
-                    child: Text('구글 로그인'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await auth.signInWithKakao();
-                    },
-                    child: Text('카카오 로그인'),
-                  ),
-                ],
-              );
-            }
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Spacer(),
+            Spacer(),
+            SvgPicture.asset('assets/images/login_img.svg'),
+            const Text(
+              textAlign: TextAlign.center,
+              '투무모두와 함께\n하루를 계획해보세요!',
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            ),
+            const Text(
+              '쉽고 간편한 스케줄러를 만나보세요',
+              style: TextStyle(color: AppColors.grey500),
+            ),
+            Spacer(),
+            Builder(
+              builder: (context) {
+                return LoginButton(
+                  path: 'assets/images/apple_login.svg',
+                  onPressed: () async {
+                    final userCred = await auth.signInWithApple();
+                    if (userCred != null) {
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString('accessToken', 'your_token_here');
+                      replaceAllWithPage(context, const MainPage());
+                    }
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            LoginButton(
+              path: 'assets/images/kakao_login.svg',
+              onPressed: () async {
+                final userCred = await auth.signInWithKakao();
+                if (userCred != null) {
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.setString('accessToken', 'your_token_here');
+                  replaceAllWithPage(context, const MainPage());
+                }
+              },
+            ),
+            const SizedBox(height: 8),
+            LoginButton(
+              path: 'assets/images/google_login.svg',
+              onPressed: () async {
+                final userCred = await auth.signInWithGoogle();
+                if (userCred != null) {
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.setString('accessToken', 'your_token_here');
+                  replaceAllWithPage(context, const MainPage());
+                }
+              },
+            ),
+            Spacer(),
+          ],
         ),
       ),
     );
