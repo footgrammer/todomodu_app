@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:todomodu_app/features/project/data/models/Project.dart';
+import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_search_bar.dart';

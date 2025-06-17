@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/project/data/models/Project.dart';
+import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card.dart';
 
 class ProjectCardList extends ConsumerWidget {

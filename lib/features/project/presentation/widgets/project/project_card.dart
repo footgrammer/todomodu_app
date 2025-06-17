@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todomodu_app/features/project/data/models/Project.dart';
+import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_member_icons.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_progress_bar.dart';
