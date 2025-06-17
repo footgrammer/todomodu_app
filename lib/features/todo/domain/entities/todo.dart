@@ -1,10 +1,10 @@
-import 'package:todomodu_app/features/todo/domain/entities/sub_task.dart';
+import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 
 class Todo {
   String id;
   String projectId;
   String title;
-  List<SubTask> subTasks;
+  List<Subtask> subTasks;
   DateTime startDate;
   DateTime endDate;
   bool isDone;
