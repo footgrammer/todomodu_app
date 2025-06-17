@@ -16,4 +16,10 @@ class TodoRepositoryImpl implements TodoRepository {
   Stream<List<Todo>> streamTodos() {
     return remoteDataSource.streamTodos();
   }
+
+    @override
+  Future<void> deleteTodo(String todoId) async {
+    await remoteDataSource.deleteTodo(todoId);
+  }
+  
 }
