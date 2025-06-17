@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/entities/sub_task.dart';
+import '../../domain/entities/subtask.dart';
 import '../../domain/entities/todo.dart';
 import '../../application/usecases/create_todo_usecase.dart';
 
@@ -55,12 +55,13 @@ class AddTodoViewModel extends ChangeNotifier {
   Future<void> submit() async {
     final uuid = Uuid();
 
-    final List<SubTask> subTasks = subTaskControllers.map((controller) {
-      return SubTask(
+    final List<Subtask> subTasks = subTaskControllers.map((controller) {
+      return Subtask(
         id: uuid.v4(),
         todoId: '임시',
         title: controller.text,
         isDone: false,
+        assignee: null,
       );
     }).toList();
 
