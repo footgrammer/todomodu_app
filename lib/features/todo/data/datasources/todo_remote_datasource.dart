@@ -74,4 +74,20 @@ class TodoRemoteDataSource {
 
     await todoDoc.delete();
   }
+
+  Future<void> toggleSubTaskDone({
+    required String todoId,
+    required String subTaskId,
+    required bool isDone,
+  }) async {
+    final subTaskDoc = firestore
+        .collection('todos')
+        .doc(todoId)
+        .collection('subTasks')
+        .doc(subTaskId);
+
+    await subTaskDoc.update({
+      'isDone': isDone,
+    });
+  }
 }
