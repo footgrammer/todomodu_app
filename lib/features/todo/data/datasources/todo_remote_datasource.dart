@@ -63,4 +63,15 @@ class TodoRemoteDataSource {
     return todos;
   });
 }
+
+  Future<void> deleteTodo(String todoId) async {
+    final todoDoc = firestore.collection('todos').doc(todoId);
+
+    final subTasksSnapshot = await todoDoc.collection('subTasks').get();
+    for (final subTaskDoc in subTasksSnapshot.docs) {
+      await subTaskDoc.reference.delete();
+    }
+
+    await todoDoc.delete();
+  }
 }
