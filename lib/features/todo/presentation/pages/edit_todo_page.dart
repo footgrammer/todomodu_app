@@ -32,7 +32,9 @@ class EditTodoPage extends ConsumerWidget {
                 controller: TextEditingController.fromValue(
                   TextEditingValue(
                     text: state.title,
-                    selection: TextSelection.collapsed(offset: state.title.length),
+                    selection: TextSelection.collapsed(
+                      offset: state.title.length,
+                    ),
                   ),
                 ),
                 onChanged: viewModel.changeTitle,
@@ -65,32 +67,53 @@ class EditTodoPage extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: 24),
-              const Text('할 일 목록', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text(
+                '할 일 목록',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 8),
 
               ...state.subtasks.asMap().entries.map((entry) {
                 final index = entry.key;
                 final subtask = entry.value;
 
-                return Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(labelText: '세부 할 일'),
-                        controller: TextEditingController.fromValue(
-                          TextEditingValue(
-                            text: subtask.title,
-                            selection: TextSelection.collapsed(offset: subtask.title.length),
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '세부 할 일',
                           ),
+                          controller: TextEditingController.fromValue(
+                            TextEditingValue(
+                              text: subtask.title,
+                              selection: TextSelection.collapsed(
+                                offset: subtask.title.length,
+                              ),
+                            ),
+                          ),
+                          onChanged:
+                              (value) =>
+                                  viewModel.changeSubtaskTitle(index, value),
                         ),
-                        onChanged: (value) => viewModel.changeSubtaskTitle(index, value),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () => viewModel.removeSubtask(index),
-                      icon: const Icon(Icons.delete_outline),
-                    ),
-                  ],
+                      IconButton(
+                        onPressed: () => viewModel.removeSubtask(index),
+                        icon: const Icon(
+                          Icons.remove_circle_outline,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               }),
 
@@ -109,9 +132,9 @@ class EditTodoPage extends ConsumerWidget {
         onPressed: () async {
           await viewModel.submit();
           if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('할 일이 수정되었습니다')),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('할 일이 수정되었습니다')));
             Navigator.pop(context);
           }
         },
