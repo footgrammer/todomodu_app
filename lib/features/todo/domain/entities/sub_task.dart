@@ -13,4 +13,19 @@ class SubTask {
     required this.isDone,
     // required this.assignee,
   });
+
+    SubTask copyWith({
+    String? id,
+    String? todoId,
+    String? title,
+    bool? isDone,
+  }) {
+    return SubTask(
+      id: id ?? this.id,
+      todoId: todoId ?? this.todoId,
+      title: title ?? this.title,
+      isDone: isDone ?? this.isDone,
+    );
+  }
+  
 }
