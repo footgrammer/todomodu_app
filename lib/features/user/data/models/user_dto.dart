@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class UserDto {
@@ -21,7 +22,7 @@ class UserDto {
         name: map['name'],
         profileImageUrl: map['profileImageUrl'],
         email: map['email'],
-        createdAt: map['createdAt'],
+        createdAt: (map['createdAt'] as Timestamp).toDate(),
       );
 
   Map<String, dynamic> toJson() {
