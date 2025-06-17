@@ -29,9 +29,36 @@ class TodoDetailPage extends ConsumerWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Text('할 일 상세 페이지'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('시작일: ${formatDate(todo.startDate)}', style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 8),
+            Text('종료일: ${formatDate(todo.endDate)}', style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 24),
+            const Text('세부 할 일', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView.builder(
+                itemCount: todo.subTasks.length,
+                itemBuilder: (context, index) {
+                  final subTask = todo.subTasks[index];
+                  return ListTile(
+                    leading: const Icon(Icons.circle_outlined),
+                    title: Text(subTask.title, style: const TextStyle(fontSize: 16)),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  String formatDate(DateTime date) {
+    return '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
   }
 }
