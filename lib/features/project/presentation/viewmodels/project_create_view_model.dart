@@ -63,6 +63,12 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
     state = state.copyWith(selectedSubtasks: newMap);
   }
 
+  void updateSelectedSubtasks(String todo, Set<String> updatedSubtasks) {
+    final updatedMap = {...state.selectedSubtasks, todo: updatedSubtasks};
+
+    state = state.copyWith(selectedSubtasks: updatedMap);
+  }
+
   void toggleExpandedItems(String todo) {
     final current = state.expandedItems ?? <String>{};
     final updated = {...current};

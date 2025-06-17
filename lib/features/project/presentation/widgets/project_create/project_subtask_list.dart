@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
-import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectSubtaskList extends StatelessWidget {
@@ -8,16 +7,14 @@ class ProjectSubtaskList extends StatelessWidget {
     super.key,
     required this.todoToAllSubtasks,
     required this.subtasks,
-    required this.state,
-    required this.viewModel,
     required this.todo,
+    required this.onTap,
   });
 
   final Map<String, Set<String>> todoToAllSubtasks;
   final Set<String> subtasks;
-  final ProjectCreateState state;
-  final ProjectCreateViewModel viewModel;
   final String todo;
+  final void Function(String) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +27,7 @@ class ProjectSubtaskList extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                  final updated = {...subtasks};
-                  if (isSelected) {
-                    updated.remove(subtask);
-                  } else {
-                    updated.add(subtask);
-                  }
-
-                  final updatedMap = {...state.selectedSubtasks, todo: updated};
-                  viewModel.state = state.copyWith(
-                    selectedSubtasks: updatedMap,
-                  );
+                  onTap(subtask);
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 6),

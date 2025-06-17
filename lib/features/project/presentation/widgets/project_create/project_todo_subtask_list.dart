@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_subtask_list.dart';
@@ -9,17 +8,17 @@ class ProjectTodoSubtaskList extends StatelessWidget {
   const ProjectTodoSubtaskList({
     super.key,
     required this.selectedTodos,
-    required this.state,
+    required this.projectCreateState,
     required this.todoToAllSubtasks,
     required this.viewModel,
-    required this.ref,
+    required this.onTap,
   });
 
   final Set<String> selectedTodos;
-  final ProjectCreateState state;
+  final ProjectCreateState projectCreateState;
   final Map<String, Set<String>> todoToAllSubtasks;
   final ProjectCreateViewModel viewModel;
-  final WidgetRef ref;
+  final void Function(String) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +27,15 @@ class ProjectTodoSubtaskList extends StatelessWidget {
         children:
             selectedTodos.map((todo) {
               final isExpanded =
-                  state.expandedItems == null
+                  projectCreateState.expandedItems == null
                       ? false
-                      : state.expandedItems!.contains(todo);
-              final subtasks = state.selectedSubtasks[todo] ?? <String>{};
+                      : projectCreateState.expandedItems!.contains(todo);
+              final subtasks =
+                  projectCreateState.selectedSubtasks[todo] ?? <String>{};
 
               return GestureDetector(
                 onTap: () {
-                  ref
-                      .read(projectCreateViewModelProvider.notifier)
-                      .toggleExpandedItems(todo);
+                  onTap(todo);
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -68,9 +66,17 @@ class ProjectTodoSubtaskList extends StatelessWidget {
                         ProjectSubtaskList(
                           todoToAllSubtasks: todoToAllSubtasks,
                           subtasks: subtasks,
-                          state: state,
-                          viewModel: viewModel,
                           todo: todo,
+                          onTap: (String subtask) {
+                            final isSelected = subtasks.contains(subtask);
+                            final updated = {...subtasks};
+                            if (isSelected) {
+                              updated.remove(subtask);
+                            } else {
+                              updated.add(subtask);
+                            }
+                            viewModel.updateSelectedSubtasks(todo, updated);
+                          },
                         ),
                     ],
                   ),

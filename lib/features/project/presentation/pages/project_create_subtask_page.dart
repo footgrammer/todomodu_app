@@ -44,7 +44,11 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
               state: state,
               todoToAllSubtasks: todoToAllSubtasks,
               viewModel: viewModel,
-              ref: ref,
+              onTap: (String todo) {
+                ref
+                    .read(projectCreateViewModelProvider.notifier)
+                    .toggleExpandedItems(todo);
+              },
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 40, top: 10),
