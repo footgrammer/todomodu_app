@@ -5,10 +5,11 @@ abstract class TodoRepository {
   Stream<List<Todo>> streamTodos();
   Future<void> deleteTodo(String todoId);
 
-    Future<void> toggleSubTaskDone({
+  Future<void> toggleSubTaskDone({
     required String todoId,
     required String subTaskId,
     required bool isDone,
-}
-    );
+  });
+
+  Future<void> updateTodo(Todo todo);
 }

@@ -17,12 +17,12 @@ class TodoRepositoryImpl implements TodoRepository {
     return remoteDataSource.streamTodos();
   }
 
-    @override
+  @override
   Future<void> deleteTodo(String todoId) async {
     await remoteDataSource.deleteTodo(todoId);
   }
 
-   @override
+  @override
   Future<void> toggleSubTaskDone({
     required String todoId,
     required String subTaskId,
@@ -33,7 +33,10 @@ class TodoRepositoryImpl implements TodoRepository {
       subTaskId: subTaskId,
       isDone: isDone,
     );
+  }
 
-  Future<void> updateTodo(Todo todo);
-}
-}
+    @override
+    Future<void> updateTodo(Todo todo) async {
+      await remoteDataSource.updateTodo(todo);
+    }
+  }
