@@ -77,40 +77,43 @@ class EditTodoPage extends ConsumerWidget {
                 final index = entry.key;
                 final subtask = entry.value;
 
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
                   child: Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: '세부 할 일',
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          controller: TextEditingController.fromValue(
-                            TextEditingValue(
-                              text: subtask.title,
-                              selection: TextSelection.collapsed(
-                                offset: subtask.title.length,
+                          child: TextField(
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: '세부 할 일',
+                            ),
+                            controller: TextEditingController.fromValue(
+                              TextEditingValue(
+                                text: subtask.title,
+                                selection: TextSelection.collapsed(
+                                  offset: subtask.title.length,
+                                ),
                               ),
                             ),
+                            onChanged:
+                                (value) =>
+                                    viewModel.changeSubtaskTitle(index, value),
                           ),
-                          onChanged:
-                              (value) =>
-                                  viewModel.changeSubtaskTitle(index, value),
                         ),
                       ),
+                      const SizedBox(width: 8),
                       IconButton(
-                        onPressed: () => viewModel.removeSubtask(index),
                         icon: const Icon(
                           Icons.remove_circle_outline,
                           color: Colors.black54,
                         ),
+                        onPressed: () => viewModel.removeSubtask(index),
                       ),
                     ],
                   ),
