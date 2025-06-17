@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:http/http.dart' as http;
 import 'package:todomodu_app/features/project/presentation/pages/project_loading_page.dart';
 import 'package:todomodu_app/features/project/presentation/utils/project_validator.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_date_range_field.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_description_field.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_title_field.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_date_range_field.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_description_field.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_form_field.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_title_field.dart';
 import 'package:todomodu_app/shared/utils/dialog_utils.dart';
+import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 
@@ -59,24 +61,13 @@ class ProjectCreatePage extends ConsumerWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ProjectTitleField(
-                      titleController: titleController,
-                      titleFocusNode: titleFocusNode,
-                    ),
-                    SizedBox(height: 32),
-                    ProjectDateRangeField(
-                      startDateProvider: startDateProvider,
-                      endDateProvider: endDateProvider,
-                    ),
-                    SizedBox(height: 32),
-                    ProjectDescriptionField(
-                      descriptionController: descriptionController,
-                      descriptionFocusNode: descriptionFocusNode,
-                    ),
-                  ],
+                child: ProjectFormField(
+                  titleController: titleController,
+                  titleFocusNode: titleFocusNode,
+                  descriptionController: descriptionController,
+                  descriptionFocusNode: descriptionFocusNode,
+                  startDateProvider: startDateProvider,
+                  endDateProvider: endDateProvider,
                 ),
               ),
             ),
@@ -84,10 +75,12 @@ class ProjectCreatePage extends ConsumerWidget {
               padding: EdgeInsets.only(
                 left: 20,
                 right: 20,
-                bottom: 40,
+                bottom: 64,
                 top: 10,
               ),
-              child: ElevatedButton(
+              child: CommonElevatedButton(
+                buttonColor: Color(0xFF5752EA),
+                text: '프로젝트 추가하기',
                 onPressed: () {
                   _validateAndProceed(
                     context,
@@ -98,21 +91,6 @@ class ProjectCreatePage extends ConsumerWidget {
                     descriptionFocusNodeProvider,
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 56),
-                  backgroundColor: Color(0xFF5752EA),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  '프로젝트 추가하기',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
               ),
             ),
           ],

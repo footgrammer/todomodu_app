@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_todo_page.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_loading_progress.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_loading_task_text.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_loading_text.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_loading_progress.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_loading_task_text.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_loading_text.dart';
 
 class ProjectLoadingPage extends ConsumerWidget {
   final Future<Map<String, dynamic>> Function(String) requestChatGPTApi;

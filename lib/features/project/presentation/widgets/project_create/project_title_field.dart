@@ -19,7 +19,7 @@ class ProjectTitleField extends ConsumerWidget {
         ProjectLabel(text: '프로젝트 이름'),
         SizedBox(height: 8),
         Container(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
