@@ -16,6 +16,7 @@ class TodoDetailPage extends ConsumerWidget {
         title: Text(todo.title),
         actions: [
           PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
             onSelected: (value) async {
               if (value == 'delete') {
                 await ref.read(deleteTodoUseCaseProvider).call(todo.id);
