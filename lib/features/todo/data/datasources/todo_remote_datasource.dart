@@ -94,28 +94,31 @@ Future<void> createTodo(Todo todo) async {
     });
   }
 
- Future<void> updateTodo(Todo todo) async {
-    final todoDoc = firestore.collection('todos').doc(todo.id);
+Future<void> updateTodo(Todo todo) async {
+  final todoDoc = firestore.collection('todos').doc(todo.id);
 
-    await todoDoc.set({
-      'projectId': todo.projectId,
-      'title': todo.title,
-      'startDate': todo.startDate.toIso8601String(),
-      'endDate': todo.endDate.toIso8601String(),
-      'isDone': todo.isDone,
-    });
-
-    final subTasksSnapshot = await todoDoc.collection('subTasks').get();
-    for (final subTaskDoc in subTasksSnapshot.docs) {
-      await subTaskDoc.reference.delete();
-    }
-
-    for (final subTask in todo.subTasks) {
-      final subTaskDoc = todoDoc.collection('subTasks').doc(subTask.id);
-      await subTaskDoc.set({
-        'title': subTask.title,
-        'isDone': subTask.isDone,
-      });
-    }
+  await todoDoc.set({
+    'projectId': todo.projectId,
+    'title': todo.title,
+    'startDate': todo.startDate.toIso8601String(),
+    'endDate': todo.endDate.toIso8601String(),
+    'isDone': todo.isDone,
+  });
+  
+  final subTasksSnapshot = await todoDoc.collection('subTasks').get();
+  for (final subTaskDoc in subTasksSnapshot.docs) {
+    await subTaskDoc.reference.delete();
   }
+
+  for (final subTask in todo.subTasks) {
+    final subTaskDoc = todoDoc.collection('subTasks').doc();
+    final generatedId = subTaskDoc.id;
+
+    await subTaskDoc.set({
+      'title': subTask.title,
+      'isDone': subTask.isDone,
+    });
+  }
+}
+
 }
