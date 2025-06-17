@@ -51,7 +51,7 @@ final noticeCreateViewModelProvider = StateNotifierProvider.family<
   );
 });
 
-final noticeListViewModel =
+final noticeListViewModelProvider =
     StateNotifierProvider<NoticeListViewModel, NoticeListModel>((ref) {
       return NoticeListViewModel(
         retrieveUsecase: ref.watch(retrieveNoticesByProjectsUsecase),
