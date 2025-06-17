@@ -1,92 +1,79 @@
-import 'package:flutter/material.dart';
-import 'package:todomodu_app/features/todo/application/usecases/update_todo_usecase.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 import '../../domain/entities/sub_task.dart';
 import '../../domain/entities/todo.dart';
-import '../providers/update_todo_usecase_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../application/usecases/update_todo_usecase.dart';
+import '../states/edit_todo_state.dart';
 
-class EditTodoViewModel {
-  final Todo originalTodo;
-  final TextEditingController titleController;
-  final List<TextEditingController> subTaskControllers;
-  DateTime startDate;
-  DateTime endDate;
+class EditTodoViewModel extends StateNotifier<EditTodoState> {
   final UpdateTodoUseCase updateTodoUseCase;
+  final String todoId;
+  final String projectId;
 
   EditTodoViewModel({
-    required this.originalTodo,
-    required this.titleController,
-    required this.subTaskControllers,
-    required this.startDate,
-    required this.endDate,
-    required this.updateTodoUseCase,
-  });
-
-  factory EditTodoViewModel.create({
     required Todo todo,
-    required UpdateTodoUseCase updateTodoUseCase,
-  }) {
-    return EditTodoViewModel(
-      originalTodo: todo,
-      titleController: TextEditingController(text: todo.title),
-      subTaskControllers: todo.subTasks
-          .map((subTask) => TextEditingController(text: subTask.title))
-          .toList(),
-      startDate: todo.startDate,
-      endDate: todo.endDate,
-      updateTodoUseCase: updateTodoUseCase,
-    );
+    required this.updateTodoUseCase,
+  })  : todoId = todo.id,
+        projectId = todo.projectId,
+        super(EditTodoState(
+          id: todo.id,
+          projectId: todo.projectId,
+          title: todo.title,
+          startDate: todo.startDate,
+          endDate: todo.endDate,
+          subTasks: todo.subTasks,
+        ));
+
+  // 제목 수정
+  void changeTitle(String title) {
+    state = state.copyWith(title: title);
   }
 
+  // 시작일 수정
+  void changeStartDate(DateTime startDate) {
+    state = state.copyWith(startDate: startDate);
+  }
+
+  // 종료일 수정
+  void changeEndDate(DateTime endDate) {
+    state = state.copyWith(endDate: endDate);
+  }
+
+  // SubTask 추가 (uuid로 임시 id 부여)
   void addSubTask() {
-    subTaskControllers.add(TextEditingController());
+    final newSubTask = SubTask(
+      id: const Uuid().v4(),
+      todoId: todoId,
+      title: '',
+      isDone: false,
+    );
+    state = state.copyWith(subTasks: [...state.subTasks, newSubTask]);
   }
 
+  // SubTask 삭제
   void removeSubTask(int index) {
-    subTaskControllers.removeAt(index);
+    final newList = [...state.subTasks]..removeAt(index);
+    state = state.copyWith(subTasks: newList);
   }
 
-  Future<void> pickDate(BuildContext context, bool isStartDate) async {
-    final initialDate = isStartDate ? startDate : endDate;
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null) {
-      if (isStartDate) {
-        startDate = picked;
-      } else {
-        endDate = picked;
-      }
-    }
+  // SubTask 제목 수정
+  void changeSubTaskTitle(int index, String title) {
+    final updated = [...state.subTasks];
+    updated[index] = updated[index].copyWith(title: title);
+    state = state.copyWith(subTasks: updated);
   }
 
+  // 제출 (Firestore로 업데이트)
   Future<void> submit() async {
-    final updatedTodo = Todo(
-      id: originalTodo.id,
-      projectId: originalTodo.projectId,
-      title: titleController.text,
-      startDate: startDate,
-      endDate: endDate,
-      isDone: originalTodo.isDone,
-      subTasks: List.generate(
-        subTaskControllers.length,
-        (index) => SubTask(
-          id: originalTodo.subTasks.length > index
-              ? originalTodo.subTasks[index].id
-              : UniqueKey().toString(),
-          todoId: originalTodo.id,
-          title: subTaskControllers[index].text,
-          isDone: originalTodo.subTasks.length > index
-              ? originalTodo.subTasks[index].isDone
-              : false,
-        ),
-      ),
+    final todo = Todo(
+      id: todoId,
+      projectId: projectId,
+      title: state.title,
+      startDate: state.startDate,
+      endDate: state.endDate,
+      isDone: false,
+      subTasks: state.subTasks,
     );
-
-    await updateTodoUseCase(updatedTodo);
+    await updateTodoUseCase(todo);
   }
 }
