@@ -1,18 +1,20 @@
 import '../../domain/repositories/todo_repository.dart';
 
-class ToggleSubTaskDoneUseCase {
+class ToggleSubtaskDoneUseCase {
   final TodoRepository repository;
 
-  ToggleSubTaskDoneUseCase(this.repository);
+  ToggleSubtaskDoneUseCase(this.repository);
 
   Future<void> call({
+    required String projectId,
     required String todoId,
-    required String subTaskId,
+    required String subtaskId,
     required bool isDone,
   }) async {
-    await repository.toggleSubTaskDone(
+    await repository.toggleSubtaskDone(
+      projectId: projectId,
       todoId: todoId,
-      subTaskId: subTaskId,
+      subtaskId: subtaskId,
       isDone: isDone,
     );
   }

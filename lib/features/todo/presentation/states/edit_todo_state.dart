@@ -1,4 +1,4 @@
-import '../../domain/entities/sub_task.dart';
+import '../../domain/entities/subtask.dart';
 
 class EditTodoState {
   final String id;
@@ -6,7 +6,7 @@ class EditTodoState {
   final String title;
   final DateTime startDate;
   final DateTime endDate;
-  final List<SubTask> subTasks;
+  final List<Subtask> subtasks;
 
   EditTodoState({
     required this.id,
@@ -14,14 +14,14 @@ class EditTodoState {
     required this.title,
     required this.startDate,
     required this.endDate,
-    required this.subTasks,
+    required this.subtasks,
   });
 
   EditTodoState copyWith({
     String? title,
     DateTime? startDate,
     DateTime? endDate,
-    List<SubTask>? subTasks,
+    List<Subtask>? subtasks,
   }) {
     return EditTodoState(
       id: id,
@@ -29,7 +29,7 @@ class EditTodoState {
       title: title ?? this.title,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
-      subTasks: subTasks ?? this.subTasks,
+      subtasks: subtasks ?? this.subtasks,
     );
   }
 }

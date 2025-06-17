@@ -4,7 +4,6 @@ import '../../domain/entities/todo.dart';
 import '../providers/edit_todo_viewmodel_provider.dart';
 import '../widgets/todo_date_section.dart';
 import '../widgets/submit_button.dart';
-import '../../domain/entities/sub_task.dart';
 
 class EditTodoPage extends ConsumerWidget {
   final Todo todo;
@@ -30,11 +29,15 @@ class EditTodoPage extends ConsumerWidget {
             children: [
               TextField(
                 decoration: const InputDecoration(labelText: '제목'),
-                controller: TextEditingController(text: state.title),
+                controller: TextEditingController.fromValue(
+                  TextEditingValue(
+                    text: state.title,
+                    selection: TextSelection.collapsed(offset: state.title.length),
+                  ),
+                ),
                 onChanged: viewModel.changeTitle,
               ),
               const SizedBox(height: 24),
-
               TodoDateSection(
                 startDate: state.startDate,
                 endDate: state.endDate,
@@ -61,26 +64,30 @@ class EditTodoPage extends ConsumerWidget {
                   }
                 },
               ),
-
               const SizedBox(height: 24),
               const Text('할 일 목록', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
 
-              ...state.subTasks.asMap().entries.map((entry) {
+              ...state.subtasks.asMap().entries.map((entry) {
                 final index = entry.key;
-                final subTask = entry.value;
+                final subtask = entry.value;
 
                 return Row(
                   children: [
                     Expanded(
                       child: TextField(
                         decoration: const InputDecoration(labelText: '세부 할 일'),
-                        controller: TextEditingController(text: subTask.title),
-                        onChanged: (value) => viewModel.changeSubTaskTitle(index, value),
+                        controller: TextEditingController.fromValue(
+                          TextEditingValue(
+                            text: subtask.title,
+                            selection: TextSelection.collapsed(offset: subtask.title.length),
+                          ),
+                        ),
+                        onChanged: (value) => viewModel.changeSubtaskTitle(index, value),
                       ),
                     ),
                     IconButton(
-                      onPressed: () => viewModel.removeSubTask(index),
+                      onPressed: () => viewModel.removeSubtask(index),
                       icon: const Icon(Icons.delete_outline),
                     ),
                   ],
@@ -89,7 +96,7 @@ class EditTodoPage extends ConsumerWidget {
 
               Center(
                 child: IconButton(
-                  onPressed: viewModel.addSubTask,
+                  onPressed: viewModel.addSubtask,
                   icon: const Icon(Icons.add_circle_outline, size: 36),
                 ),
               ),

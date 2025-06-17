@@ -1,10 +1,8 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/todo/presentation/providers/stream_todos_usecase_provider.dart';
-import 'package:todomodu_app/features/todo/presentation/viewmodels/todo_list_viewmodel.dart';
+import '../viewmodels/todo_list_viewmodel.dart';
+import 'stream_todos_usecase_provider.dart';
 
-final TodoListViewModelProvider = ChangeNotifierProvider<TodoListViewModel>((ref){
-  final useCase = ref.read(streamTodosUseCaseProvider);
-  return TodoListViewModel(useCase);
-
+final todoListViewModelProvider = Provider<TodoListViewModel>((ref) {
+  final streamTodosUseCase = ref.watch(streamTodosUseCaseProvider);
+  return TodoListViewModel(streamTodosUseCase);
 });

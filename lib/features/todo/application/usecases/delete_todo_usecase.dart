@@ -5,7 +5,10 @@ class DeleteTodoUseCase {
 
   DeleteTodoUseCase(this.repository);
 
-  Future<void> call(String todoId) async {
-    await repository.deleteTodo(todoId);
+  Future<void> call({
+    required String projectId,
+    required String todoId,
+  }) async {
+    await repository.deleteTodo(projectId, todoId);
   }
 }

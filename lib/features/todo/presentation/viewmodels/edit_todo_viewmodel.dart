@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/entities/sub_task.dart';
+import '../../domain/entities/subtask.dart';
 import '../../domain/entities/todo.dart';
 import '../../application/usecases/update_todo_usecase.dart';
 import '../states/edit_todo_state.dart';
@@ -21,49 +21,41 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
           title: todo.title,
           startDate: todo.startDate,
           endDate: todo.endDate,
-          subTasks: todo.subTasks,
+          subtasks: todo.subtasks,
         ));
 
-  // 제목 수정
   void changeTitle(String title) {
     state = state.copyWith(title: title);
   }
 
-  // 시작일 수정
   void changeStartDate(DateTime startDate) {
     state = state.copyWith(startDate: startDate);
   }
 
-  // 종료일 수정
   void changeEndDate(DateTime endDate) {
     state = state.copyWith(endDate: endDate);
   }
 
-  // SubTask 추가 (uuid로 임시 id 부여)
-  void addSubTask() {
-    final newSubTask = SubTask(
+  void addSubtask() {
+    final newSubtask = Subtask(
       id: const Uuid().v4(),
-      todoId: todoId,
       title: '',
       isDone: false,
     );
-    state = state.copyWith(subTasks: [...state.subTasks, newSubTask]);
+    state = state.copyWith(subtasks: [...state.subtasks, newSubtask]);
   }
 
-  // SubTask 삭제
-  void removeSubTask(int index) {
-    final newList = [...state.subTasks]..removeAt(index);
-    state = state.copyWith(subTasks: newList);
+  void removeSubtask(int index) {
+    final newList = [...state.subtasks]..removeAt(index);
+    state = state.copyWith(subtasks: newList);
   }
 
-  // SubTask 제목 수정
-  void changeSubTaskTitle(int index, String title) {
-    final updated = [...state.subTasks];
+  void changeSubtaskTitle(int index, String title) {
+    final updated = [...state.subtasks];
     updated[index] = updated[index].copyWith(title: title);
-    state = state.copyWith(subTasks: updated);
+    state = state.copyWith(subtasks: updated);
   }
 
-  // 제출 (Firestore로 업데이트)
   Future<void> submit() async {
     final todo = Todo(
       id: todoId,
@@ -72,7 +64,7 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
       startDate: state.startDate,
       endDate: state.endDate,
       isDone: false,
-      subTasks: state.subTasks,
+      subtasks: state.subtasks,
     );
     await updateTodoUseCase(todo);
   }

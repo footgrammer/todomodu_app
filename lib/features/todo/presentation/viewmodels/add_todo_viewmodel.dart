@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/entities/sub_task.dart';
+import '../../domain/entities/subtask.dart';
 import '../../domain/entities/todo.dart';
 import '../../application/usecases/create_todo_usecase.dart';
 
 class AddTodoViewModel extends ChangeNotifier {
   final CreateTodoUseCase createTodoUseCase;
+  final String projectId;
 
-  AddTodoViewModel(this.createTodoUseCase);
+  AddTodoViewModel(this.createTodoUseCase, {required this.projectId});
 
   final TextEditingController titleController = TextEditingController();
-  final List<TextEditingController> subTaskControllers = [];
+  final List<TextEditingController> subtaskControllers = [];
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
 
-  void addSubTask() {
-    subTaskControllers.add(TextEditingController());
+  void addSubtask() {
+    subtaskControllers.add(TextEditingController());
     notifyListeners();
   }
 
-  void removeSubTask(int index) {
-    subTaskControllers[index].dispose();
-    subTaskControllers.removeAt(index);
+  void removeSubtask(int index) {
+    subtaskControllers[index].dispose();
+    subtaskControllers.removeAt(index);
     notifyListeners();
   }
 
@@ -55,10 +56,9 @@ class AddTodoViewModel extends ChangeNotifier {
   Future<void> submit() async {
     final uuid = Uuid();
 
-    final List<SubTask> subTasks = subTaskControllers.map((controller) {
-      return SubTask(
+    final List<Subtask> subtasks = subtaskControllers.map((controller) {
+      return Subtask(
         id: uuid.v4(),
-        todoId: '임시',
         title: controller.text,
         isDone: false,
       );
@@ -66,9 +66,9 @@ class AddTodoViewModel extends ChangeNotifier {
 
     final todo = Todo(
       id: uuid.v4(),
-      projectId: '임시 프로젝트',
+      projectId: projectId,
       title: titleController.text,
-      subTasks: subTasks,
+      subtasks: subtasks,
       startDate: startDate,
       endDate: endDate,
       isDone: false,
@@ -80,7 +80,7 @@ class AddTodoViewModel extends ChangeNotifier {
   @override
   void dispose() {
     titleController.dispose();
-    for (var c in subTaskControllers) {
+    for (var c in subtaskControllers) {
       c.dispose();
     }
     super.dispose();

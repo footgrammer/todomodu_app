@@ -13,33 +13,36 @@ class TodoDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-appBar: AppBar(
-  title: Text(todo.title),
-  actions: [
-    PopupMenuButton<String>(
-      icon: const Icon(Icons.more_vert),
-      onSelected: (value) async {
-        if (value == 'edit') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditTodoPage(todo: todo),
-            ),
-          );
-        } else if (value == 'delete') {
-          await ref.read(deleteTodoUseCaseProvider).call(todo.id);
-          if (context.mounted) {
-            Navigator.pop(context);
-          }
-        }
-      },
-      itemBuilder: (context) => [
-        const PopupMenuItem(value: 'edit', child: Text('할 일 수정하기')),
-        const PopupMenuItem(value: 'delete', child: Text('할 일 삭제하기')),
-      ],
-    ),
-  ],
-),
+      appBar: AppBar(
+        title: Text(todo.title),
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) async {
+              if (value == 'edit') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditTodoPage(todo: todo),
+                  ),
+                );
+              } else if (value == 'delete') {
+                await ref.read(deleteTodoUseCaseProvider).call(
+                  projectId: todo.projectId,
+                  todoId: todo.id,
+                );
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: 'edit', child: Text('할 일 수정하기')),
+              const PopupMenuItem(value: 'delete', child: Text('할 일 삭제하기')),
+            ],
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -53,23 +56,26 @@ appBar: AppBar(
             const SizedBox(height: 12),
             Expanded(
               child: ListView.builder(
-                itemCount: todo.subTasks.length,
+                itemCount: todo.subtasks.length,
                 itemBuilder: (context, index) {
-                  final subTask = todo.subTasks[index];
+                  final subtask = todo.subtasks[index];
                   return CheckboxListTile(
-                    value: subTask.isDone,
+                    value: subtask.isDone,
                     onChanged: (value) async {
-                      await ref.read(toggleSubTaskDoneUseCaseProvider).call(
+                      await ref.read(toggleSubtaskDoneUseCaseProvider).call(
+                        projectId: todo.projectId,
                         todoId: todo.id,
-                        subTaskId: subTask.id,
+                        subtaskId: subtask.id,
                         isDone: value ?? false,
                       );
                     },
                     title: Text(
-                      subTask.title,
+                      subtask.title,
                       style: TextStyle(
                         fontSize: 16,
-                        decoration: subTask.isDone ? TextDecoration.lineThrough : TextDecoration.none,
+                        decoration: subtask.isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
                       ),
                     ),
                   );

@@ -47,7 +47,7 @@ class TodoCard extends StatelessWidget {
             const SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: todo.subTasks.map((subTask) {
+              children: todo.subtasks.map((subTask) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Row(
