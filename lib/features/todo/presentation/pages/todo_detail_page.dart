@@ -15,6 +15,7 @@ class TodoDetailPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(todo.title),
+        centerTitle: false,
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),
@@ -27,59 +28,72 @@ class TodoDetailPage extends ConsumerWidget {
                   ),
                 );
               } else if (value == 'delete') {
-                await ref.read(deleteTodoUseCaseProvider).call(
-                  projectId: todo.projectId,
-                  todoId: todo.id,
-                );
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
+                await ref
+                    .read(deleteTodoUseCaseProvider)
+                    .call(projectId: todo.projectId, todoId: todo.id);
+                if (context.mounted) Navigator.pop(context);
               }
             },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: 'edit', child: Text('할 일 수정하기')),
-              const PopupMenuItem(value: 'delete', child: Text('할 일 삭제하기')),
-            ],
+            itemBuilder:
+                (context) => [
+                  const PopupMenuItem(value: 'edit', child: Text('할 일 수정하기')),
+                  const PopupMenuItem(value: 'delete', child: Text('할 일 삭제하기')),
+                ],
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('시작일: ${formatDate(todo.startDate)}', style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 8),
-            Text('종료일: ${formatDate(todo.endDate)}', style: const TextStyle(fontSize: 16)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildInfo('시작일', formatDate(todo.startDate)),
+                _buildInfo('종료일', formatDate(todo.endDate)),
+                _buildInfo('만든 이', '이름'),
+              ],
+            ),
             const SizedBox(height: 24),
-            const Text('세부 할 일', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+            const Text(
+              '할 일 목록',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 12),
+
             Expanded(
-              child: ListView.builder(
-                itemCount: todo.subtasks.length,
-                itemBuilder: (context, index) {
-                  final subtask = todo.subtasks[index];
-                  return CheckboxListTile(
-                    value: subtask.isDone,
-                    onChanged: (value) async {
-                      await ref.read(toggleSubtaskDoneUseCaseProvider).call(
-                        projectId: todo.projectId,
-                        todoId: todo.id,
-                        subtaskId: subtask.id,
-                        isDone: value ?? false,
-                      );
-                    },
-                    title: Text(
-                      subtask.title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        decoration: subtask.isDone
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                      ),
-                    ),
-                  );
-                },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 16,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListView.separated(
+                  itemCount: todo.subtasks.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final subtask = todo.subtasks[index];
+                    return _SubtaskItem(
+                      title: subtask.title,
+                      isDone: subtask.isDone,
+                      onToggle: () {
+                        ref
+                            .read(toggleSubtaskDoneUseCaseProvider)
+                            .call(
+                              projectId: todo.projectId,
+                              todoId: todo.id,
+                              subtaskId: subtask.id,
+                              isDone: !subtask.isDone,
+                            );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -88,7 +102,72 @@ class TodoDetailPage extends ConsumerWidget {
     );
   }
 
+  Widget _buildInfo(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: Colors.black54),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        ),
+      ],
+    );
+  }
+
   String formatDate(DateTime date) {
     return '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
+  }
+}
+
+class _SubtaskItem extends StatelessWidget {
+  final String title;
+  final bool isDone;
+  final VoidCallback onToggle;
+
+  const _SubtaskItem({
+    required this.title,
+    required this.isDone,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      decoration: BoxDecoration(
+        color: isDone ? Colors.grey[200] : Colors.white,
+        border: Border.all(color: Colors.grey[300]!),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: onToggle,
+            child: Icon(
+              isDone ? Icons.check_circle : Icons.radio_button_unchecked,
+              color: isDone ? Colors.grey[700] : Colors.grey[400],
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                decoration:
+                    isDone ? TextDecoration.lineThrough : TextDecoration.none,
+                color: isDone ? Colors.black54 : Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
