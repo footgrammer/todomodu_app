@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/delete_todo_usecase_provider.dart';
+import '../providers/toggle_subtask_done_usecase_provider.dart';
 import '../../domain/entities/todo.dart';
 
 class TodoDetailPage extends ConsumerWidget {
@@ -45,9 +46,22 @@ class TodoDetailPage extends ConsumerWidget {
                 itemCount: todo.subTasks.length,
                 itemBuilder: (context, index) {
                   final subTask = todo.subTasks[index];
-                  return ListTile(
-                    leading: const Icon(Icons.circle_outlined),
-                    title: Text(subTask.title, style: const TextStyle(fontSize: 16)),
+                  return CheckboxListTile(
+                    value: subTask.isDone,
+                    onChanged: (value) async {
+                      await ref.read(toggleSubTaskDoneUseCaseProvider).call(
+                        todoId: todo.id,
+                        subTaskId: subTask.id,
+                        isDone: value ?? false,
+                      );
+                    },
+                    title: Text(
+                      subTask.title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        decoration: subTask.isDone ? TextDecoration.lineThrough : TextDecoration.none,
+                      ),
+                    ),
                   );
                 },
               ),
