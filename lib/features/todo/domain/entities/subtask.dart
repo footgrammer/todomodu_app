@@ -1,30 +1,39 @@
-import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+class Subtask {
+  final String id;
+  final String title;
+  final bool isDone;
 
-class SubTask {
-  String id;
-  String todoId;
-  String title;
-  bool isDone;
-  // UserEntity assignee;
-  SubTask({
+  Subtask({
     required this.id,
-    required this.todoId,
     required this.title,
     required this.isDone,
-    // required this.assignee,
   });
 
-    SubTask copyWith({
+  Subtask copyWith({
     String? id,
-    String? todoId,
     String? title,
     bool? isDone,
   }) {
-    return SubTask(
+    return Subtask(
       id: id ?? this.id,
-      todoId: todoId ?? this.todoId,
       title: title ?? this.title,
       isDone: isDone ?? this.isDone,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'isDone': isDone,
+    };
+  }
+
+  factory Subtask.fromMap(Map<String, dynamic> map) {
+    return Subtask(
+      id: map['id'],
+      title: map['title'],
+      isDone: map['isDone'],
     );
   }
 }
