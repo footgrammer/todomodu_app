@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/data/models/Project.dart';
-import 'package:todomodu_app/features/project/data/repositories/project_repository.dart';
 
-// 상태 클ㅐㅡ
+// 상태 클래스
 class ProjectState {
   List<Project>? projects;
 

@@ -7,6 +7,7 @@ class Todo {
   List<SubTask> subTasks;
   DateTime startDate;
   DateTime endDate;
+  bool isDone;
 
   Todo({
     required this.id,
@@ -15,5 +16,6 @@ class Todo {
     required this.subTasks,
     required this.startDate,
     required this.endDate,
+    required this.isDone,
   });
 }
