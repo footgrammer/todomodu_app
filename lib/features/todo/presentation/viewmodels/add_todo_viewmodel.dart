@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/entities/sub_task.dart';
 import '../../domain/entities/todo.dart';
-import '../../application/usecases/create_todo_usecase.dart';
+import '../../domain/usecases/create_todo_usecase.dart';
 
 class AddTodoViewModel extends ChangeNotifier {
   final CreateTodoUseCase createTodoUseCase;

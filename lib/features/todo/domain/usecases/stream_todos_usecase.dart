@@ -1,5 +1,5 @@
-import '../../domain/entities/todo.dart';
-import '../../domain/repositories/todo_repository.dart';
+import '../entities/todo.dart';
+import '../repositories/todo_repository.dart';
 
 class StreamTodosUseCase {
   final TodoRepository repository;

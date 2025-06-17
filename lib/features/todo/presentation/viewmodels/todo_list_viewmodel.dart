@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';import 'package:todomodu_app/features/todo/application/usecases/stream_todos_usecase.dart';
+import 'package:flutter/material.dart';import 'package:todomodu_app/features/todo/domain/usecases/stream_todos_usecase.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 
 class TodoListViewModel extends ChangeNotifier {
