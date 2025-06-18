@@ -34,6 +34,7 @@ class _NoticeCreateFormState extends State<NoticeCreateForm> {
                 fontWeight: FontWeight.bold
               ),
             ),
+            SizedBox(height: 7,),
             TextFormField(
               controller: titleInputController,
               onChanged: (value) {
@@ -41,16 +42,21 @@ class _NoticeCreateFormState extends State<NoticeCreateForm> {
               },
               decoration: InputDecoration(
                 hintText: '공지 제목을 입력하세요',
-                border: OutlineInputBorder()
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10)
+                )
               ),
+              maxLines: 1,
+              maxLength: 30,
             ),
-            SizedBox(height: 30,),
+            SizedBox(height: 20,),
             Text('공지 내용',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold
               ),
             ),
+            SizedBox(height: 7,),
             TextFormField(
               onChanged: (value) {
                 widget.onContentChanged(value);
@@ -58,7 +64,9 @@ class _NoticeCreateFormState extends State<NoticeCreateForm> {
               controller: contentInputController,
               decoration: InputDecoration(
                 hintText: '공지 내용을 입력하세요',
-                border: OutlineInputBorder()
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10)
+                )
               ),
               maxLines: 5,
               maxLength: 500,
