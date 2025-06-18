@@ -5,26 +5,29 @@ import '../../domain/repositories/subtask_repository.dart';
 class SubtaskRepositoryImpl implements SubtaskRepository {
   final FirebaseFirestore firestore;
 
-  SubtaskRepositoryImpl({required this.firestore});
+  SubtaskRepositoryImpl(this.firestore);
 
   @override
-  Future<void> createSubtask(Subtask subtask) async {
-    await firestore
+  Stream<List<Subtask>> streamSubtasks(String projectId, String todoId) {
+    return firestore
         .collection('projects')
-        .doc(subtask.projectId)
+        .doc(projectId)
         .collection('subtasks')
-        .doc(subtask.id)
-        .set(subtask.toMap());
+        .where('todoId', isEqualTo: todoId)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Subtask.fromMap(doc.data())).toList());
   }
 
   @override
-  Future<void> updateSubtask(Subtask subtask) async {
-    await firestore
+  Future<void> createSubtask(Subtask subtask) async {
+    final docRef = firestore
         .collection('projects')
         .doc(subtask.projectId)
         .collection('subtasks')
-        .doc(subtask.id)
-        .update(subtask.toMap());
+        .doc(subtask.id);
+
+    await docRef.set(subtask.toMap());
   }
 
   @override
@@ -41,18 +44,13 @@ class SubtaskRepositoryImpl implements SubtaskRepository {
   }
 
   @override
-  Stream<List<Subtask>> streamSubtasks({
-    required String projectId,
-    required String todoId,
-  }) {
-    return firestore
+  Future<void> updateSubtask(Subtask subtask) async {
+    await firestore
         .collection('projects')
-        .doc(projectId)
+        .doc(subtask.projectId)
         .collection('subtasks')
-        .where('todoId', isEqualTo: todoId)
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Subtask.fromMap(doc.data())).toList());
+        .doc(subtask.id)
+        .update(subtask.toMap());
   }
 
   @override
