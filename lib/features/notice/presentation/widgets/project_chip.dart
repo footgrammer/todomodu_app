@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
+
 
 class ProjectChip extends StatelessWidget {
-  const ProjectChip({required this.isChecked, required this.projectName,super.key});
+  const ProjectChip({required this.isChecked, required this.project, super.key});
 
   final bool isChecked;
-  final String projectName;
+  final Project project;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class ProjectChip extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(100)
       ),
-      child: Center(child: Text(projectName)),
+      child: Center(child: Text(project.title)),
     );
   }
 }

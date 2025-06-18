@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class UserProfileImage extends StatelessWidget {
   final UserEntity user;
