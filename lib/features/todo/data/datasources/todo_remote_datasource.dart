@@ -8,13 +8,13 @@ class TodoRemoteDataSource {
   TodoRemoteDataSource(this.firestore);
 
   Future<void> createTodo(Todo todo) async {
-    final todoRef = firestore
+    final todoDoc = firestore
         .collection('projects')
         .doc(todo.projectId)
         .collection('todos')
         .doc(todo.id);
 
-    await todoRef.set(todo.toMap());
+    await todoDoc.set(todo.toMap());
 
     final subtasksRef = firestore
         .collection('projects')
@@ -65,13 +65,13 @@ class TodoRemoteDataSource {
   }
 
 Future<void> updateTodo(Todo todo) async {
-  final todoRef = firestore
+  final todoDoc = firestore
       .collection('projects')
       .doc(todo.projectId)
       .collection('todos')
       .doc(todo.id);
 
-  await todoRef.set(todo.toMap());
+  await todoDoc.set(todo.toMap());
 
   final subtasksRef = firestore
       .collection('projects')

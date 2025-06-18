@@ -19,28 +19,27 @@ class Todo {
     required this.isDone,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'projectId': projectId,
-      'title': title,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String(),
-      'isDone': isDone,
-      'subtasks': subtasks.map((e) => e.toMap()).toList(),
-    };
-  }
+Map<String, dynamic> toMap() {
+  return {
+    'title': title,
+    'isDone': isDone,
+    'projectId': projectId,
+    'startDate': startDate.toIso8601String(),
+    'endDate': endDate.toIso8601String(),
+  };
+}
 
-  factory Todo.fromMap(String id, Map<String, dynamic> map) {
-    return Todo(
-      id: id,
-      projectId: map['projectId'],
-      title: map['title'],
-      startDate: DateTime.parse(map['startDate']),
-      endDate: DateTime.parse(map['endDate']),
-      isDone: map['isDone'],
-      subtasks: (map['subtasks'] as List<dynamic>)
-          .map((e) => Subtask.fromMap(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+
+factory Todo.fromMap(String id, Map<String, dynamic> map) {
+  return Todo(
+    id: id,
+    title: map['title'] ?? '',
+    isDone: map['isDone'] ?? false,
+    projectId: map['projectId'] ?? '',
+    startDate: DateTime.parse(map['startDate']),
+    endDate: DateTime.parse(map['endDate']),
+    subtasks: [],
+  );
+}
+
 }

@@ -4,5 +4,5 @@ import '../../data/repositories/subtask_repository_impl.dart';
 import '../../domain/repositories/subtask_repository.dart';
 
 final subtaskRepositoryProvider = Provider<SubtaskRepository>((ref) {
-  return SubtaskRepositoryImpl(firestore: FirebaseFirestore.instance);
+  return SubtaskRepositoryImpl(FirebaseFirestore.instance);
 });
