@@ -41,7 +41,7 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
             const SizedBox(height: 80),
             ProjectTodoSubtaskList(
               selectedTodos: selectedTodos,
-              state: state,
+              projectCreateState: state,
               todoToAllSubtasks: todoToAllSubtasks,
               viewModel: viewModel,
               onTap: (String todo) {
