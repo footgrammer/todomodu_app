@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectSearchBar extends ConsumerWidget {
   TextEditingController controller;
@@ -20,7 +21,7 @@ class ProjectSearchBar extends ConsumerWidget {
           Expanded(
             child: TextFormField(
               controller: controller,
-              style: TextStyle(fontSize: 16),
+              style: AppTextStyles.body2,
               decoration: InputDecoration(
                 hintText: '프로젝트 코드를 입력하세요',
                 border: InputBorder.none,

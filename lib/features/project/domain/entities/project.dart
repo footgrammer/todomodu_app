@@ -1,5 +1,5 @@
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
-import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
 
 class Project {
   String id;
