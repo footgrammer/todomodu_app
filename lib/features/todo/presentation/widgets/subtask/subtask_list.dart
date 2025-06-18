@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class TodoSubTaskList extends StatelessWidget{
+class TodoSubtaskList extends StatelessWidget{
   final List<TextEditingController> controllers;
   final void Function(int) onRemove;
   
-  const TodoSubTaskList({
+  const TodoSubtaskList({
     required this.controllers,
     required this.onRemove,
     super.key
