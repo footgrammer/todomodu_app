@@ -35,37 +35,39 @@ class AddTodoViewModel extends ChangeNotifier {
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
-
     if (picked != null) {
       if (isStart) {
         startDate = picked;
-        if (startDate.isAfter(endDate)) {
-          endDate = startDate;
-        }
+        if (startDate.isAfter(endDate)) endDate = startDate;
       } else {
-        if (picked.isBefore(startDate)) {
-          endDate = startDate;
-        } else {
-          endDate = picked;
-        }
+        if (picked.isBefore(startDate)) endDate = startDate;
+        else endDate = picked;
       }
       notifyListeners();
     }
   }
 
   Future<void> submit() async {
+    if (titleController.text.trim().isEmpty) {
+      return; 
+    }
     final uuid = Uuid();
 
-    final List<Subtask> subtasks = subtaskControllers.map((controller) {
+    if (subtaskControllers.isEmpty) {
+      subtaskControllers.add(TextEditingController());
+    }
+
+    final generatedTodoId = uuid.v4();
+    final subtasks = subtaskControllers.map((ctrl) {
       return Subtask(
         id: uuid.v4(),
-        title: controller.text,
+        title: ctrl.text,
         isDone: false,
       );
     }).toList();
 
     final todo = Todo(
-      id: uuid.v4(),
+      id: generatedTodoId,
       projectId: projectId,
       title: titleController.text,
       subtasks: subtasks,
@@ -80,9 +82,7 @@ class AddTodoViewModel extends ChangeNotifier {
   @override
   void dispose() {
     titleController.dispose();
-    for (var c in subtaskControllers) {
-      c.dispose();
-    }
+    for (var c in subtaskControllers) c.dispose();
     super.dispose();
   }
 }
