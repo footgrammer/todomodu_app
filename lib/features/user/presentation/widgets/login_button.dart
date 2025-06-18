@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({super.key, required this.path, required this.onPressed});
@@ -10,8 +9,12 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(padding: EdgeInsets.zero, elevation: 0),
-      child: SvgPicture.asset(path),
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.zero,
+        elevation: 0,
+        maximumSize: Size.fromHeight(54),
+      ),
+      child: Image.asset(path, fit: BoxFit.cover),
     );
   }
 }
