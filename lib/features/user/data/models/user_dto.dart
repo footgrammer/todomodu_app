@@ -18,11 +18,14 @@ class UserDto {
 
   UserDto.fromJson(Map<String, dynamic> map)
     : this(
-        userId: map['userId'],
-        name: map['name'],
-        profileImageUrl: map['profileImageUrl'],
-        email: map['email'],
-        createdAt: (map['createdAt'] as Timestamp).toDate(),
+        userId: map['userId'] ?? '',
+        name: map['name'] ?? '',
+        profileImageUrl: map['profileImageUrl'] ?? '',
+        email: map['email'] ?? '',
+        createdAt:
+            map['createdAt'] != null
+                ? (map['createdAt'] as Timestamp).toDate()
+                : DateTime.now(), // 기본값 설정
       );
 
   Map<String, dynamic> toJson() {
@@ -37,7 +40,7 @@ class UserDto {
 
   UserEntity toEntity() {
     return UserEntity(
-      id: userId,
+      userId: userId,
       name: name,
       profileImageUrl: profileImageUrl,
       email: email,
@@ -47,7 +50,7 @@ class UserDto {
 
   factory UserDto.fromEntity(UserEntity entity) {
     return UserDto(
-      userId: entity.id,
+      userId: entity.userId,
       name: entity.name,
       profileImageUrl: entity.profileImageUrl,
       email: entity.email,

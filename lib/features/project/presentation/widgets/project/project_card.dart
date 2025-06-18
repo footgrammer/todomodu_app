@@ -3,8 +3,7 @@ import 'package:todomodu_app/features/project/data/models/Project.dart';
 import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_member_icons.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_progress_bar.dart';
-
-final textColor = Color(0xFF28282F);
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectCard extends StatelessWidget {
   final int index;
@@ -28,7 +27,7 @@ class ProjectCard extends StatelessWidget {
           _getProjectTimePlan(),
           SizedBox(height: 16),
           // 진행도
-          ProjectProgressBar(textColor: textColor, project: project),
+          ProjectProgressBar(textColor: AppColors.grey900, project: project),
           SizedBox(height: 16),
           // 멤버 아이콘들
           ProjectMemberIcons(),
@@ -44,11 +43,7 @@ class ProjectCard extends StatelessWidget {
         Expanded(
           child: Text(
             project.title,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTextStyles.header4,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -62,7 +57,7 @@ class ProjectCard extends StatelessWidget {
   Text _getProjectTimePlan() {
     return Text(
       '${DateFormat('yyyy.MM.dd').format(project.startDate)} - ${DateFormat('yyyy.MM.dd').format(project.endDate)}',
-      style: TextStyle(color: textColor, fontSize: 14),
+      style: AppTextStyles.body3.copyWith(color: AppColors.grey700),
     );
   }
 }

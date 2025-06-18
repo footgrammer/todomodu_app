@@ -22,9 +22,8 @@ class TodoRepositoryImpl implements TodoRepository {
     await _remoteDataSource.createTodo(todo);
   }
 
-  @override
-  Stream<List<Todo>> streamTodos() {
-    return _remoteDataSource.streamTodos();
+  Stream<List<Todo>> streamTodos(String projectId) {
+    return _remoteDataSource.streamTodos(projectId);
   }
 
   @override
@@ -41,15 +40,21 @@ class TodoRepositoryImpl implements TodoRepository {
       return Result.error(Exception('Failed to load todos: $e'));
     }
   }
-  
+
   @override
-  Future<Result<List<Todo>>> getTodosWithSubtasksByProjectId(String projectId) async {
+  Future<Result<List<Todo>>> getTodosWithSubtasksByProjectId(
+    String projectId,
+  ) async {
     final todosResult = await _remoteDataSource.getTodosByProjectId(projectId);
-    if (todosResult is! Ok<List<TodoDto>>) return Result.error(Exception('Todo load failed'));
+    if (todosResult is! Ok<List<TodoDto>>)
+      return Result.error(Exception('Todo load failed'));
     final todoDtos = todosResult.value;
 
-    final subtasksResult = await _subtaskRepository.getSubtasksByProjectId(projectId);
-    if (subtasksResult is! Ok<List<Subtask>>) return Result.error(Exception('Subtask load failed'));
+    final subtasksResult = await _subtaskRepository.getSubtasksByProjectId(
+      projectId,
+    );
+    if (subtasksResult is! Ok<List<Subtask>>)
+      return Result.error(Exception('Subtask load failed'));
     final subtasks = subtasksResult.value;
 
     // Group subtasks by todoId
@@ -58,11 +63,37 @@ class TodoRepositoryImpl implements TodoRepository {
       subtaskMap.putIfAbsent(sub.todoId, () => []).add(sub);
     }
 
-    final todos = todoDtos.map((dto) {
-      final subtasks = subtaskMap[dto.id] ?? [];
-      return dto.toEntity(subTasks: subtasks);
-    }).toList();
+    final todos =
+        todoDtos.map((dto) {
+          final subtasks = subtaskMap[dto.id] ?? [];
+          return dto.toEntity(subTasks: subtasks);
+        }).toList();
 
     return Result.ok(todos);
+  }
+
+  @override
+  Future<void> deleteTodo(String projectId, String todoId) async {
+    await _remoteDataSource.deleteTodo(projectId, todoId);
+  }
+
+  @override
+  Future<void> toggleSubtaskDone({
+    required String projectId,
+    required String todoId,
+    required String subtaskId,
+    required bool isDone,
+  }) async {
+    await _remoteDataSource.toggleSubtaskDone(
+      projectId: projectId,
+      todoId: todoId,
+      subtaskId: subtaskId,
+      isDone: isDone,
+    );
+  }
+
+  @override
+  Future<void> updateTodo(Todo todo) async {
+    await _remoteDataSource.updateTodo(todo);
   }
 }
