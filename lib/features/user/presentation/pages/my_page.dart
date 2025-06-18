@@ -9,7 +9,6 @@ import 'package:todomodu_app/features/user/presentation/widgets/custom_menu_bar.
 import 'package:todomodu_app/features/user/presentation/widgets/edit_nickname_dialog.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/logout_dialog.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/my_profile_image.dart';
-import 'package:todomodu_app/features/user/presentation/widgets/user_profile_image.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
