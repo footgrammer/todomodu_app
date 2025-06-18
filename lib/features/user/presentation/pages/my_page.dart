@@ -8,7 +8,7 @@ import 'package:todomodu_app/features/user/presentation/providers/user_providers
 import 'package:todomodu_app/features/user/presentation/widgets/custom_menu_bar.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/edit_nickname_dialog.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/logout_dialog.dart';
-import 'package:todomodu_app/features/user/presentation/widgets/profile_image.dart';
+import 'package:todomodu_app/features/user/presentation/widgets/my_profile_image.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
@@ -51,7 +51,7 @@ class MyPage extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          ProfileImage(user: user),
+                          MyProfileImage(user: user),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 4, 4, 0),
                             child: Text(

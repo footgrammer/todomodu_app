@@ -5,24 +5,24 @@ class Project {
   String id;
   String title;
   String description;
-  DateTime startTime;
-  DateTime endTime;
+  DateTime startDate;
+  DateTime endDate;
   UserEntity owner;
   List<UserEntity> members;
   List<Todo> todos;
-  String inviteCode;
+  String invitationCode;
   bool isDone;
 
   Project({
     required this.id,
     required this.title,
     required this.description,
-    required this.startTime,
-    required this.endTime,
+    required this.startDate,
+    required this.endDate,
     required this.owner,
     required this.members,
     required this.todos,
-    required this.inviteCode,
+    required this.invitationCode,
     required this.isDone,
   });
 }

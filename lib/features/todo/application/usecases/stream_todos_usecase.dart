@@ -6,7 +6,7 @@ class StreamTodosUseCase {
 
   StreamTodosUseCase(this.repository);
 
-  Stream<List<Todo>> call() {
-    return repository.streamTodos();
+  Stream<List<Todo>> call(String projectId) {
+    return repository.streamTodos(projectId);
   }
 }

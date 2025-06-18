@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class MemberIcon extends ConsumerWidget {
   final String? imageUrl;
@@ -21,7 +21,7 @@ class MemberIcon extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF28282F),
+                  color: AppColors.grey900,
                 ),
               )
               : null,

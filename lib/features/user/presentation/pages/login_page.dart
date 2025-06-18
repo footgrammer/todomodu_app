@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/login_button.dart';
@@ -36,7 +37,7 @@ class LoginPage extends ConsumerWidget {
             Builder(
               builder: (context) {
                 return LoginButton(
-                  path: 'assets/images/apple_login.svg',
+                  path: 'assets/images/apple_login.png',
                   onPressed: () async {
                     final userCred = await auth.signInWithApple();
                     if (userCred != null) {
@@ -50,7 +51,7 @@ class LoginPage extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             LoginButton(
-              path: 'assets/images/kakao_login.svg',
+              path: 'assets/images/kakao_login.png',
               onPressed: () async {
                 final userCred = await auth.signInWithKakao();
                 if (userCred != null) {
@@ -62,7 +63,7 @@ class LoginPage extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             LoginButton(
-              path: 'assets/images/google_login.svg',
+              path: 'assets/images/google_login.png',
               onPressed: () async {
                 final userCred = await auth.signInWithGoogle();
                 if (userCred != null) {

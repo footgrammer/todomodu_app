@@ -1,12 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'package:todomodu_app/features/project/presentation/pages/project_loading_page.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_date_range_field.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_description_field.dart';
-import 'package:todomodu_app/features/project/presentation/widgets/form_fields/project_title_field.dart';
+import 'package:todomodu_app/features/project/presentation/utils/project_validator.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_form_field.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/dialog_utils.dart';
+import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 
@@ -59,24 +59,13 @@ class ProjectCreatePage extends ConsumerWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ProjectTitleField(
-                      titleController: titleController,
-                      titleFocusNode: titleFocusNode,
-                    ),
-                    SizedBox(height: 32),
-                    ProjectDateRangeField(
-                      startDateProvider: startDateProvider,
-                      endDateProvider: endDateProvider,
-                    ),
-                    SizedBox(height: 32),
-                    ProjectDescriptionField(
-                      descriptionController: descriptionController,
-                      descriptionFocusNode: descriptionFocusNode,
-                    ),
-                  ],
+                child: ProjectFormField(
+                  titleController: titleController,
+                  titleFocusNode: titleFocusNode,
+                  descriptionController: descriptionController,
+                  descriptionFocusNode: descriptionFocusNode,
+                  startDateProvider: startDateProvider,
+                  endDateProvider: endDateProvider,
                 ),
               ),
             ),
@@ -84,10 +73,12 @@ class ProjectCreatePage extends ConsumerWidget {
               padding: EdgeInsets.only(
                 left: 20,
                 right: 20,
-                bottom: 40,
+                bottom: 64,
                 top: 10,
               ),
-              child: ElevatedButton(
+              child: CommonElevatedButton(
+                buttonColor: AppColors.primary500,
+                text: '프로젝트 추가하기',
                 onPressed: () {
                   _validateAndProceed(
                     context,
@@ -98,21 +89,6 @@ class ProjectCreatePage extends ConsumerWidget {
                     descriptionFocusNodeProvider,
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 56),
-                  backgroundColor: Color(0xFF5752EA),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  '프로젝트 추가하기',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
               ),
             ),
           ],
@@ -134,33 +110,47 @@ class ProjectCreatePage extends ConsumerWidget {
     final startDate = ref.read(startDateProvider);
     final endDate = ref.read(endDateProvider);
 
-    if (title.isEmpty) {
-      _showErrorDialog(context, '프로젝트 이름을 입력해 주세요.', () {
-        FocusScope.of(context).requestFocus(FocusNode());
-        ref.read(titleFocusNodeProvider).requestFocus();
-        titleController.selection = TextSelection.collapsed(offset: 0);
-      });
+    final titleError = ProjectValidator.validateTitle(title);
+    final dateError = ProjectValidator.validateDates(startDate, endDate);
+    final descriptionError = ProjectValidator.validateDescription(description);
+    if (titleError != null) {
+      DialogUtils.showErrorDialog(
+        context,
+        '프로젝트 이름을 입력해 주세요.',
+        onDismiss: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          ref.read(titleFocusNodeProvider).requestFocus();
+          titleController.selection = TextSelection.collapsed(offset: 0);
+        },
+      );
       return;
     }
 
-    if (startDate == null || endDate == null) {
-      _showErrorDialog(context, '시작일과 종료일을 선택해 주세요.', () {
-        FocusScope.of(context).unfocus();
-      });
+    if (dateError != null) {
+      DialogUtils.showErrorDialog(
+        context,
+        '시작일과 종료일을 선택해 주세요.',
+        onDismiss: () {
+          FocusScope.of(context).unfocus();
+        },
+      );
       return;
     }
 
-    if (description.isEmpty) {
-      _showErrorDialog(context, '프로젝트 설명을 입력해 주세요.', () {
-        FocusScope.of(context).requestFocus(FocusNode());
-        ref.read(descriptionFocusNodeProvider).requestFocus();
-        descriptionController.selection = TextSelection.collapsed(offset: 0);
-      });
+    if (descriptionError != null) {
+      DialogUtils.showErrorDialog(
+        context,
+        '프로젝트 설명을 입력해 주세요.',
+        onDismiss: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          ref.read(descriptionFocusNodeProvider).requestFocus();
+          descriptionController.selection = TextSelection.collapsed(offset: 0);
+        },
+      );
       return;
     }
 
     // chat GPT API 함수
-    // Future<void> requestChatGPTApi = Future.delayed(Duration(seconds: 10));
     Future<Map<String, dynamic>> requestChatGPTApi(String prompt) async {
       await Future.delayed(Duration(seconds: 6));
       // final response = await http.post(
@@ -236,30 +226,6 @@ class ProjectCreatePage extends ConsumerWidget {
         builder:
             (_) => ProjectLoadingPage(requestChatGPTApi: requestChatGPTApi),
       ),
-    );
-  }
-
-  void _showErrorDialog(
-    BuildContext context,
-    String message,
-    VoidCallback onDismiss,
-  ) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text('알림'),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  onDismiss();
-                },
-                child: Text('확인'),
-              ),
-            ],
-          ),
     );
   }
 }
