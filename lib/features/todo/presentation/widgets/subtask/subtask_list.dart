@@ -1,110 +1,110 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
+import '../../../domain/entities/subtask.dart';
+import '../../providers/subtask_stream_provider.dart';
+import '../../viewmodels/subtask_viewmodel.dart';
 
-class SubtaskList extends StatefulWidget {
-  final List<TextEditingController> controllers;
-  final void Function(int) onRemove;
+class SubtaskList extends ConsumerWidget {
+  final String projectId;
+  final String todoId;
 
   const SubtaskList({
     super.key,
-    required this.controllers,
-    required this.onRemove,
+    required this.projectId,
+    required this.todoId,
   });
 
   @override
-  State<SubtaskList> createState() => _SubtaskListState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncSubtasks = ref.watch(subtaskStreamProvider((projectId, todoId)));
+    final subtaskViewModel = ref.read(subtaskViewModelProvider);
 
-class _SubtaskListState extends State<SubtaskList> {
-  @override
-  void initState() {
-    super.initState();
-    for (var c in widget.controllers) {
-      c.addListener(_onChange);
-    }
-  }
-
-  @override
-  void didUpdateWidget(SubtaskList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    for (var c in widget.controllers) {
-      if (!oldWidget.controllers.contains(c)) {
-        c.addListener(_onChange);
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    for (var c in widget.controllers) {
-      c.removeListener(_onChange);
-    }
-    super.dispose();
-  }
-
-  void _onChange() => setState(() {});
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
-      children: List.generate(widget.controllers.length, (i) {
-        final controller = widget.controllers[i];
-        final len = controller.text.length;
+      children: [
+        asyncSubtasks.when(
+          data: (subtasks) {
+            return Column(
+              children: subtasks.map((subtask) {
+                final controller = TextEditingController(text: subtask.title);
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(right: 60, bottom: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: TextField(
-                        controller: controller,
-                        maxLength: 50,
-                        decoration: const InputDecoration(
-                          hintText: '세부 할 일',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 14,
-                          ),
-                          counterText: '',
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(right: 60, bottom: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: TextField(
+                                controller: controller,
+                                maxLength: 50,
+                                onChanged: (value) {
+                                  subtaskViewModel.update(
+                                    subtask.copyWith(title: value),
+                                  );
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: '세부 할 일',
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                                  counterText: '',
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 16,
+                              bottom: 8,
+                              child: Text(
+                                '${controller.text.length}/50',
+                                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                            ),
+                          ],
                         ),
-                        onChanged: (_) => setState(() {}),
                       ),
-                    ),
-                    Positioned(
-                      right: 16,
-                      bottom: 8,
-                      child: Text(
-                        '$len/50',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        onPressed: () {
+                          subtaskViewModel.delete(
+                            projectId: projectId,
+                            subtaskId: subtask.id,
+                          );
+                        },
+                        icon: const Icon(Icons.remove_circle_outline),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              IconButton(
-                onPressed: () {
-                  widget.onRemove(i);
-                  setState(() {});
-                },
-                icon: const Icon(Icons.remove_circle_outline),
-              ),
-            ],
+                    ],
+                  ),
+                );
+              }).toList(),
+            );
+          },
+          loading: () => const CircularProgressIndicator(),
+          error: (e, _) => Text('에러: $e'),
+        ),
+        const SizedBox(height: 12),
+        Center(
+          child: IconButton(
+            icon: const Icon(Icons.add_circle_outline, size: 36),
+            onPressed: () {
+              final subtask = Subtask(
+                id: const Uuid().v4(),
+                title: '',
+                isDone: false,
+                todoId: todoId,
+                projectId: projectId,
+              );
+              subtaskViewModel.create(subtask);
+            },
           ),
-        );
-      }),
+        ),
+      ],
     );
   }
 }

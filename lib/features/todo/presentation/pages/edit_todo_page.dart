@@ -5,7 +5,7 @@ import '../providers/edit_todo_viewmodel_provider.dart';
 import '../widgets/todo_date_section.dart';
 import '../widgets/submit_button.dart';
 import '../widgets/todo_title_input.dart';
-import '../widgets/subtask/edit_subtask_list.dart';
+import '../widgets/subtask/subtask_list.dart';
 
 class EditTodoPage extends ConsumerWidget {
   final Todo todo;
@@ -64,16 +64,9 @@ class EditTodoPage extends ConsumerWidget {
               const SizedBox(height: 24),
               const Text('할 일 목록', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
-              EditTodoSubtaskList(
-                subtasks: state.subtasks,
-                onTitleChange: viewModel.changeSubtaskTitle,
-                onRemove: viewModel.removeSubtask,
-              ),
-              Center(
-                child: IconButton(
-                  onPressed: viewModel.addSubtask,
-                  icon: const Icon(Icons.add_circle_outline, size: 36),
-                ),
+              SubtaskList(
+                projectId: todo.projectId,
+                todoId: todo.id,
               ),
             ],
           ),

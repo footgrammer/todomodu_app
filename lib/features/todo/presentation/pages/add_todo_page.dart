@@ -1,10 +1,12 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/add_todo_viewmodel_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/submit_button.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
-import 'package:todomodu_app/features/todo/presentation/widgets/subtask/subtask_list.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/subtask/subtask_list.dart';
+import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
+import 'package:uuid/uuid.dart';
 
 class AddTodoPage extends ConsumerWidget {
   final String projectId;
@@ -42,14 +44,8 @@ class AddTodoPage extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               SubtaskList(
-                controllers: viewModel.subtaskControllers,
-                onRemove: viewModel.removeSubtask,
-              ),
-              Center(
-                child: IconButton(
-                  onPressed: viewModel.addSubtask,
-                  icon: const Icon(Icons.add_circle_outline, size: 36),
-                ),
+                projectId: projectId,
+                todoId: viewModel.pendingTodoId,
               ),
             ],
           ),
@@ -58,11 +54,13 @@ class AddTodoPage extends ConsumerWidget {
       bottomNavigationBar: SubmitButton(
         label: '완료',
         onPressed: () async {
-          await viewModel.submit();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('할 일이 추가되었습니다')),
-          );
-          Navigator.pop(context);
+          await viewModel.submitWithSubtasks();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('할 일이 추가되었습니다')),
+            );
+            Navigator.pop(context);
+          }
         },
       ),
     );

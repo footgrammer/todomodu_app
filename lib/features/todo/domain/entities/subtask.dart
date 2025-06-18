@@ -41,11 +41,11 @@ class Subtask {
 
   factory Subtask.fromMap(Map<String, dynamic> map) {
     return Subtask(
-      id: map['id'],
-      title: map['title'],
-      isDone: map['isDone'],
-      todoId: map['todoId'],
-      projectId: map['projectId'],
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      isDone: map['isDone'] ?? false,
+      todoId: map['todoId'] ?? '',
+      projectId: map['projectId'] ?? '',
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/subtask.dart';
 import '../../domain/entities/todo.dart';
 import '../../application/usecases/create_todo_usecase.dart';
@@ -11,27 +12,10 @@ class AddTodoViewModel extends ChangeNotifier {
   AddTodoViewModel(this.createTodoUseCase, {required this.projectId});
 
   final TextEditingController titleController = TextEditingController();
-  final List<TextEditingController> subtaskControllers = [];
-
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
 
-  void addSubtask() {
-    subtaskControllers.add(TextEditingController());
-    notifyListeners();
-  }
-
-  void removeSubtask(int index) {
-    subtaskControllers[index].dispose();
-    subtaskControllers.removeAt(index);
-    notifyListeners();
-  }
-
-  void addSubtaskWithTitle(String title) {
-    final controller = TextEditingController(text: title);
-    subtaskControllers.add(controller);
-    notifyListeners();
-  }
+  final String pendingTodoId = const Uuid().v4();
 
   Future<void> pickDate(BuildContext context, bool isStart) async {
     final DateTime initial = isStart ? startDate : endDate;
@@ -56,27 +40,23 @@ class AddTodoViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> submit() async {
+  Future<void> submitWithSubtasks() async {
     final trimmedTitle = titleController.text.trim();
     if (trimmedTitle.isEmpty) return;
 
-    if (subtaskControllers.isEmpty) {
-      addSubtaskWithTitle(trimmedTitle);
-    }
+    final subtasksSnapshot = await FirebaseFirestore.instance
+        .collection('projects')
+        .doc(projectId)
+        .collection('subtasks')
+        .where('todoId', isEqualTo: pendingTodoId)
+        .get();
 
-    final uuid = Uuid();
-    final generatedTodoId = uuid.v4();
-
-    final subtasks = subtaskControllers.map((ctrl) {
-      return Subtask(
-        id: uuid.v4(),
-        title: ctrl.text.trim(),
-        isDone: false,
-      );
-    }).toList();
+    final subtasks = subtasksSnapshot.docs
+        .map((doc) => Subtask.fromMap(doc.data()))
+        .toList();
 
     final todo = Todo(
-      id: generatedTodoId,
+      id: pendingTodoId,
       projectId: projectId,
       title: trimmedTitle,
       subtasks: subtasks,
@@ -91,9 +71,6 @@ class AddTodoViewModel extends ChangeNotifier {
   @override
   void dispose() {
     titleController.dispose();
-    for (var c in subtaskControllers) {
-      c.dispose();
-    }
     super.dispose();
   }
 }

@@ -8,13 +8,22 @@ class TodoRemoteDataSource {
   TodoRemoteDataSource(this.firestore);
 
   Future<void> createTodo(Todo todo) async {
-    final todoDoc = firestore
+    final todoRef = firestore
         .collection('projects')
         .doc(todo.projectId)
         .collection('todos')
         .doc(todo.id);
 
-    await todoDoc.set(todo.toMap());
+    await todoRef.set(todo.toMap());
+
+    final subtasksRef = firestore
+        .collection('projects')
+        .doc(todo.projectId)
+        .collection('subtasks');
+
+    for (final subtask in todo.subtasks) {
+      await subtasksRef.doc(subtask.id).set(subtask.toMap());
+    }
   }
 
   Stream<List<Todo>> streamTodos(String projectId) {
@@ -31,13 +40,13 @@ class TodoRemoteDataSource {
   }
 
   Future<void> deleteTodo(String projectId, String todoId) async {
-    final todoDoc = firestore
+    final todoRef = firestore
         .collection('projects')
         .doc(projectId)
         .collection('todos')
         .doc(todoId);
 
-    await todoDoc.delete();
+    await todoRef.delete();
   }
 
   Future<void> toggleSubtaskDone({
@@ -46,37 +55,50 @@ class TodoRemoteDataSource {
     required String subtaskId,
     required bool isDone,
   }) async {
-    final todoDoc = firestore
+    final subtaskRef = firestore
         .collection('projects')
         .doc(projectId)
-        .collection('todos')
-        .doc(todoId);
+        .collection('subtasks')
+        .doc(subtaskId);
 
-    final docSnapshot = await todoDoc.get();
-    final data = docSnapshot.data();
-    if (data == null) return;
-
-    final subtasks = (data['subtasks'] as List<dynamic>).map((e) => Subtask.fromMap(e as Map<String, dynamic>)).toList();
-
-    final updatedSubtasks = subtasks.map((subtask) {
-      if (subtask.id == subtaskId) {
-        return subtask.copyWith(isDone: isDone);
-      }
-      return subtask;
-    }).toList();
-
-    await todoDoc.update({
-      'subtasks': updatedSubtasks.map((e) => e.toMap()).toList(),
-    });
+    await subtaskRef.update({'isDone': isDone});
   }
 
-  Future<void> updateTodo(Todo todo) async {
-    final todoDoc = firestore
-        .collection('projects')
-        .doc(todo.projectId)
-        .collection('todos')
-        .doc(todo.id);
+Future<void> updateTodo(Todo todo) async {
+  final todoRef = firestore
+      .collection('projects')
+      .doc(todo.projectId)
+      .collection('todos')
+      .doc(todo.id);
 
-    await todoDoc.set(todo.toMap());
+  await todoRef.set(todo.toMap());
+
+  final subtasksRef = firestore
+      .collection('projects')
+      .doc(todo.projectId)
+      .collection('subtasks');
+
+  final snapshot = await subtasksRef
+      .where('todoId', isEqualTo: todo.id)
+      .get();
+
+  final firestoreSubtaskIds = snapshot.docs.map((doc) => doc.id).toSet();
+  final incomingSubtaskIds = todo.subtasks.map((s) => s.id).toSet();
+
+  final idsToDelete = firestoreSubtaskIds.difference(incomingSubtaskIds);
+  for (final id in idsToDelete) {
+    await subtasksRef.doc(id).delete();
   }
+
+  for (final subtask in todo.subtasks) {
+    final docRef = subtasksRef.doc(subtask.id);
+    final doc = await docRef.get();
+    if (doc.exists) {
+      await docRef.update(subtask.toMap());
+    } else {
+      await docRef.set(subtask.toMap());
+    }
+  }
+}
+
 }

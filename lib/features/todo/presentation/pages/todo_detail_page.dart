@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/todo/presentation/pages/edit_todo_page.dart';
-import '../providers/delete_todo_usecase_provider.dart';
-import '../providers/toggle_subtask_done_usecase_provider.dart';
-import '../../domain/entities/todo.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/delete_todo_usecase_provider.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/toggle_subtask_done_usecase_provider.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/subtask_stream_provider.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 
 class TodoDetailPage extends ConsumerWidget {
   final Todo todo;
@@ -12,6 +13,10 @@ class TodoDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final asyncSubtasks = ref.watch(
+      subtaskStreamProvider((todo.projectId, todo.id)),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(todo.title),
@@ -35,9 +40,9 @@ class TodoDetailPage extends ConsumerWidget {
               }
             },
             itemBuilder:
-                (context) => [
-                  const PopupMenuItem(value: 'edit', child: Text('할 일 수정하기')),
-                  const PopupMenuItem(value: 'delete', child: Text('할 일 삭제하기')),
+                (context) => const [
+                  PopupMenuItem(value: 'edit', child: Text('할 일 수정하기')),
+                  PopupMenuItem(value: 'delete', child: Text('할 일 삭제하기')),
                 ],
           ),
         ],
@@ -56,13 +61,11 @@ class TodoDetailPage extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 24),
-
             const Text(
               '할 일 목록',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
-
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -73,26 +76,35 @@ class TodoDetailPage extends ConsumerWidget {
                   color: Colors.grey[100],
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: ListView.separated(
-                  itemCount: todo.subtasks.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final subtask = todo.subtasks[index];
-                    return _SubtaskItem(
-                      title: subtask.title,
-                      isDone: subtask.isDone,
-                      onToggle: () {
-                        ref
-                            .read(toggleSubtaskDoneUseCaseProvider)
-                            .call(
-                              projectId: todo.projectId,
-                              todoId: todo.id,
-                              subtaskId: subtask.id,
-                              isDone: !subtask.isDone,
-                            );
-                      },
-                    );
-                  },
+                child: asyncSubtasks.when(
+                  data:
+                      (subtasks) => ListView.separated(
+                        itemCount: subtasks.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final subtask = subtasks[index];
+                          return _SubtaskItem(
+                            title: subtask.title,
+                            isDone: subtask.isDone,
+                            onToggle: () {
+                              ref
+                                  .read(toggleSubtaskDoneUseCaseProvider)
+                                  .call(
+                                    projectId: subtask.projectId,
+                                    todoId:
+                                        (subtask.todoId ?? '').isNotEmpty
+                                            ? subtask.todoId!
+                                            : todo.id,
+                                    subtaskId: subtask.id,
+                                    isDone: !subtask.isDone,
+                                  );
+                            },
+                          );
+                        },
+                      ),
+                  loading:
+                      () => const Center(child: CircularProgressIndicator()),
+                  error: (e, _) => Center(child: Text('오류 발생: $e')),
                 ),
               ),
             ),
