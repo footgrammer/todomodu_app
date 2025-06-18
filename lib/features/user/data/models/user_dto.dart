@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
 
 class UserDto {
@@ -5,21 +6,26 @@ class UserDto {
   final String name;
   final String profileImageUrl;
   final String email;
+  final DateTime createdAt;
 
   UserDto({
     required this.userId,
     required this.name,
     required this.profileImageUrl,
     required this.email,
+    required this.createdAt,
   });
 
   UserDto.fromJson(Map<String, dynamic> map)
-    : this(
-        userId: map['userId'],
-        name: map['name'],
-        profileImageUrl: map['profileImageUrl'],
-        email: map['email'],
-      );
+      : this(
+          userId: map['userId'] ?? '',
+          name: map['name'] ?? '',
+          profileImageUrl: map['profileImageUrl'] ?? '',
+          email: map['email'] ?? '',
+          createdAt: map['createdAt'] != null
+              ? (map['createdAt'] as Timestamp).toDate()
+              : DateTime.now(), // 기본값 설정
+        );
 
   Map<String, dynamic> toJson() {
     return {
@@ -27,6 +33,7 @@ class UserDto {
       'name': name,
       'profileImageUrl': profileImageUrl,
       'email': email,
+      'createdAt': createdAt,
     };
   }
 
@@ -36,6 +43,7 @@ class UserDto {
       name: name,
       profileImageUrl: profileImageUrl,
       email: email,
+      createdAt: createdAt,
     );
   }
 }

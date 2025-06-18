@@ -28,4 +28,12 @@ class UserDataSourceImpl implements UserDataSource {
       }
     });
   }
+
+  @override
+  Stream<UserDto?> getUserByUserId(String userId) {
+    return _firestore.collection('users').doc(userId).snapshots().map((doc) {
+      if (!doc.exists) return null;
+      return UserDto.fromJson(doc.data()!);
+    });
+  }
 }

@@ -6,8 +6,8 @@ import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
-class ProfileImage extends StatelessWidget {
-  const ProfileImage({super.key, required this.user});
+class MyProfileImage extends StatelessWidget {
+  const MyProfileImage({super.key, required this.user});
 
   final UserEntity user;
   @override

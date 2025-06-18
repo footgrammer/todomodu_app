@@ -1,5 +1,3 @@
-import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
-
 class SubTask {
   String id;
   String todoId;
