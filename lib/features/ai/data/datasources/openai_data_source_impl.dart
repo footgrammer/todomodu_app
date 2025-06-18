@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -39,7 +40,7 @@ class OpenaiDataSourceImpl implements OpenaiDataSource {
                   'project_title: ${openaiParams.projectTitle}, project_start_date: ${openaiParams.projectStartDate}, project_end_date: ${openaiParams.projectEndDate}, prompt: ${openaiParams.prompt}',
             },
           ],
-          'max_tokens': 1000,
+          'max_tokens': 3000,
         },
       );
       log('${response.statusCode}');
