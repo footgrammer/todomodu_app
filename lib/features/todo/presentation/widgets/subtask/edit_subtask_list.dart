@@ -18,7 +18,6 @@ class EditTodoSubtaskList extends StatelessWidget {
     return Column(
       children: List.generate(subtasks.length, (index) {
         final subtask = subtasks[index];
-
         final controller = TextEditingController.fromValue(
           TextEditingValue(
             text: subtask.title,
@@ -28,30 +27,44 @@ class EditTodoSubtaskList extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: TextField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                      hintText: '세부 할 일',
-                      border: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextField(
+                        controller: controller,
+                        maxLength: 50,
+                        onChanged: (value) => onTitleChange(index, value),
+                        decoration: const InputDecoration(
+                          hintText: '세부 할 일',
+                          border: InputBorder.none,
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                          counterText: '',
+                        ),
+                      ),
                     ),
-                    onChanged: (value) => onTitleChange(index, value),
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    onPressed: () => onRemove(index),
+                    icon: const Icon(Icons.remove_circle_outline),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
-              IconButton(
-                onPressed: () => onRemove(index),
-                icon: const Icon(Icons.remove_circle_outline),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '${controller.text.length}/50',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
               ),
             ],
           ),
