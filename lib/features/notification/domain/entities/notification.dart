@@ -1,5 +1,5 @@
 import 'package:todomodu_app/features/activity_history/domain/entities/activity_history.dart';
-import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity1.dart';
 
 class Notification {
   String id;

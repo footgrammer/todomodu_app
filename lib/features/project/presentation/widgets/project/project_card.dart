@@ -7,7 +7,7 @@ import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectCard extends StatelessWidget {
   final int index;
-  final Project project;
+  final ProjectDto project;
   const ProjectCard({super.key, required this.index, required this.project});
 
   @override

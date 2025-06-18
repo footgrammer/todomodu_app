@@ -5,7 +5,7 @@ import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectProgressBar extends ConsumerWidget {
   Color textColor;
-  Project project;
+  ProjectDto project;
 
   ProjectProgressBar({
     super.key,

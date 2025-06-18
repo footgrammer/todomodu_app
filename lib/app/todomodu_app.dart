@@ -1,4 +1,16 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import 'package:todomodu_app/features/ai/presentation/pages/project_create_test_page.dart';
+import 'package:todomodu_app/features/notice/presentation/pages/notice_create_page.dart';
+import 'package:todomodu_app/features/notice/presentation/pages/notice_list_page.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_list_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/onboarding/onboarding_page.dart';
+>>>>>>> 61c9c2a (feat : change projectState and make usecases file)
 import 'package:todomodu_app/features/user/presentation/pages/splash/splash_page.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';

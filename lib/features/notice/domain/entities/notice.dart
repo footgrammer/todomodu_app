@@ -1,4 +1,4 @@
-import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
 
 class Notice {
   String id;
@@ -16,6 +16,7 @@ class Notice {
     required this.checkedUsers,
     required this.createdAt,
   });
+<<<<<<< HEAD
 
   Notice copyWith({
     String? id,
@@ -34,4 +35,6 @@ class Notice {
       createdAt: createdAt ?? this.createdAt,
     );
   }
+=======
+>>>>>>> 61c9c2a (feat : change projectState and make usecases file)
 }

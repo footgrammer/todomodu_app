@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
+=======
+import 'package:todomodu_app/features/todo/domain/entities/sub_task.dart';
+>>>>>>> 61c9c2a (feat : change projectState and make usecases file)
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 
 class TodoDto {
@@ -10,8 +14,12 @@ class TodoDto {
   final DateTime endDate;
   final bool isDone;
 
+<<<<<<< HEAD
   // DTO에는 subTasks는 포함하지 않음 (별도 subcollection으로 관리)
   const TodoDto({
+=======
+  TodoDto({
+>>>>>>> 61c9c2a (feat : change projectState and make usecases file)
     required this.id,
     required this.projectId,
     required this.title,
@@ -20,6 +28,7 @@ class TodoDto {
     required this.isDone,
   });
 
+<<<<<<< HEAD
   /// fromJson (Firestore용)
   factory TodoDto.fromJson(Map<String, dynamic> json, {required String id}) {
     return TodoDto(
@@ -39,10 +48,30 @@ class TodoDto {
       'title': title,
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),
+=======
+  TodoDto.fromJson(Map<String, dynamic> map)
+    : this(
+        id: map['id'],
+        projectId: map['projectId'],
+        title: map['title'],
+        startDate: map['startDate'],
+        endDate: map['endDate'],
+        isDone: map['isDone'],
+      );
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'projectId': projectId,
+      'title': title,
+      'startDate': startDate,
+      'endDate': endDate,
+>>>>>>> 61c9c2a (feat : change projectState and make usecases file)
       'isDone': isDone,
     };
   }
 
+<<<<<<< HEAD
   /// fromEntity (Domain → Dto)
   factory TodoDto.fromEntity(Todo entity) {
     return TodoDto(
@@ -57,6 +86,9 @@ class TodoDto {
 
   /// toEntity (Dto → Domain)
   Todo toEntity({List<Subtask> subTasks = const []}) {
+=======
+  Todo toEntity() {
+>>>>>>> 61c9c2a (feat : change projectState and make usecases file)
     return Todo(
       id: id,
       projectId: projectId,
@@ -64,6 +96,7 @@ class TodoDto {
       startDate: startDate,
       endDate: endDate,
       isDone: isDone,
+<<<<<<< HEAD
       subtasks: subTasks, // 나중에 subtasks 따로 fetch해서 연결
     );
   }
@@ -83,6 +116,9 @@ class TodoDto {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       isDone: isDone ?? this.isDone,
+=======
+      subTasks: [],
+>>>>>>> 61c9c2a (feat : change projectState and make usecases file)
     );
   }
 }

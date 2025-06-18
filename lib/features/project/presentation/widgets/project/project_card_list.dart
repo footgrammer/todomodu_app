@@ -4,7 +4,7 @@ import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card.dart';
 
 class ProjectCardList extends ConsumerWidget {
-  List<Project>? projects;
+  List<ProjectDto>? projects;
 
   ProjectCardList({super.key, required this.projects});
 
