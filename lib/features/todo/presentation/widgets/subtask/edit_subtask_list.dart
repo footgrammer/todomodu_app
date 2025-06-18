@@ -27,13 +27,14 @@ class EditTodoSubtaskList extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
+              Expanded(
+                child: Stack(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(right: 60, bottom: 20),
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(12),
@@ -45,26 +46,26 @@ class EditTodoSubtaskList extends StatelessWidget {
                         decoration: const InputDecoration(
                           hintText: '세부 할 일',
                           border: InputBorder.none,
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                           counterText: '',
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    onPressed: () => onRemove(index),
-                    icon: const Icon(Icons.remove_circle_outline),
-                  ),
-                ],
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '${controller.text.length}/50',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    Positioned(
+                      right: 16,
+                      bottom: 8,
+                      child: Text(
+                        '${controller.text.length}/50',
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                onPressed: () => onRemove(index),
+                icon: const Icon(Icons.remove_circle_outline),
               ),
             ],
           ),
