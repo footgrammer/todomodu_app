@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/subtask/subtask_providers.dart';
 import '../../domain/entities/subtask.dart';
 import '../../domain/repositories/subtask_repository.dart';
-import '../providers/subtask_repository_provider.dart';
 
 class SubtaskViewModel {
   final SubtaskRepository repo;

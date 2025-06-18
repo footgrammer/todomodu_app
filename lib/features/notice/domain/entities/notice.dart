@@ -1,4 +1,4 @@
-import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class Notice {
   String id;
@@ -16,4 +16,22 @@ class Notice {
     required this.checkedUsers,
     required this.createdAt,
   });
+
+  Notice copyWith({
+    String? id,
+    String? projectId,
+    String? title,
+    String? content,
+    List<UserEntity>? checkedUsers,
+    DateTime? createdAt,
+  }) {
+    return Notice(
+      id: id ?? this.id,
+      projectId: projectId ?? this.projectId,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      checkedUsers: checkedUsers ?? this.checkedUsers,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

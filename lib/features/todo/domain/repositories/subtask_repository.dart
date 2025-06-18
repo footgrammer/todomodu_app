@@ -1,6 +1,7 @@
-import '../entities/subtask.dart';
+import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
+import 'package:todomodu_app/shared/types/result.dart';
 
-abstract class SubtaskRepository {
+abstract interface class SubtaskRepository {
   Stream<List<Subtask>> streamSubtasks(String projectId, String todoId);
   Future<void> toggleDone({
     required String projectId,
@@ -13,4 +14,7 @@ abstract class SubtaskRepository {
     required String subtaskId,
   });
   Future<void> createSubtask(Subtask subtask);
+
+  Future<Result<List<Subtask>>> getSubtasksByProjectId(String projectId);
+  Future<Result<List<Subtask>>> getSubtasksByProjectAndTodoId(String projectId, String todoId);
 }

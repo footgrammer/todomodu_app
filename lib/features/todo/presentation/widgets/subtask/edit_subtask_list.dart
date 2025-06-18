@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/subtask.dart';
-import '../../providers/subtask_stream_provider.dart';
+import '../../providers/subtask/subtask_stream_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/viewmodels/subtask_viewmodel.dart';
 
 

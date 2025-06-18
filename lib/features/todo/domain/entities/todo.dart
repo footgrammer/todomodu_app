@@ -1,4 +1,4 @@
-import 'subtask.dart';
+import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 
 class Todo {
   final String id;
@@ -19,27 +19,25 @@ class Todo {
     required this.isDone,
   });
 
-Map<String, dynamic> toMap() {
-  return {
-    'title': title,
-    'isDone': isDone,
-    'projectId': projectId,
-    'startDate': startDate.toIso8601String(),
-    'endDate': endDate.toIso8601String(),
-  };
-}
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'isDone': isDone,
+      'projectId': projectId,
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
+    };
+  }
 
-
-factory Todo.fromMap(String id, Map<String, dynamic> map) {
-  return Todo(
-    id: id,
-    title: map['title'] ?? '',
-    isDone: map['isDone'] ?? false,
-    projectId: map['projectId'] ?? '',
-    startDate: DateTime.parse(map['startDate']),
-    endDate: DateTime.parse(map['endDate']),
-    subtasks: [],
-  );
-}
-
+  factory Todo.fromMap(String id, Map<String, dynamic> map) {
+    return Todo(
+      id: id,
+      title: map['title'] ?? '',
+      isDone: map['isDone'] ?? false,
+      projectId: map['projectId'] ?? '',
+      startDate: DateTime.parse(map['startDate']),
+      endDate: DateTime.parse(map['endDate']),
+      subtasks: [],
+    );
+  }
 }

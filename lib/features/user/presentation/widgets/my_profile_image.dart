@@ -2,7 +2,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/user/domain/models/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 

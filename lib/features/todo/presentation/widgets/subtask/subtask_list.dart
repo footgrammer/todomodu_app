@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../../domain/entities/subtask.dart';
-import '../../providers/subtask_stream_provider.dart';
+import '../../providers/subtask/subtask_stream_provider.dart';
 import '../../viewmodels/subtask_viewmodel.dart';
 
 class SubtaskList extends ConsumerWidget {

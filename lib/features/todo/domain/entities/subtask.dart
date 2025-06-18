@@ -1,9 +1,12 @@
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+
 class Subtask {
   final String id;
   final String title;
   final bool isDone;
   final String todoId;
   final String projectId;
+  final UserEntity? assignee;
 
   Subtask({
     required this.id,
@@ -11,6 +14,7 @@ class Subtask {
     required this.isDone,
     required this.todoId,
     required this.projectId,
+    this.assignee,
   });
 
   Subtask copyWith({
@@ -19,6 +23,7 @@ class Subtask {
     bool? isDone,
     String? todoId,
     String? projectId,
+    UserEntity? assignee,
   }) {
     return Subtask(
       id: id ?? this.id,
@@ -26,6 +31,7 @@ class Subtask {
       isDone: isDone ?? this.isDone,
       todoId: todoId ?? this.todoId,
       projectId: projectId ?? this.projectId,
+      assignee: assignee ?? this.assignee,
     );
   }
 
@@ -36,16 +42,18 @@ class Subtask {
       'isDone': isDone,
       'todoId': todoId,
       'projectId': projectId,
+      'assigneeId': assignee?.userId,
     };
   }
 
   factory Subtask.fromMap(Map<String, dynamic> map) {
     return Subtask(
-      id: map['id'] ?? '',
-      title: map['title'] ?? '',
-      isDone: map['isDone'] ?? false,
-      todoId: map['todoId'] ?? '',
-      projectId: map['projectId'] ?? '',
+      id: map['id'] as String? ?? '',
+      title: map['title'] as String? ?? '',
+      isDone: map['isDone'] as bool? ?? false,
+      todoId: map['todoId'] as String? ?? '',
+      projectId: map['projectId'] as String? ?? '',
+      assignee: null,
     );
   }
 }
