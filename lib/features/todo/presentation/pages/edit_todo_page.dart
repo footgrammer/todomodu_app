@@ -4,6 +4,8 @@ import '../../domain/entities/todo.dart';
 import '../providers/edit_todo_viewmodel_provider.dart';
 import '../widgets/todo_date_section.dart';
 import '../widgets/submit_button.dart';
+import '../widgets/todo_title_input.dart';
+import '../widgets/subtask/edit_subtask_list.dart';
 
 class EditTodoPage extends ConsumerWidget {
   final Todo todo;
@@ -27,14 +29,11 @@ class EditTodoPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                decoration: const InputDecoration(labelText: '제목'),
+              TodoTitleInput(
                 controller: TextEditingController.fromValue(
                   TextEditingValue(
                     text: state.title,
-                    selection: TextSelection.collapsed(
-                      offset: state.title.length,
-                    ),
+                    selection: TextSelection.collapsed(offset: state.title.length),
                   ),
                 ),
                 onChanged: viewModel.changeTitle,
@@ -50,9 +49,7 @@ class EditTodoPage extends ConsumerWidget {
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
                   );
-                  if (picked != null) {
-                    viewModel.changeStartDate(picked);
-                  }
+                  if (picked != null) viewModel.changeStartDate(picked);
                 },
                 onEndTap: () async {
                   final picked = await showDatePicker(
@@ -61,65 +58,17 @@ class EditTodoPage extends ConsumerWidget {
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
                   );
-                  if (picked != null) {
-                    viewModel.changeEndDate(picked);
-                  }
+                  if (picked != null) viewModel.changeEndDate(picked);
                 },
               ),
               const SizedBox(height: 24),
-              const Text(
-                '할 일 목록',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              const Text('할 일 목록', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
-
-              ...state.subtasks.asMap().entries.map((entry) {
-                final index = entry.key;
-                final subtask = entry.value;
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '세부 할 일',
-                            ),
-                            controller: TextEditingController.fromValue(
-                              TextEditingValue(
-                                text: subtask.title,
-                                selection: TextSelection.collapsed(
-                                  offset: subtask.title.length,
-                                ),
-                              ),
-                            ),
-                            onChanged:
-                                (value) =>
-                                    viewModel.changeSubtaskTitle(index, value),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.remove_circle_outline,
-                          color: Colors.black54,
-                        ),
-                        onPressed: () => viewModel.removeSubtask(index),
-                      ),
-                    ],
-                  ),
-                );
-              }),
-
+              EditTodoSubtaskList(
+                subtasks: state.subtasks,
+                onTitleChange: viewModel.changeSubtaskTitle,
+                onRemove: viewModel.removeSubtask,
+              ),
               Center(
                 child: IconButton(
                   onPressed: viewModel.addSubtask,
@@ -135,9 +84,9 @@ class EditTodoPage extends ConsumerWidget {
         onPressed: () async {
           await viewModel.submit();
           if (context.mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('할 일이 수정되었습니다')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('할 일이 수정되었습니다')),
+            );
             Navigator.pop(context);
           }
         },

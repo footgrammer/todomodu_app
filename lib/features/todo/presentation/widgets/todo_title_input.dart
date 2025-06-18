@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class TodoTitleInput extends StatelessWidget {
   final TextEditingController controller;
+  final void Function(String)? onChanged; 
 
   const TodoTitleInput({
     super.key,
     required this.controller,
+    this.onChanged,
   });
 
   @override
@@ -20,6 +22,7 @@ class TodoTitleInput extends StatelessWidget {
         const SizedBox(height: 8),
         TextField(
           controller: controller,
+          onChanged: onChanged,
           decoration: InputDecoration(
             hintText: '할 일 1',
             border: OutlineInputBorder(
