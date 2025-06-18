@@ -41,7 +41,7 @@ class AddTodoPage extends ConsumerWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              TodoSubtaskList(
+              SubtaskList(
                 controllers: viewModel.subtaskControllers,
                 onRemove: viewModel.removeSubtask,
               ),
