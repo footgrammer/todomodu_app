@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/expanded_text_box/expand_animate_text_box.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/expanded_text_box/fade_in_text_toggle_button.dart';
+import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/expanded_text_box/notice_check_button.dart';
 
 class ExpandedTextWidget extends StatefulWidget {
   const ExpandedTextWidget({required this.content, super.key});
@@ -34,21 +35,25 @@ class _ExpandedTextWidgetState extends State<ExpandedTextWidget>
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ExpandAnimateTextBox(
-              content: widget.content,
-              expanded: _expanded,
+            ExpandAnimateTextBox(content: widget.content, expanded: _expanded),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                NoticeCheckButton(isChecked: true,),
+                if (isOverflowing)
+                  FadeInTextToggleButton(
+                    toggleTrueText: '접기',
+                    toggleFalseText: '펼치기',
+                    toggleFunction:
+                        () => {
+                          setState(() {
+                            _expanded = !_expanded;
+                          }),
+                        },
+                  ),
+              ],
             ),
-            if (isOverflowing)
-              FadeInTextToggleButton(
-                toggleTrueText: '접기',
-                toggleFalseText: '펼치기',
-                toggleFunction:
-                    () => {
-                      setState(() {
-                        _expanded = !_expanded;
-                      }),
-                    },
-              ),
           ],
         );
       },
