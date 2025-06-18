@@ -1,48 +1,65 @@
 import 'package:flutter/material.dart';
 
-class SubtaskList extends StatelessWidget{
+class SubtaskList extends StatelessWidget {
   final List<TextEditingController> controllers;
   final void Function(int) onRemove;
-  
+
   const SubtaskList({
+    super.key,
     required this.controllers,
     required this.onRemove,
-    super.key
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-                children: List.generate(controllers.length, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: controllers[index],
-                            decoration: InputDecoration(
-                                hintText: '세부 할일',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                filled: true,
-                                fillColor: Colors.grey[300],
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 14, vertical: 14)),
-                          ),
+      children: List.generate(controllers.length, (index) {
+        final controller = controllers[index];
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextField(
+                        controller: controller,
+                        maxLength: 50,
+                        decoration: const InputDecoration(
+                          hintText: '세부 할 일',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 14),
+                          counterText: '',
                         ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        IconButton(
-                            onPressed: () => onRemove(index),
-                            icon: const Icon(Icons.remove_circle_outline)),
-                      ],
+                      ),
                     ),
-                  );
-                }),
-              );
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    onPressed: () => onRemove(index),
+                    icon: const Icon(Icons.remove_circle_outline),
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '${controller.text.length}/50',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
   }
 }
