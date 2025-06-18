@@ -23,7 +23,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
 
   @override
   Future<Result<List<Project>>> fetchProjectsByUser(UserEntity user) async {
-    final dtoResult = await _dataSource.getProjectsByUserId(user.id);
+    final dtoResult = await _dataSource.getProjectsByUserId(user.userId);
 
     return switch (dtoResult) {
       Ok(value: final dtos) => await _mapDtosToEntities(dtos),
@@ -56,7 +56,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
 
           // 4. Owner 찾기
           final owner = members.firstWhere(
-            (m) => m.id == dto.ownerId,
+            (m) => m.userId == dto.ownerId,
             orElse: () {
               throw Exception(
                 'Owner with ID ${dto.ownerId} not found among project members.',

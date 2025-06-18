@@ -67,7 +67,7 @@ class ProjectDto {
       description: entity.description,
       startDate: entity.startDate,
       endDate: entity.endDate,
-      ownerId: entity.owner.id,
+      ownerId: entity.owner.userId,
       // memberIds: entity.members.map((e) => e.id).toList(),
       // todoIds:   entity.todos.map((e) => e.id).toList(),
       invitationCode: entity.invitationCode,

@@ -64,7 +64,7 @@ class TodoDto {
       startDate: startDate,
       endDate: endDate,
       isDone: isDone,
-      subTasks: subTasks, // 나중에 subtasks 따로 fetch해서 연결
+      subtasks: subTasks, // 나중에 subtasks 따로 fetch해서 연결
     );
   }
 

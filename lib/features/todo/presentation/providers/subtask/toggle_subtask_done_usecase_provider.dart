@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../application/usecases/toggle_subtask_done_usecase.dart';
-import 'subtask_repository_provider.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/subtask/subtask_providers.dart';
+import '../../../application/usecases/toggle_subtask_done_usecase.dart';
 
 final toggleSubtaskDoneUseCaseProvider = Provider<ToggleSubtaskDoneUseCase>((ref) {
   final repository = ref.watch(subtaskRepositoryProvider);

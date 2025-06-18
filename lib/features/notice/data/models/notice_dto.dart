@@ -59,7 +59,7 @@ class NoticeDto {
       projectId: entity.projectId,
       title: entity.title,
       content: entity.content,
-      checkedUsers: entity.checkedUsers.map((e) => e.id).toList(),
+      checkedUsers: entity.checkedUsers.map((e) => e.userId).toList(),
       createdAt: entity.createdAt,
     );
   }

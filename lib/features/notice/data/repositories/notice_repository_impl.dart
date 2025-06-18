@@ -61,7 +61,7 @@ class NoticeRepositoryImpl implements NoticeRepository {
     required UserEntity user,
   }) async {
     // 이미 읽은 사용자라면 바로 반환
-    if (notice.checkedUsers.any((u) => u.id == user.id)) {
+    if (notice.checkedUsers.any((u) => u.userId == user.userId)) {
       return Result.ok(notice);
     }
 

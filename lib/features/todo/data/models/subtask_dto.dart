@@ -3,13 +3,15 @@ import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class SubtaskDto {
   final String id;
+  final String projectId;
   final String todoId;
   final String title;
   final bool isDone;
-  final String? assigneeId; // nullable 처리
+  final String? assigneeId;
 
   const SubtaskDto({
     required this.id,
+    required this.projectId,
     required this.todoId,
     required this.title,
     required this.isDone,
@@ -17,9 +19,13 @@ class SubtaskDto {
   });
 
   /// Firestore → Dto
-  factory SubtaskDto.fromJson(Map<String, dynamic> json, {required String id}) {
+  factory SubtaskDto.fromJson(
+    Map<String, dynamic> json, {
+    required String id,
+  }) {
     return SubtaskDto(
       id: id,
+      projectId: json['projectId'] as String,
       todoId: json['todoId'] as String,
       title: json['title'] as String,
       isDone: json['isDone'] as bool,
@@ -30,6 +36,7 @@ class SubtaskDto {
   /// Dto → Firestore
   Map<String, dynamic> toJson() {
     return {
+      'projectId': projectId,
       'todoId': todoId,
       'title': title,
       'isDone': isDone,
@@ -41,10 +48,11 @@ class SubtaskDto {
   factory SubtaskDto.fromEntity(Subtask entity) {
     return SubtaskDto(
       id: entity.id,
+      projectId: entity.projectId,
       todoId: entity.todoId,
       title: entity.title,
       isDone: entity.isDone,
-      assigneeId: entity.assignee?.id,
+      assigneeId: entity.assignee?.userId,
     );
   }
 
@@ -52,9 +60,10 @@ class SubtaskDto {
   Subtask toEntity({UserEntity? assignee}) {
     return Subtask(
       id: id,
-      todoId: todoId,
       title: title,
       isDone: isDone,
+      todoId: todoId,
+      projectId: projectId,
       assignee: assignee,
     );
   }
@@ -62,6 +71,7 @@ class SubtaskDto {
   /// copyWith
   SubtaskDto copyWith({
     String? id,
+    String? projectId,
     String? todoId,
     String? title,
     bool? isDone,
@@ -69,6 +79,7 @@ class SubtaskDto {
   }) {
     return SubtaskDto(
       id: id ?? this.id,
+      projectId: projectId ?? this.projectId,
       todoId: todoId ?? this.todoId,
       title: title ?? this.title,
       isDone: isDone ?? this.isDone,

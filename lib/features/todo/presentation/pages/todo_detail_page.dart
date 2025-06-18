@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/todo/presentation/pages/edit_todo_page.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/delete_todo_usecase_provider.dart';
-import 'package:todomodu_app/features/todo/presentation/providers/toggle_subtask_done_usecase_provider.dart';
-import 'package:todomodu_app/features/todo/presentation/providers/subtask_stream_provider.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/subtask/toggle_subtask_done_usecase_provider.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/subtask/subtask_stream_provider.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 
 class TodoDetailPage extends ConsumerWidget {

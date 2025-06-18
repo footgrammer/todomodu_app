@@ -41,7 +41,7 @@ class MyProfileImage extends StatelessWidget {
                 onTap: () {
                   log('카메라 버튼 클릭');
                   final userRepo = ref.read(userRepositoryProvider);
-                  userRepo.uploadProfileImage(user.id);
+                  userRepo.uploadProfileImage(user.userId);
                 },
                 child: Container(
                   width: 36,
