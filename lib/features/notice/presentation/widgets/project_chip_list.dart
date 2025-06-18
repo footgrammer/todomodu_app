@@ -4,9 +4,10 @@ import 'package:todomodu_app/features/project/domain/entities/project.dart';
 
 
 class ProjectChipList extends StatelessWidget {
-  const ProjectChipList({required this.projects ,super.key});
+  const ProjectChipList({required this.projects, required this.selectedProjects ,super.key});
   
   final List<Project> projects;
+  final List<Project> selectedProjects;
 
   // final List<String> projectNames = ['전체', '프로젝트1', '프로젝트2', '프로젝트 명이 너무 길면 어떻게 되는가'];
 
@@ -17,7 +18,7 @@ class ProjectChipList extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return ProjectChip(isChecked: true, project: projects[index]);
+          return ProjectChip(project: projects[index]);
         },
         separatorBuilder: (context, index) {
           return SizedBox(width: 10);

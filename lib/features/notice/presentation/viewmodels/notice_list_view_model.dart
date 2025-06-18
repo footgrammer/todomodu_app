@@ -17,10 +17,10 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     required RetrieveNoticesByProjectsUsecase retrieveUsecase,
     required MarkNoticeAsReadUsecase markAsReadUsecase,
     required FetchProjectsByUserUsecase fetchProjectsUsecase,
-  })  : _retrieveUsecase = retrieveUsecase,
-        _markAsReadUsecase = markAsReadUsecase,
-        _fetchProjectsUsecase = fetchProjectsUsecase,
-        super(NoticeListModel.initial());
+  }) : _retrieveUsecase = retrieveUsecase,
+       _markAsReadUsecase = markAsReadUsecase,
+       _fetchProjectsUsecase = fetchProjectsUsecase,
+       super(NoticeListModel.initial());
 
   /// 앱 초기화 시 사용자 기준 프로젝트 + 공지 불러오기
   Future<void> initialize(UserEntity user) async {
@@ -30,13 +30,16 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
 
     if (projectResult is Ok<List<Project>>) {
       final projects = projectResult.value;
-      state = state.copyWith(projects: projects);
-
+      state = state.copyWith(
+        projects: projects,
+        selectedProjects: List.from(projects),
+      );
       final noticeResult = await _retrieveUsecase.execute(projects);
 
       state = switch (noticeResult) {
         Ok(value: final notices) => state.copyWith(
           notices: notices,
+          selectedNotices: List.from(notices),
           isLoading: false,
         ),
         Error(:final error) => state.copyWith(
@@ -53,27 +56,34 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
   }
 
   void addProject(Project project) {
-    final updatedProjects = [...state.projects, project];
-    state = state.copyWith(projects: updatedProjects);
-    _refreshNotices();
+    final updatedProjects = [...state.selectedProjects, project];
+    state = state.copyWith(selectedProjects: updatedProjects);
+    // _refreshNotices();
+    filterNoticesBySelection();
   }
 
   void removeProject(Project project) {
     final updatedProjects =
-        state.projects.where((p) => p.id != project.id).toList();
-    state = state.copyWith(projects: updatedProjects);
-    _refreshNotices();
+        state.selectedProjects.where((p) => p.id != project.id).toList();
+    state = state.copyWith(selectedProjects: updatedProjects);
+    // _refreshNotices();
+    filterNoticesBySelection();
   }
 
   Future<void> _refreshNotices() async {
     state = state.copyWith(isLoading: true, error: null);
 
-    final result = await _retrieveUsecase.execute(state.projects);
+    final result = await _retrieveUsecase.execute(state.selectedProjects);
+
     state = switch (result) {
-      Ok(value: final notices) =>
-        state.copyWith(notices: notices, isLoading: false),
-      Error(:final error) =>
-        state.copyWith(isLoading: false, error: error.toString()),
+      Ok(value: final notices) => state.copyWith(
+        notices: notices,
+        isLoading: false,
+      ),
+      Error(:final error) => state.copyWith(
+        isLoading: false,
+        error: error.toString(),
+      ),
     };
   }
 
@@ -81,16 +91,25 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     required Notice notice,
     required UserEntity user,
   }) async {
-    final result = await _markAsReadUsecase.execute(
-      notice: notice,
-    );
+    final result = await _markAsReadUsecase.execute(notice: notice);
 
     if (result is Ok<Notice>) {
       final updated = result.value;
-      final updatedList = state.notices
-          .map((n) => n.id == updated.id ? updated : n)
-          .toList();
+      final updatedList =
+          state.notices.map((n) => n.id == updated.id ? updated : n).toList();
       state = state.copyWith(notices: updatedList);
     }
+  }
+
+  void filterNoticesBySelection() {
+    final filtered =
+        state.notices
+            .where(
+              (notice) =>
+                  state.selectedProjects.any((p) => p.id == notice.projectId),
+            )
+            .toList();
+
+    state = state.copyWith(selectedNotices: filtered);
   }
 }

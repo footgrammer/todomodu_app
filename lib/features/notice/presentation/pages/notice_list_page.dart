@@ -51,14 +51,14 @@ class _NoticeListPageState extends ConsumerState<NoticeListPage> {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  NoticeSearchbar(),
-                  const SizedBox(height: 20),
-                  ProjectChipList(projects: noticeListState.projects),
+                  // NoticeSearchbar(),
+                  // const SizedBox(height: 20),
+                  ProjectChipList(projects: noticeListState.projects, selectedProjects: noticeListState.selectedProjects,),
                   const SizedBox(height: 20),
                   Expanded(
                     child: noticeListState.projects.isEmpty
                         ? const Center(child: Text('프로젝트를 선택하세요.'))
-                        : NoticeListWidget(notices: noticeListState.notices),
+                        : NoticeListWidget(notices: noticeListState.selectedNotices),
                   ),
                 ],
               ),
