@@ -30,6 +30,7 @@ class AuthRepositoryImpl implements AuthRepository {
       'email': user.email ?? '',
       'name': user.displayName ?? '',
       'profileImageUrl': user.photoURL ?? '',
+      'createdAt': FieldValue.serverTimestamp(),
     });
   }
 
