@@ -31,7 +31,6 @@ class _NoticeCheckButtonState extends State<NoticeCheckButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(widget.isChecked ? checkedText : beforecheckedText);
         onCheckedChange();
       },
       child: Container(
@@ -42,13 +41,13 @@ class _NoticeCheckButtonState extends State<NoticeCheckButton> {
         ),
         child: Row(
           children: [
-            CustomIcon(name: 'Circle_Check', color: AppColors.grey600,),
+            CustomIcon(name: 'Circle_Check', color:  widget.isChecked ? AppColors.grey600 : AppColors.grey900,),
             SizedBox(width: 4,),
             Text(
               buttonText,
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall?.copyWith(color: AppColors.grey600),
+              ).textTheme.bodySmall?.copyWith(color:  widget.isChecked ? AppColors.grey600 : AppColors.grey900),
             ),
           ],
         ),
