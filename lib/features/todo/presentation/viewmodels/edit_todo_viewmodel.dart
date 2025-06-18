@@ -57,15 +57,27 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
   }
 
   Future<void> submit() async {
+    final trimmedTitle = state.title.trim();
+    if (trimmedTitle.isEmpty) return;
+
+    List<Subtask> updatedSubtasks = state.subtasks;
+
+    if (updatedSubtasks.isEmpty) {
+      updatedSubtasks = [
+        Subtask(id: const Uuid().v4(), title: trimmedTitle, isDone: false)
+      ];
+    }
+
     final todo = Todo(
       id: todoId,
       projectId: projectId,
-      title: state.title,
+      title: trimmedTitle,
       startDate: state.startDate,
       endDate: state.endDate,
       isDone: false,
-      subtasks: state.subtasks,
+      subtasks: updatedSubtasks.map((s) => s.copyWith(title: s.title.trim())).toList(),
     );
+
     await updateTodoUseCase(todo);
   }
 }

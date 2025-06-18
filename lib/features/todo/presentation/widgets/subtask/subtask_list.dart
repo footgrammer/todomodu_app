@@ -70,16 +70,25 @@ class _SubtaskListState extends State<SubtaskList> {
                         decoration: const InputDecoration(
                           hintText: '세부 할 일',
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 14,
+                          ),
                           counterText: '',
                         ),
-                        onChanged: (_) {}, // 이미 컨트롤러 리스너 이용
+                        onChanged: (_) => setState(() {}),
                       ),
                     ),
                     Positioned(
                       right: 16,
                       bottom: 8,
-                      child: Text('$len/50', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                      child: Text(
+                        '$len/50',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -27,6 +27,12 @@ class AddTodoViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addSubtaskWithTitle(String title) {
+    final controller = TextEditingController(text: title);
+    subtaskControllers.add(controller);
+    notifyListeners();
+  }
+
   Future<void> pickDate(BuildContext context, bool isStart) async {
     final DateTime initial = isStart ? startDate : endDate;
     final DateTime? picked = await showDatePicker(
@@ -40,28 +46,31 @@ class AddTodoViewModel extends ChangeNotifier {
         startDate = picked;
         if (startDate.isAfter(endDate)) endDate = startDate;
       } else {
-        if (picked.isBefore(startDate)) endDate = startDate;
-        else endDate = picked;
+        if (picked.isBefore(startDate)) {
+          endDate = startDate;
+        } else {
+          endDate = picked;
+        }
       }
       notifyListeners();
     }
   }
 
   Future<void> submit() async {
-    if (titleController.text.trim().isEmpty) {
-      return; 
-    }
-    final uuid = Uuid();
+    final trimmedTitle = titleController.text.trim();
+    if (trimmedTitle.isEmpty) return;
 
     if (subtaskControllers.isEmpty) {
-      subtaskControllers.add(TextEditingController());
+      addSubtaskWithTitle(trimmedTitle);
     }
 
+    final uuid = Uuid();
     final generatedTodoId = uuid.v4();
+
     final subtasks = subtaskControllers.map((ctrl) {
       return Subtask(
         id: uuid.v4(),
-        title: ctrl.text,
+        title: ctrl.text.trim(),
         isDone: false,
       );
     }).toList();
@@ -69,7 +78,7 @@ class AddTodoViewModel extends ChangeNotifier {
     final todo = Todo(
       id: generatedTodoId,
       projectId: projectId,
-      title: titleController.text,
+      title: trimmedTitle,
       subtasks: subtasks,
       startDate: startDate,
       endDate: endDate,
@@ -82,7 +91,9 @@ class AddTodoViewModel extends ChangeNotifier {
   @override
   void dispose() {
     titleController.dispose();
-    for (var c in subtaskControllers) c.dispose();
+    for (var c in subtaskControllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 }
