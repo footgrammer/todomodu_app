@@ -3,12 +3,14 @@ class UserEntity {
   final String name;
   final String profileImageUrl;
   final String email;
+  final DateTime createdAt;
 
   UserEntity({
     required this.userId,
     required this.name,
     required this.profileImageUrl,
     required this.email,
+    required this.createdAt,
   });
 
   UserEntity.fromJson(Map<String, dynamic> map)
@@ -17,6 +19,7 @@ class UserEntity {
         name: map['name'],
         profileImageUrl: map['profileImageUrl'],
         email: map['email'],
+        createdAt: map['createdAt'],
       );
 
   Map<String, dynamic> toJson() {
@@ -25,6 +28,7 @@ class UserEntity {
       'name': name,
       'profileImageUrl': profileImageUrl,
       'email': email,
+      'createdAt': createdAt,
     };
   }
 }

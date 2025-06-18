@@ -5,12 +5,14 @@ class UserDto {
   final String name;
   final String profileImageUrl;
   final String email;
+  final DateTime createdAt;
 
   UserDto({
     required this.userId,
     required this.name,
     required this.profileImageUrl,
     required this.email,
+    required this.createdAt
   });
 
   UserDto.fromJson(Map<String, dynamic> map)
@@ -19,6 +21,7 @@ class UserDto {
         name: map['name'],
         profileImageUrl: map['profileImageUrl'],
         email: map['email'],
+        createdAt: map['createdAt'],
       );
 
   Map<String, dynamic> toJson() {
@@ -27,6 +30,7 @@ class UserDto {
       'name': name,
       'profileImageUrl': profileImageUrl,
       'email': email,
+      'createdAt': createdAt,
     };
   }
 
@@ -36,6 +40,7 @@ class UserDto {
       name: name,
       profileImageUrl: profileImageUrl,
       email: email,
+      createdAt: createdAt,
     );
   }
 }
