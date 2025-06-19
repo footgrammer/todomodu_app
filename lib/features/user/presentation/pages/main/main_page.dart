@@ -26,12 +26,13 @@ class _MainPageState extends State<MainPage> {
         children: [
           ProjectPage(),
           NoticeListPage(),
-          NoticeCreatePage(projectId: '1',),
+          NoticeCreatePage(projectId: '1'),
           MyPage(),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(top: 0),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        bottom: false,
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (value) {
@@ -39,6 +40,7 @@ class _MainPageState extends State<MainPage> {
               _currentIndex = value;
             });
           },
+          backgroundColor: Colors.white,
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
@@ -61,7 +63,7 @@ class _MainPageState extends State<MainPage> {
               icon: CustomIcon(name: 'note', color: AppColors.grey300),
               label: '공지',
               activeIcon: CustomIcon(
-                name: 'List_Check',
+                name: 'note',
                 color: AppColors.primary700,
               ),
             ),
@@ -69,7 +71,7 @@ class _MainPageState extends State<MainPage> {
               icon: CustomIcon(name: 'User_01', color: AppColors.grey300),
               label: '마이',
               activeIcon: CustomIcon(
-                name: 'List_Check',
+                name: 'User_01',
                 color: AppColors.primary700,
               ),
             ),
