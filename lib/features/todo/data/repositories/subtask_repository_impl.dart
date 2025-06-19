@@ -10,7 +10,7 @@ class SubtaskRepositoryImpl implements SubtaskRepository {
   final SubtaskDatasource dataSource;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  SubtaskRepositoryImpl({required this.dataSource});
+  SubtaskRepositoryImpl({required this.dataSource,});
 
   @override
   Stream<List<Subtask>> streamSubtasks(String projectId, String todoId) {
