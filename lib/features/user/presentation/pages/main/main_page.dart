@@ -23,19 +23,17 @@ class _MainPageState extends State<MainPage> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-<<<<<<< HEAD
-          ProjectPage(),
+          ProjectListPage(),
           NoticeListPage(),
-=======
-          ProjectListPage(),
-          ProjectListPage(),
->>>>>>> 61c9c2a (feat : change projectState and make usecases file)
           NoticeListPage(),
           MyPage(),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(top: 0),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.only(top: 14),
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.grey200, width: 1)),
+        ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (value) {

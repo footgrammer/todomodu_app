@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectProgressBar extends ConsumerWidget {
   Color textColor;
-  ProjectDto project;
+  Project project;
 
   ProjectProgressBar({
     super.key,

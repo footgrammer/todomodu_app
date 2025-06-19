@@ -18,7 +18,6 @@ class Todo {
     required this.endDate,
     required this.isDone,
   });
-<<<<<<< HEAD
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,6 +40,4 @@ class Todo {
       subtasks: [],
     );
   }
-=======
->>>>>>> 61c9c2a (feat : change projectState and make usecases file)
 }

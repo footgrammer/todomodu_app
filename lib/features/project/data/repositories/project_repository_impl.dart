@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-=======
-import 'package:cloud_firestore/cloud_firestore.dart';
->>>>>>> 61c9c2a (feat : change projectState and make usecases file)
 import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/domain/repositories/project_repository.dart';
-<<<<<<< HEAD
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/todo/domain/repositories/todo_repository.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
@@ -55,7 +50,8 @@ class ProjectRepositoryImpl implements ProjectRepository {
           final members = membersResult.value;
 
           // 3. 투두 정보 가져오기 (현재 생략)
-          final todosResult = await _todoRepository.getTodosWithSubtasksByProjectId(dto.id);
+          final todosResult = await _todoRepository
+              .getTodosWithSubtasksByProjectId(dto.id);
           if (todosResult is! Ok<List<Todo>>) return null;
           final todos = todosResult.value;
 
@@ -84,19 +80,5 @@ class ProjectRepositoryImpl implements ProjectRepository {
     } catch (e) {
       return Result.error(Exception('Failed to map ProjectDto to Project: $e'));
     }
-=======
-
-class ProjectRepositoryImpl implements ProjectRepository {
-  final ProjectDataSource _projectDataSource;
-
-  ProjectRepositoryImpl(this._projectDataSource);
-
-  @override
-  Future<List<Project>> getProjects() async {
-    final result = await _projectDataSource.getProjects();
-    final projects = result.map((projectDto) => projectDto.toEntity()).toList();
-
-    return projects;
->>>>>>> 61c9c2a (feat : change projectState and make usecases file)
   }
 }

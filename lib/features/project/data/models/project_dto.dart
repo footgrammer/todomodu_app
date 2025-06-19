@@ -1,54 +1,48 @@
-<<<<<<< HEAD
-
-=======
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
-import 'package:todomodu_app/features/todo/data/models/todo_dto.dart';
-import 'package:todomodu_app/features/user/data/models/user_dto.dart';
-import 'package:todomodu_app/shared/utils/parse_date.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class ProjectDto {
   String id;
   String title;
   String description;
-  Color color;
   DateTime startDate;
   DateTime endDate;
-  UserDto owner;
-  List<UserDto> members;
-  List<TodoDto> todos;
+  String ownerId;
+  // List<String> memberIds;
+  // List<String> todoIds;
   String invitationCode;
   bool isDone;
+  Color color;
 
   ProjectDto({
     required this.id,
     required this.title,
     required this.description,
-    required this.color,
     required this.startDate,
     required this.endDate,
-    required this.owner,
-    required this.members,
-    required this.todos,
+    required this.ownerId,
     required this.invitationCode,
     required this.isDone,
+    required this.color,
   });
 
-  ProjectDto.fromJson(Map<String, dynamic> map)
-    : this(
-        id: map['id'] ?? '',
-        title: map['title'] ?? '',
-        description: map['description'] ?? '',
-        color: Color(map['color'] ?? Color(0xFFFFFFFF)),
-        startDate: parseDate(map['startDate']),
-        endDate: parseDate(map['endDate']),
-        owner: map['owner'],
-        members: map['members'],
-        todos: map['todos'],
-        invitationCode: map['invitationCode'] ?? '',
-        isDone: map['isDone'] ?? false,
-      );
+  factory ProjectDto.fromJson(Map<String, dynamic> json) {
+    return ProjectDto(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      // Timestamp → DateTime
+      startDate: (json['startDate'] as Timestamp).toDate(),
+      endDate: (json['endDate'] as Timestamp).toDate(),
+      ownerId: json['ownerId'] as String,
+      color: Color(json['color'] ?? Color(0xFFFFFFFF)),
+      invitationCode: json['invitationCode'] as String,
+      isDone: json['isDone'] as bool,
+    );
+  }
 
   // toJson
   Map<String, dynamic> toJson() {
@@ -59,28 +53,43 @@ class ProjectDto {
       'color': color.value, // Color → int 저장
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),
-      'owner': owner,
-      'members': members,
-      'todos': todos,
+      'ownerId': ownerId,
       'invitationCode': invitationCode,
       'isDone': isDone,
     };
   }
 
-  Project toEntity() {
+  factory ProjectDto.fromEntity(Project entity) {
+    return ProjectDto(
+      id: entity.id,
+      title: entity.title,
+      description: entity.description,
+      startDate: entity.startDate,
+      endDate: entity.endDate,
+      ownerId: entity.owner.userId,
+      invitationCode: entity.invitationCode,
+      isDone: entity.isDone,
+      color: entity.color,
+    );
+  }
+
+  Project toEntity({
+    required UserEntity owner,
+    required List<UserEntity> members,
+    required List<Todo> todos,
+  }) {
     return Project(
       id: id,
       title: title,
       description: description,
-      color: color,
       startDate: startDate,
       endDate: endDate,
-      owner: owner.toEntity(),
-      members: members.map((userDto) => userDto.toEntity()).toList(),
-      todos: todos.map((todoDto) => todoDto.toEntity()).toList(),
+      owner: owner,
+      members: members,
+      todos: todos,
       invitationCode: invitationCode,
       isDone: isDone,
+      color: color,
     );
   }
 }
->>>>>>> 61c9c2a (feat : change projectState and make usecases file)

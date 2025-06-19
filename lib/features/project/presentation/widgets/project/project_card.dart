@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:intl/intl.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_member_icons.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_progress_bar.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectCard extends StatelessWidget {
   final int index;
-  final ProjectDto project;
+  final Project project;
   const ProjectCard({super.key, required this.index, required this.project});
 
   @override

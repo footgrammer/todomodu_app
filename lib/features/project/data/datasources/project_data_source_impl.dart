@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
@@ -60,30 +59,6 @@ class ProjectDataSourceImpl implements ProjectDataSource {
       return Result.ok(ids);
     } catch (e) {
       return Result.error(Exception('Failed to fetch memberIds: $e'));
-=======
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
-import 'package:todomodu_app/features/project/data/models/project_dto.dart';
-
-class ProjectDataSourceImpl implements ProjectDataSource {
-  final FirebaseFirestore firestore;
-
-  ProjectDataSourceImpl({FirebaseFirestore? firestore})
-    : firestore = firestore ?? FirebaseFirestore.instance;
-  @override
-  Future<List<ProjectDto>> getProjects() async {
-    try {
-      final querySnapshot = await firestore.collection('projects').get();
-
-      return querySnapshot.docs.map((doc) {
-        final map = doc.data();
-        return ProjectDto.fromJson({...map, "id": doc.id});
-      }).toList();
-    } catch (e) {
-      throw Exception('프로젝트 정보를 가져오는 데 실패했습니다. : $e');
->>>>>>> 61c9c2a (feat : change projectState and make usecases file)
     }
   }
 }

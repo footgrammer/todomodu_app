@@ -44,28 +44,18 @@ class AddTodoViewModel extends ChangeNotifier {
     final trimmedTitle = titleController.text.trim();
     if (trimmedTitle.isEmpty) return;
 
-<<<<<<< HEAD
-    final subtasksSnapshot = await FirebaseFirestore.instance
-        .collection('projects')
-        .doc(projectId)
-        .collection('subtasks')
-        .where('todoId', isEqualTo: pendingTodoId)
-        .get();
+    final subtasksSnapshot =
+        await FirebaseFirestore.instance
+            .collection('projects')
+            .doc(projectId)
+            .collection('subtasks')
+            .where('todoId', isEqualTo: pendingTodoId)
+            .get();
 
-    final subtasks = subtasksSnapshot.docs
-        .map((doc) => Subtask.fromMap(doc.data()))
-        .toList();
-=======
-    final List<SubTask> subTasks =
-        subTaskControllers.map((controller) {
-          return SubTask(
-            id: uuid.v4(),
-            todoId: '임시',
-            title: controller.text,
-            isDone: false,
-          );
-        }).toList();
->>>>>>> 61c9c2a (feat : change projectState and make usecases file)
+    final subtasks =
+        subtasksSnapshot.docs
+            .map((doc) => Subtask.fromMap(doc.data()))
+            .toList();
 
     final todo = Todo(
       id: pendingTodoId,
