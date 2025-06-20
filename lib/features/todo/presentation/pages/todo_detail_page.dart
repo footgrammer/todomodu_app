@@ -83,6 +83,7 @@ class TodoDetailPage extends ConsumerWidget {
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final subtask = subtasks[index];
+
                           return _SubtaskItem(
                             title: subtask.title,
                             isDone: subtask.isDone,
@@ -90,12 +91,9 @@ class TodoDetailPage extends ConsumerWidget {
                               ref
                                   .read(toggleSubtaskDoneUseCaseProvider)
                                   .call(
-                                    projectId: subtask.projectId,
-                                    todoId:
-                                        (subtask.todoId ?? '').isNotEmpty
-                                            ? subtask.todoId!
-                                            : todo.id,
                                     subtaskId: subtask.id,
+                                    todoId: subtask.todoId ?? todo.id,
+                                    projectId: subtask.projectId,
                                     isDone: !subtask.isDone,
                                   );
                             },
