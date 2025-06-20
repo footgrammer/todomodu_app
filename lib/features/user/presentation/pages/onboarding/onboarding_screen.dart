@@ -17,10 +17,11 @@ class OnboardingScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Spacer(),
-        Spacer(),
-        Spacer(),
-        Image.asset(path),
+        Spacer(flex: 3),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 80),
+          child: Image.asset(path),
+        ),
         const SizedBox(height: 16),
         Text(
           title,
@@ -32,7 +33,7 @@ class OnboardingScreen extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16, color: AppColors.grey600),
         ),
-        Spacer(),
+        Spacer(flex: 1),
       ],
     );
   }
