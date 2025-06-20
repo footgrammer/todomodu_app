@@ -2,13 +2,18 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/repositories/user_repository.dart';
 import 'package:todomodu_app/features/user/domain/usecases/get_current_user_usecase_impl.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 
 class UserViewModel extends StateNotifier<AsyncValue<UserEntity?>> {
   final GetCurrentUserUsecaseImpl _usecase;
+  final UserRepository _userRepository;
 
-  UserViewModel(this._usecase) : super(const AsyncValue.loading());
+  UserViewModel(this._usecase, this._userRepository)
+    : super(const AsyncValue.loading()) {
+    fetchUser();
+  }
 
   Future<UserEntity?> fetchUser() async {
     try {
@@ -22,10 +27,16 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity?>> {
       return null;
     }
   }
+
+  Future<void> updateNickname(String userId, String newNickname) async {
+    await _userRepository.changeUserNickname(userId, newNickname);
+    await fetchUser();
+  }
 }
 
 final userViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserEntity?>>((ref) {
       final usecase = ref.read(getCurrentUserUsecaseProvider);
-      return UserViewModel(usecase);
+      final userRepository = ref.read(userRepositoryProvider);
+      return UserViewModel(usecase, userRepository);
     });

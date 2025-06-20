@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/dual_action_buttons.dart';
 
 class EditNicknameDialog extends StatefulWidget {
@@ -69,12 +70,13 @@ class _EditNicknameDialogState extends State<EditNicknameDialog> {
                     onCancel: () {
                       Navigator.pop(context);
                     },
-                    onConfirm: () {
-                      final userRepo = ref.read(userRepositoryProvider);
-                      userRepo.changeUserNickname(
-                        widget.userId,
-                        _nickNameController.text.trim(),
-                      );
+                    onConfirm: () async {
+                      await ref
+                          .read(userViewModelProvider.notifier)
+                          .updateNickname(
+                            widget.userId,
+                            _nickNameController.text.trim(),
+                          );
                       Navigator.pop(context);
                     },
                   );

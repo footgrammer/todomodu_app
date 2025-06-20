@@ -47,7 +47,6 @@ class _MyPageState extends ConsumerState<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -81,14 +80,15 @@ class _MyPageState extends ConsumerState<MyPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       log('닉네임 변경 버튼 클릭');
-                      showDialog(
+                      await showDialog(
                         context: context,
                         builder:
                             (context) =>
                                 EditNicknameDialog(userId: _user!.userId),
                       );
+                      await loadUser();
                     },
                     child: Container(
                       width: 28,
