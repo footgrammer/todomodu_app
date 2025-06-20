@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/todo.dart';
-import '../../domain/entities/subtask.dart';
-import '../providers/subtask/subtask_stream_provider.dart';
-import '../providers/subtask/toggle_subtask_done_usecase_provider.dart';
-import '../pages/todo_detail_page.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/todo_card/project_title_chip.dart';
+import '../../../domain/entities/todo.dart';
+import '../../../domain/entities/subtask.dart';
+import '../../providers/subtask/subtask_stream_provider.dart';
+import '../../providers/subtask/toggle_subtask_done_usecase_provider.dart';
+import '../../pages/todo_detail_page.dart';
 
 class TodoCard extends ConsumerWidget {
   final Todo todo;
+  final bool showProjectTitle;
 
-  const TodoCard({super.key, required this.todo});
+  const TodoCard({super.key, required this.todo, this.showProjectTitle = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,6 +42,10 @@ class TodoCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (showProjectTitle) ...[
+              ProjectTitleChip(projectId: todo.projectId),
+              const SizedBox(height: 4),
+            ],
             Text(
               todo.title,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
