@@ -26,7 +26,7 @@ class LoginPage extends ConsumerWidget {
             SvgPicture.asset('assets/images/login_img.svg'),
             const Text(
               textAlign: TextAlign.center,
-              '투무모두와 함께\n하루를 계획해보세요!',
+              '투두모두와 함께\n하루를 계획해보세요!',
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
             const Text(
@@ -37,7 +37,7 @@ class LoginPage extends ConsumerWidget {
             Builder(
               builder: (context) {
                 return LoginButton(
-                  path: 'assets/images/apple_login.png',
+                  path: 'assets/images/apple_logo.png',
                   onPressed: () async {
                     final userCred = await auth.signInWithApple();
                     if (userCred != null) {
@@ -51,7 +51,7 @@ class LoginPage extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             LoginButton(
-              path: 'assets/images/kakao_login.png',
+              path: 'assets/images/kakao_logo.png',
               onPressed: () async {
                 final userCred = await auth.signInWithKakao();
                 if (userCred != null) {
@@ -63,7 +63,7 @@ class LoginPage extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             LoginButton(
-              path: 'assets/images/google_login.png',
+              path: 'assets/images/google_logo.png',
               onPressed: () async {
                 final userCred = await auth.signInWithGoogle();
                 if (userCred != null) {

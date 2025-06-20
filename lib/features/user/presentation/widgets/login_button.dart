@@ -14,7 +14,22 @@ class LoginButton extends StatelessWidget {
         elevation: 0,
         maximumSize: Size.fromHeight(54),
       ),
-      child: Image.asset(path, fit: BoxFit.cover),
+      child: Row(
+        children: [
+          SizedBox.square(
+            dimension: 24,
+            child: Image.asset(path, fit: BoxFit.cover),
+          ),
+          Text(
+            '로 로그인하기',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
