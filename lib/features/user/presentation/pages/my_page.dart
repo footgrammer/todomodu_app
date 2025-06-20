@@ -47,10 +47,6 @@ class _MyPageState extends ConsumerState<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_user == null) {
-      // 아직 데이터 없을 때 로딩 UI
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
 
     return Scaffold(
       appBar: AppBar(
