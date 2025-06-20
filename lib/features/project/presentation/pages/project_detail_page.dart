@@ -6,7 +6,7 @@ import 'package:todomodu_app/features/project/presentation/widgets/project_detai
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/todo/presentation/pages/add_todo_page.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/todo_list_viewmodel_provider.dart';
-import 'package:todomodu_app/features/todo/presentation/widgets/todo_card.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/todo_card/todo_card.dart';
 
 class ProjectDetailPage extends ConsumerWidget {
   final String projectId;

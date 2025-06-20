@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/todo_stream_provider.dart';
-import 'package:todomodu_app/features/todo/presentation/widgets/todo_card.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/todo_card/todo_card.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
 final selectedDateProvider = StateProvider<DateTime>((ref) => DateTime.now());
-final searchKeywordProvider = StateProvider<String>((ref) => '');
 
 class TodoPage extends ConsumerWidget {
   final String projectId;
@@ -37,7 +37,6 @@ class TodoPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final todosAsync = ref.watch(todoStreamProvider(projectId));
     final selectedDate = ref.watch(selectedDateProvider);
-    final searchKeyword = ref.watch(searchKeywordProvider);
     final weekDates = _getWeekDates(selectedDate);
 
     return Scaffold(
@@ -60,18 +59,6 @@ class TodoPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                hintText: '할 일을 검색하세요',
-                prefixIcon: const Icon(Icons.search),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-              ),
-              onChanged: (value) => ref.read(searchKeywordProvider.notifier).state = value,
-            ),
             const SizedBox(height: 16),
             Text(
               _yearMonthString(selectedDate),
@@ -120,13 +107,51 @@ class TodoPage extends ConsumerWidget {
               child: todosAsync.when(
                 data: (todos) {
                   final filtered = todos
-                      .where((t) =>
-                          _isInRange(t, selectedDate) &&
-                          t.title.contains(searchKeyword.trim()))
+                      .where((t) => _isInRange(t, selectedDate))
                       .toList();
 
                   return filtered.isEmpty
-                      ? const Center(child: Text('오늘 할 일이 없습니다'))
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/images/todo_empty_img.svg',
+                                height: 160,
+                              ),
+                              const SizedBox(height: 24),
+                              const Text(
+                                '아직 등록된 할 일이 없습니다.',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 8),
+                              const Text(
+                                '프로젝트를 생성하여\n오늘의 할 일을 만들어 보세요!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                              const SizedBox(height: 24),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => const ProjectCreatePage()),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: const Color(0xFF706FBF),
+                                  backgroundColor: Colors.white,
+                                  side: const BorderSide(color: Color(0xFF706FBF)),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                ),
+                                child: const Text('프로젝트 생성하기'),
+                              ),
+                            ],
+                          ),
+                        )
                       : ListView.builder(
                           padding: const EdgeInsets.only(bottom: 64),
                           itemCount: filtered.length,
