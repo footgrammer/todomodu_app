@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -21,7 +20,7 @@ class OnboardingScreen extends StatelessWidget {
         Spacer(),
         Spacer(),
         Spacer(),
-        SvgPicture.asset(path),
+        Image.asset(path),
         const SizedBox(height: 16),
         Text(
           title,
