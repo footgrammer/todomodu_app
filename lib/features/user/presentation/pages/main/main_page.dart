@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_create_page.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_list_page.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_page.dart';
+import 'package:todomodu_app/features/todo/presentation/pages/add_todo_page.dart';
+import 'package:todomodu_app/features/todo/presentation/pages/edit_todo_page.dart';
+import 'package:todomodu_app/features/todo/presentation/pages/todo_detail_page.dart';
+import 'package:todomodu_app/features/todo/presentation/pages/todo_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
@@ -25,7 +30,7 @@ class _MainPageState extends State<MainPage> {
         index: _currentIndex,
         children: [
           ProjectPage(),
-          NoticeListPage(),
+          TodoPage(projectId: 'test-project-id'),
           NoticeCreatePage(projectId: '1',),
           MyPage(),
         ],

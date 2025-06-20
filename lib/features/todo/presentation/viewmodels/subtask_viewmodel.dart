@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/todo/presentation/providers/subtask/subtask_providers.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/subtask/subtask_provider.dart';
 import '../../domain/entities/subtask.dart';
 import '../../domain/repositories/subtask_repository.dart';
 

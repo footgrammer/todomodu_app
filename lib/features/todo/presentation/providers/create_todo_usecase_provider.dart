@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/todo/application/usecases/create_todo_usecase.dart';
-import 'package:todomodu_app/features/todo/presentation/providers/subtask/subtask_providers.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/subtask/subtask_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/todo_repository_provider.dart';
 
 

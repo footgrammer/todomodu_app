@@ -66,6 +66,7 @@ class ProjectDetailPage extends ConsumerWidget {
         floatingActionButton: Container(
           height: 50,
           child: FloatingActionButton.extended(
+              heroTag: 'uniqueTagForThisPage',
             backgroundColor: Colors.grey[700],
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
