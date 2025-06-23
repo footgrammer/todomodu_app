@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:todomodu_app/features/todo/presentation/pages/edit_todo_page.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/delete_todo_usecase_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/subtask/toggle_subtask_done_usecase_provider.dart';
@@ -20,8 +23,6 @@ class TodoDetailPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(todo.title),
-        centerTitle: false,
         actions: [
           PopupMenuButton<String>(
             menuPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -80,43 +81,61 @@ class TodoDetailPage extends ConsumerWidget {
           const SizedBox(width: 14),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
+      body: SafeArea(
+        bottom: true,
+        minimum: EdgeInsets.only(bottom: 34),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildInfo('시작일', formatDate(todo.startDate)),
-                _buildInfo('종료일', formatDate(todo.endDate)),
-                _buildInfo('만든 이', '이름'),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 24,
+                left: 24,
+                top: 8,
+              ),
+              child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    todo.title,
+                    style: AppTextStyles.header2.copyWith(
+                      color: AppColors.grey800,
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildInfo('시작일', formatDate(todo.startDate)),
+                      _buildInfo('종료일', formatDate(todo.endDate)),
+                      _buildInfo('만든 이', '김영우'), // 이름 좌측 프로필 아이콘 추가
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    '할 일 목록',
+                    style: AppTextStyles.subtitle1.copyWith(
+                      color: AppColors.grey800,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
-            const SizedBox(height: 24),
-            const Text(
-              '할 일 목록',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 16,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.grey75,
                 ),
                 child: asyncSubtasks.when(
                   data:
                       (subtasks) => ListView.separated(
                         itemCount: subtasks.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        separatorBuilder: (_, __) => const SizedBox(height: 8),
                         itemBuilder: (context, index) {
                           final subtask = subtasks[index];
-
+              
                           return _SubtaskItem(
                             title: subtask.title,
                             isDone: subtask.isDone,
@@ -133,8 +152,7 @@ class TodoDetailPage extends ConsumerWidget {
                           );
                         },
                       ),
-                  loading:
-                      () => const Center(child: CircularProgressIndicator()),
+                  loading: () => const Center(child: CircularProgressIndicator()),
                   error: (e, _) => Center(child: Text('오류 발생: $e')),
                 ),
               ),
@@ -151,12 +169,11 @@ class TodoDetailPage extends ConsumerWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: Colors.black54),
+          style: AppTextStyles.subtitle3.copyWith(color: AppColors.grey500),
         ),
-        const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          style: AppTextStyles.body2.copyWith(color: AppColors.grey800),
         ),
       ],
     );
@@ -181,31 +198,32 @@ class _SubtaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDone ? Colors.grey[200] : Colors.white,
-        border: Border.all(color: Colors.grey[300]!),
+        color: isDone ? AppColors.grey200 : Colors.white,
+        border: Border.all(color: AppColors.grey100),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
           GestureDetector(
             onTap: onToggle,
-            child: Icon(
-              isDone ? Icons.check_circle : Icons.radio_button_unchecked,
-              color: isDone ? Colors.grey[700] : Colors.grey[400],
-              size: 22,
+            child: SvgPicture.asset(
+              isDone
+                  ? 'assets/images/check_box_true.svg'
+                  : 'assets/images/check_box_false.svg',
+              width: 24,
+              height: 24,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               title,
-              style: TextStyle(
-                fontSize: 16,
+              style: AppTextStyles.body2.copyWith(
+                color: AppColors.grey800,
                 decoration:
                     isDone ? TextDecoration.lineThrough : TextDecoration.none,
-                color: isDone ? Colors.black54 : Colors.black87,
               ),
             ),
           ),
