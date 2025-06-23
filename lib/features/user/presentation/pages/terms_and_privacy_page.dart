@@ -32,11 +32,30 @@ class _TermsAndPrivacyPageState extends State<TermsAndPrivacyPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text(
-          '이용약관 및 개인정보 처리방침',
-          style: AppTextStyles.header3.copyWith(
-            color: theme.colorScheme.onSurface,
-          ),
+        automaticallyImplyLeading: false,
+        titleSpacing: 0,
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(18),
+                onTap: () => Navigator.of(context).pop(),
+                child: const SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: Icon(Icons.arrow_back_ios_new, size: 18),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '이용약관 및 개인정보 처리방침',
+              style: AppTextStyles.header3.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+          ],
         ),
       ),
       body:
