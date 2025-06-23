@@ -3,13 +3,13 @@ import 'package:todomodu_app/features/activity_history/domain/entities/activity_
 import 'package:todomodu_app/features/activity_history/domain/models/activity_history_payload.dart';
 
 class ActivityHistoryDto {
-  final String id;
+  final String? id; // 🔧 nullable
   final String projectId;
   final DateTime createdAt;
   final ActivityHistoryPayload payload;
 
   ActivityHistoryDto({
-    required this.id,
+    this.id,
     required this.projectId,
     required this.createdAt,
     required this.payload,
@@ -26,7 +26,7 @@ class ActivityHistoryDto {
 
   ActivityHistory toEntity() {
     return ActivityHistory(
-      id: id,
+      id: id, 
       projectId: projectId,
       createdAt: createdAt,
       payload: payload,
