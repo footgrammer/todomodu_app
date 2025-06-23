@@ -33,21 +33,52 @@ class TodoDetailPage extends ConsumerWidget {
             offset: const Offset(-10, 40),
             color: Colors.white,
             elevation: 6,
-            onSelected: (value) async {
-              if (value == 'edit') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditTodoPage(todo: todo),
-                  ),
-                );
-              } else if (value == 'delete') {
-                await ref
-                    .read(deleteTodoUseCaseProvider)
-                    .call(projectId: todo.projectId, todoId: todo.id);
-                if (context.mounted) Navigator.pop(context);
-              }
-            },
+  onSelected: (value) async {
+  if (value == 'edit') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTodoPage(todo: todo),
+      ),
+    );
+  } else if (value == 'delete') {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('할 일 삭제하기'),
+        content: const Text('할 일을 삭제하시겠습니까?'),
+        actions: [
+          TextButton(
+            child: const Text('취소'),
+            onPressed: () => Navigator.of(ctx).pop(false),
+          ),
+          TextButton(
+            child: const Text('삭제', style: TextStyle(color: Colors.blue)),
+            onPressed: () => Navigator.of(ctx).pop(true),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      await ref
+          .read(deleteTodoUseCaseProvider)
+          .call(projectId: todo.projectId, todoId: todo.id);
+
+      if (context.mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('할 일이 삭제되었습니다.'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+},
+
             itemBuilder:
                 (context) => [
                   PopupMenuItem(
