@@ -5,6 +5,7 @@ import 'package:todomodu_app/features/todo/presentation/providers/delete_todo_us
 import 'package:todomodu_app/features/todo/presentation/providers/subtask/toggle_subtask_done_usecase_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/subtask/subtask_stream_provider.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class TodoDetailPage extends ConsumerWidget {
   final Todo todo;
@@ -23,7 +24,14 @@ class TodoDetailPage extends ConsumerWidget {
         centerTitle: false,
         actions: [
           PopupMenuButton<String>(
+            menuPadding: const EdgeInsets.symmetric(horizontal: 16),
             icon: const Icon(Icons.more_vert),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            offset: const Offset(-10, 40),
+            color: Colors.white,
+            elevation: 6,
             onSelected: (value) async {
               if (value == 'edit') {
                 Navigator.push(
@@ -40,11 +48,36 @@ class TodoDetailPage extends ConsumerWidget {
               }
             },
             itemBuilder:
-                (context) => const [
-                  PopupMenuItem(value: 'edit', child: Text('할 일 수정하기')),
-                  PopupMenuItem(value: 'delete', child: Text('할 일 삭제하기')),
+                (context) => [
+                  PopupMenuItem(
+                    value: 'edit',
+                    padding: EdgeInsets.zero,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '할 일 수정하기',
+                        style: AppTextStyles.body2.copyWith(
+                          color: AppColors.grey800,
+                        ),
+                      ),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    padding: EdgeInsets.zero,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '할 일 삭제하기',
+                        style: AppTextStyles.body2.copyWith(
+                          color: AppColors.grey800,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
           ),
+          const SizedBox(width: 14),
         ],
       ),
       body: Padding(

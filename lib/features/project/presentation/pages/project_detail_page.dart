@@ -30,7 +30,49 @@ class ProjectDetailPage extends ConsumerWidget {
         appBar: AppBar(
           title: const Text('프로젝트 상세'),
           leading: const BackButton(),
-          actions: const [Icon(Icons.more_vert), SizedBox(width: 14)],
+          actions: [
+            PopupMenuButton<String>(
+              menuPadding: const EdgeInsets.symmetric(horizontal: 9),
+              icon: const Icon(Icons.more_vert),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              offset: const Offset(-10, 40),
+              color: Colors.white,
+              onSelected: (value) {
+                switch (value) {
+                  case 'edit':
+                    //  수정 페이지 이동
+                    break;
+                  case 'leave':
+                    //  나가기 로직
+                    break;
+                }
+              },
+              itemBuilder:
+                  (context) => [
+                    PopupMenuItem(
+                      value: 'edit',
+                      padding: EdgeInsets.zero,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('프로젝트 정보 수정하기',
+                        style: AppTextStyles.body2.copyWith(color: AppColors.grey800),),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'leave',
+                      padding: EdgeInsets.zero,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('프로젝트 나가기',
+                        style: AppTextStyles.body2.copyWith(color: AppColors.grey800)),
+                      ),
+                    ),
+                  ],
+            ),
+            const SizedBox(width: 14),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.only(
@@ -101,7 +143,7 @@ class ProjectDetailPage extends ConsumerWidget {
                       Row(
                         children: [
                           Text(
-                            '${(progress * 100).toInt()}%',
+                            '${(progress * 100)}%',
                             style: AppTextStyles.body2.copyWith(
                               color: AppColors.grey800,
                             ),
@@ -139,7 +181,6 @@ class ProjectDetailPage extends ConsumerWidget {
                   CircleAvatar(radius: 16, backgroundColor: Colors.orange[400]),
                   const Spacer(),
                   OutlinedButton.icon(
-                    
                     onPressed: () {},
                     icon: Icon(Icons.add, color: AppColors.primary600),
                     style: OutlinedButton.styleFrom(
@@ -159,7 +200,7 @@ class ProjectDetailPage extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 28,),
+              const SizedBox(height: 28),
 
               const ProjectTabBar(),
 
