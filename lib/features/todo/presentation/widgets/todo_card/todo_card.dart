@@ -43,7 +43,7 @@ class TodoCard extends ConsumerWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         decoration: BoxDecoration(
           color: AppColors.primary200,
           borderRadius: BorderRadius.circular(20),

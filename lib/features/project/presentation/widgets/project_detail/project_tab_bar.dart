@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectTabBar extends StatelessWidget {
   const ProjectTabBar({
@@ -8,19 +9,17 @@ class ProjectTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: const TabBar(
-        labelColor: Colors.black87,
-        unselectedLabelColor: Colors.grey,
-        indicatorSize: TabBarIndicatorSize.tab,
-        indicatorColor: Colors.black87,
-        tabs: [
-          Tab(text: '할일'),
-          Tab(text: '공지'),
-          Tab(text: '타임라인'),
-        ],
-      ),
+    return const TabBar(
+      labelColor: AppColors.primary600,
+      labelStyle: AppTextStyles.subtitle1,
+      unselectedLabelColor: AppColors.grey400,
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicatorColor: AppColors.primary600,
+      tabs: [
+        Tab(text: '할 일'),
+        Tab(text: '공지'),
+        Tab(text: '타임라인'),
+      ],
     );
   }
 }
