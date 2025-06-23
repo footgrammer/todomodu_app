@@ -1,8 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:todomodu_app/features/notice/presentation/pages/notice_create_page.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_list_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_list_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
@@ -24,14 +20,17 @@ class _MainPageState extends State<MainPage> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          ProjectPage(),
+          ProjectListPage(),
           NoticeListPage(),
-          NoticeCreatePage(projectId: '1'),
+          NoticeListPage(),
           MyPage(),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(top: 0),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.only(top: 14),
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.grey200, width: 1)),
+        ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (value) {
