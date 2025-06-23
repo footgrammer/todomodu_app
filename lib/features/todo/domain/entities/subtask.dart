@@ -8,7 +8,7 @@ class Subtask {
   final String projectId;
   final UserEntity? assignee;
 
-  Subtask({
+  const Subtask({
     required this.id,
     required this.title,
     required this.isDone,
@@ -32,28 +32,6 @@ class Subtask {
       todoId: todoId ?? this.todoId,
       projectId: projectId ?? this.projectId,
       assignee: assignee ?? this.assignee,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'isDone': isDone,
-      'todoId': todoId,
-      'projectId': projectId,
-      'assigneeId': assignee?.userId,
-    };
-  }
-
-  factory Subtask.fromMap(Map<String, dynamic> map) {
-    return Subtask(
-      id: map['id'] as String? ?? '',
-      title: map['title'] as String? ?? '',
-      isDone: map['isDone'] as bool? ?? false,
-      todoId: map['todoId'] as String? ?? '',
-      projectId: map['projectId'] as String? ?? '',
-      assignee: null,
     );
   }
 }

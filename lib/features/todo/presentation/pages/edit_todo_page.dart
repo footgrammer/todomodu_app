@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import '../../domain/entities/todo.dart';
 import '../providers/edit_todo_viewmodel_provider.dart';
 import '../widgets/todo_date_section.dart';
@@ -61,8 +62,11 @@ class EditTodoPage extends ConsumerWidget {
                   if (picked != null) viewModel.changeEndDate(picked);
                 },
               ),
-              const SizedBox(height: 24),
-              const Text('할 일 목록', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 32),
+              Text(
+                '할 일 목록',
+                style: AppTextStyles.body3.copyWith(color: AppColors.grey500,
+              ),),
               const SizedBox(height: 8),
               SubtaskList(
                 projectId: todo.projectId,
