@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/presentation/providers/project_title_provider.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectTitleChip extends ConsumerWidget {
   final String projectId;
@@ -14,10 +15,8 @@ class ProjectTitleChip extends ConsumerWidget {
     return titleAsync.when(
       data: (title) => Text(
         title,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: Colors.deepPurple,
+        style: AppTextStyles.body1.copyWith(
+          color: AppColors.grey800,
         ),
       ),
       loading: () => const SizedBox(

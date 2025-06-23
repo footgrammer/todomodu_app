@@ -199,18 +199,22 @@ class TodoPage extends ConsumerWidget {
                           children: [
                             Text(
                               '할 일 ${filtered.length}개',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
-                              ),
+                              style: AppTextStyles.body2.copyWith(
+                                color: AppColors.grey500,
+                              )
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 16),
                             Expanded(
                               child: ListView.builder(
                                 padding: const EdgeInsets.only(bottom: 64),
                                 itemCount: filtered.length,
-                                itemBuilder: (context, i) => TodoCard(todo: filtered[i]),
+                                itemBuilder: (context, i) => TodoCard(
+                                  todo: filtered[i],
+                                  showProjectTitle: true,
+                                  showDateRange: false,
+                                  todoTitleTextStyle: AppTextStyles.body3.copyWith(
+                                    color: AppColors.grey700,
+                                  ),),
                               ),
                             ),
                           ],

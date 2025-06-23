@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_card/project_title_chip.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import '../../../domain/entities/todo.dart';
 import '../../../domain/entities/subtask.dart';
 import '../../providers/subtask/subtask_stream_provider.dart';
@@ -10,8 +12,16 @@ import '../../pages/todo_detail_page.dart';
 class TodoCard extends ConsumerWidget {
   final Todo todo;
   final bool showProjectTitle;
+  final bool showDateRange;
+  final TextStyle? todoTitleTextStyle;
 
-  const TodoCard({super.key, required this.todo, this.showProjectTitle = true});
+  const TodoCard({
+    super.key,
+    required this.todo,
+    this.showProjectTitle = true,
+    this.showDateRange = false,
+    this.todoTitleTextStyle,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,36 +36,36 @@ class TodoCard extends ConsumerWidget {
         '${todo.endDate.year}.${todo.endDate.month.toString().padLeft(2, '0')}.${todo.endDate.day.toString().padLeft(2, '0')}';
 
     return GestureDetector(
-      onTap:
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => TodoDetailPage(todo: todo)),
-          ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => TodoDetailPage(todo: todo)),
+        );
+      },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade300),
+          color: AppColors.primary200,
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (showProjectTitle) ...[
-              ProjectTitleChip(projectId: todo.projectId),
-              const SizedBox(height: 4),
-            ],
+            if (showProjectTitle) ProjectTitleChip(projectId: todo.projectId),
             Text(
               todo.title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style:
+                  todoTitleTextStyle ??
+                  AppTextStyles.body3.copyWith(color: AppColors.grey700),
             ),
-            const SizedBox(height: 8),
-            Text(
-              dateRange,
-              style: const TextStyle(color: Colors.black54, fontSize: 14),
-            ),
-            const SizedBox(height: 16),
+            if (showDateRange) ...[
+              const SizedBox(height: 4),
+              Text(
+                dateRange,
+                style: AppTextStyles.body3.copyWith(color: AppColors.grey500),
+              ),
+            ],
+            const SizedBox(height: 14),
             asyncSubs.when(
               data:
                   (subs) => Column(
@@ -75,27 +85,25 @@ class TodoCard extends ConsumerWidget {
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Row(
                                 children: [
-                                  Icon(
-                                    s.isDone
-                                        ? Icons.check_circle
-                                        : Icons.radio_button_unchecked,
-                                    size: 20,
-                                    color: s.isDone ? Colors.blue : Colors.grey,
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SvgPicture.asset(
+                                      s.isDone
+                                          ? 'assets/images/check_box_true.svg'
+                                          : 'assets/images/check_box_false.svg',
+                                      width: 24,
+                                      height: 24,
+                                    ),
                                   ),
-                                  const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       s.title,
-                                      style: TextStyle(
-                                        fontSize: 16,
+                                      style: AppTextStyles.body2.copyWith(
+                                        color: AppColors.grey900,
                                         decoration:
                                             s.isDone
                                                 ? TextDecoration.lineThrough
                                                 : null,
-                                        color:
-                                            s.isDone
-                                                ? Colors.black54
-                                                : Colors.black87,
                                       ),
                                     ),
                                   ),

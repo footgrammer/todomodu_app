@@ -7,7 +7,7 @@ import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/todo/presentation/pages/add_todo_page.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/todo_list_viewmodel_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_card/todo_card.dart';
-
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectDetailPage extends ConsumerWidget {
   final String projectId;
@@ -56,7 +56,14 @@ class ProjectDetailPage extends ConsumerWidget {
                     itemCount: todos.length,
                     itemBuilder: (context, index) {
                       final todo = todos[index];
-                      return TodoCard(todo: todo);
+                      return TodoCard(
+                        todo: todo,
+                        showProjectTitle: false,
+                        showDateRange: true,
+                        todoTitleTextStyle: AppTextStyles.body1.copyWith(
+                          color: AppColors.grey800,
+                        ),
+                      );
                     },
                   );
                 },
@@ -67,7 +74,7 @@ class ProjectDetailPage extends ConsumerWidget {
         floatingActionButton: Container(
           height: 50,
           child: FloatingActionButton.extended(
-              heroTag: 'uniqueTagForThisPage',
+            heroTag: 'uniqueTagForThisPage',
             backgroundColor: Colors.grey[700],
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
