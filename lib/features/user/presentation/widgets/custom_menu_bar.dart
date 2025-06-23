@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
 class CustomMenuBar extends StatelessWidget {
   const CustomMenuBar({super.key, required this.text, this.onPressed});
@@ -20,7 +22,7 @@ class CustomMenuBar extends StatelessWidget {
               log('메뉴바 버튼 클릭');
               onPressed?.call();
             },
-            icon: Icon(Icons.chevron_right, size: 24),
+            icon: CustomIcon(name: 'Chevron_Right', color: AppColors.grey400),
           ),
         ],
       ),
