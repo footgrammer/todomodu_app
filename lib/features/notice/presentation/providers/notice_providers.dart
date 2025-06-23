@@ -56,6 +56,6 @@ final noticeListViewModelProvider =
       return NoticeListViewModel(
         retrieveUsecase: ref.watch(retrieveNoticesByProjectsUsecase),
         markAsReadUsecase: ref.watch(markNoticeAsReadUsecase),
-        fetchProjectsUsecase: ref.watch(fetchProjectsByUserUsecase),
+        fetchProjectsUsecase: ref.watch(fetchProjectsByUserUsecaseProvider),
       );
     });
