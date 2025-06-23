@@ -4,6 +4,7 @@ import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/dual_action_buttons.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class LogoutDialog extends StatelessWidget {
   const LogoutDialog({super.key});
@@ -28,25 +29,18 @@ class LogoutDialog extends StatelessWidget {
                 children: [
                   Text(
                     '로그아웃',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF403F4B),
+                    style: AppTextStyles.header4.copyWith(
+                      color: AppColors.grey800,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
                       '로그아웃 하시겠습니까?',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF403F4B),
-                        fontFamily: 'Pretendard',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        height: 1.5,
-                        letterSpacing: -0.32,
+                      style: AppTextStyles.body2.copyWith(
+                        color: AppColors.grey800,
                       ),
                     ),
                   ),
