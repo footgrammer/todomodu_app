@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:http/http.dart' as http;
+import 'package:todomodu_app/features/ai/domain/models/openai_params.dart';
+import 'package:todomodu_app/features/ai/presentation/providers/openai_providers.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_loading_page.dart';
 import 'package:todomodu_app/features/project/presentation/utils/project_validator.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_form_field.dart';
@@ -35,6 +36,7 @@ final endDateProvider = StateProvider.autoDispose<DateTime?>((ref) => null);
 
 class ProjectCreatePage extends ConsumerWidget {
   const ProjectCreatePage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 텍스트 컨트롤러
@@ -149,23 +151,36 @@ class ProjectCreatePage extends ConsumerWidget {
       );
       return;
     }
+    final projectStartDate = ref.read(startDateProvider.notifier).state;
+    final projectEndDate = ref.read(endDateProvider.notifier).state;
+    final openaiParams = OpenaiParams(
+      projectTitle: titleController.text,
+      projectStartDate: startDate!,
+      projectEndDate: endDate!,
+      prompt: descriptionController.text,
+    );
+    final responseAsyncValue = ref.watch(openaiResponseProvider(openaiParams));
+
+    print('openAIParams : ${openaiParams}');
+    print('openAI : ${responseAsyncValue.value}');
 
     // chat GPT API 함수
     Future<Map<String, dynamic>> requestChatGPTApi(String prompt) async {
       await Future.delayed(Duration(seconds: 6));
-      // final response = await http.post(
-      //   Uri.parse("https://api.openai.com/v1/chat/completions"),
-      //   headers: {
-      //     "Authorization": "Bearer YOUR_API_KEY",
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: jsonEncode({
-      //     "model": "gpt-4",
-      //     "messages": [
-      //       {"role": "user", "content": prompt},
-      //     ],
-      //   }),
-      // );
+      final startDate = ref.read(startDateProvider.notifier).state;
+      final endDate = ref.read(endDateProvider.notifier).state;
+      final openaiParams = OpenaiParams(
+        projectTitle: titleController.text,
+        projectStartDate: startDate!,
+        projectEndDate: endDate!,
+        prompt: descriptionController.text,
+      );
+      final responseAsyncValue = ref.watch(
+        openaiResponseProvider(openaiParams),
+      );
+
+      print('openAIParams : ${openaiParams}');
+      print('openAI : ${responseAsyncValue}');
 
       final data = {
         "projectTitle": "프로젝트 이름",
@@ -221,11 +236,11 @@ class ProjectCreatePage extends ConsumerWidget {
     }
 
     // 모든 검증 통과 시 수행할 로직 추가
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder:
-            (_) => ProjectLoadingPage(requestChatGPTApi: requestChatGPTApi),
-      ),
-    );
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder:
+    //         (_) => ProjectLoadingPage(requestChatGPTApi: requestChatGPTApi),
+    //   ),
+    // );
   }
 }

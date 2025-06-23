@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:todomodu_app/features/ai/presentation/pages/project_create_test_page.dart';
 import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
@@ -88,7 +89,7 @@ class ProjectListPage extends ConsumerWidget {
         // ➕ 플로팅 버튼
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            navigateToPage(context, ProjectCreatePage());
+            navigateToPage(context, ProjectCreateTestPage());
           },
           label: Text(
             '프로젝트 추가',
