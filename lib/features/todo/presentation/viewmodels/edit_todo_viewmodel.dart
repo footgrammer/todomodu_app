@@ -10,6 +10,12 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
   final UpdateTodoUseCase updateTodoUseCase;
   final String todoId;
   final String projectId;
+  
+  bool get canSubmit {
+  return state.title.trim().isNotEmpty &&
+         state.startDate != null &&
+         state.endDate != null;
+}
 
   EditTodoViewModel({
     required Todo todo,

@@ -77,6 +77,7 @@ class EditTodoPage extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: SubmitButton(
+         enabled: viewModel.canSubmit,
         label: '수정 완료',
         onPressed: () async {
           await viewModel.submit();
