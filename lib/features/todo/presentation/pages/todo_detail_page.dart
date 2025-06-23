@@ -33,51 +33,117 @@ class TodoDetailPage extends ConsumerWidget {
             offset: const Offset(-10, 40),
             color: Colors.white,
             elevation: 6,
-  onSelected: (value) async {
-  if (value == 'edit') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditTodoPage(todo: todo),
-      ),
-    );
-  } else if (value == 'delete') {
-    final shouldDelete = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('할 일 삭제하기'),
-        content: const Text('할 일을 삭제하시겠습니까?'),
-        actions: [
-          TextButton(
-            child: const Text('취소'),
-            onPressed: () => Navigator.of(ctx).pop(false),
-          ),
-          TextButton(
-            child: const Text('삭제', style: TextStyle(color: Colors.blue)),
-            onPressed: () => Navigator.of(ctx).pop(true),
-          ),
-        ],
-      ),
-    );
+            onSelected: (value) async {
+              if (value == 'edit') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditTodoPage(todo: todo),
+                  ),
+                );
+              } else if (value == 'delete') {
+                final shouldDelete = await showDialog<bool>(
+                  context: context,
+                  builder:
+                      (ctx) => Dialog(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        insetPadding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 32),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '할 일 삭제하기',
+                                style: AppTextStyles.header4.copyWith(
+                                  color: AppColors.grey800,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                '할 일을 삭제하시겠습니까?',
+                                style: AppTextStyles.body2.copyWith(
+                                  color: AppColors.grey800,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 24),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed:
+                                          () => Navigator.of(ctx).pop(false),
+                                      style: TextButton.styleFrom(
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(24)
+                                          ),
+                                        ),
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: AppColors.grey400,
+                                        textStyle: AppTextStyles.header4,
+                                        padding: const EdgeInsets.only(
+                                          top: 17.5,
+                                          bottom: 16.5,
+                                        ),
+                                      ),
+                                      child: const Text('취소'),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed:
+                                          () => Navigator.of(ctx).pop(true),
+                                      style: TextButton.styleFrom(
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(24)
+                                          ),
+                                        ),
+                                        backgroundColor: AppColors.grey75,
+                                        foregroundColor: AppColors.primary600,
+                                        textStyle: AppTextStyles.header4,
+                                        padding: const EdgeInsets.only(
+                                          top: 17.5,
+                                          bottom: 16.5,
+                                        ),
+                                      ),
+                                      child: const Text('삭제'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                );
 
-    if (shouldDelete == true) {
-      await ref
-          .read(deleteTodoUseCaseProvider)
-          .call(projectId: todo.projectId, todoId: todo.id);
+                if (shouldDelete == true) {
+                  await ref
+                      .read(deleteTodoUseCaseProvider)
+                      .call(projectId: todo.projectId, todoId: todo.id);
 
-      if (context.mounted) {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('할 일이 삭제되었습니다.'),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    }
-  }
-},
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('할 일이 삭제되었습니다.'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                }
+              }
+            },
 
             itemBuilder:
                 (context) => [
@@ -116,16 +182,11 @@ class TodoDetailPage extends ConsumerWidget {
         bottom: true,
         minimum: EdgeInsets.only(bottom: 34),
         child: Column(
-        
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                right: 24,
-                left: 24,
-                top: 8,
-              ),
+              padding: const EdgeInsets.only(right: 24, left: 24, top: 8),
               child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     todo.title,
@@ -155,10 +216,11 @@ class TodoDetailPage extends ConsumerWidget {
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.grey75,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
                 ),
+                decoration: BoxDecoration(color: AppColors.grey75),
                 child: asyncSubtasks.when(
                   data:
                       (subtasks) => ListView.separated(
@@ -166,7 +228,7 @@ class TodoDetailPage extends ConsumerWidget {
                         separatorBuilder: (_, __) => const SizedBox(height: 8),
                         itemBuilder: (context, index) {
                           final subtask = subtasks[index];
-              
+
                           return _SubtaskItem(
                             title: subtask.title,
                             isDone: subtask.isDone,
@@ -183,7 +245,8 @@ class TodoDetailPage extends ConsumerWidget {
                           );
                         },
                       ),
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading:
+                      () => const Center(child: CircularProgressIndicator()),
                   error: (e, _) => Center(child: Text('오류 발생: $e')),
                 ),
               ),
