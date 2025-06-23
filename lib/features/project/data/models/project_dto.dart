@@ -11,8 +11,6 @@ class ProjectDto {
   DateTime startDate;
   DateTime endDate;
   String ownerId;
-  // List<String> memberIds;
-  // List<String> todoIds;
   String invitationCode;
   bool isDone;
   Color color;

@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
@@ -15,7 +18,6 @@ class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.read(authProvider);
-
     return Scaffold(
       body: Center(
         child: Column(
@@ -53,12 +55,13 @@ class LoginPage extends ConsumerWidget {
             LoginButton(
               path: 'assets/images/kakao_login.png',
               onPressed: () async {
-                final userCred = await auth.signInWithKakao();
-                if (userCred != null) {
-                  final prefs = await SharedPreferences.getInstance();
-                  prefs.setString('accessToken', 'your_token_here');
-                  replaceAllWithPage(context, const MainPage());
-                }
+                checkKakao();
+                // final userCred = await auth.signInWithKakao();
+                // if (userCred != null) {
+                //   final prefs = await SharedPreferences.getInstance();
+                //   prefs.setString('accessToken', 'your_token_here');
+                //   replaceAllWithPage(context, const MainPage());
+                // }
               },
             ),
             const SizedBox(height: 8),
@@ -78,5 +81,25 @@ class LoginPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void checkKakao() async {
+    try {
+      final isInstalled = await isKakaoTalkInstalled();
+      print('isInstalled : ${isInstalled}');
+      // final token =
+      //     isInstalled
+      //         ? await UserApi.instance.loginWithKakaoTalk()
+      //         : await UserApi.instance.loginWithKakaoAccount();
+      final token = await UserApi.instance.loginWithKakaoAccount();
+      print('token : ${token}');
+      final credential = OAuthProvider(
+        "oidc.kakao",
+      ).credential(accessToken: token.accessToken, idToken: token.idToken);
+      print('credential : ${credential}');
+    } catch (e, stack) {
+      print('❌ kakao login error: $e');
+      print('📌 Stack trace:\n$stack');
+    }
   }
 }

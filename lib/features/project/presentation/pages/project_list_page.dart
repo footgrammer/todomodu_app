@@ -27,11 +27,9 @@ class ProjectListPage extends ConsumerWidget {
 
     ref.listen<AsyncValue<UserEntity?>>(userProvider, (prev, next) {
       final user = next.asData?.value;
-      print('user : ${user}');
       if (user != null && !_initialized) {
         _initialized = true;
         ref.read(noticeListViewModelProvider.notifier).initialize(user);
-        print('user test : ${user}');
       }
     });
 

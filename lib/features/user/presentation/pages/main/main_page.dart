@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_list_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_list_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';

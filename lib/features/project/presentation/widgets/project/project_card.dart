@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_member_icons.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_progress_bar.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
 class ProjectCard extends StatelessWidget {
   final int index;
@@ -13,26 +15,31 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: project.color,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 제목 + 알림 + 메뉴
-          _getProjectTitle(),
-          SizedBox(height: 4),
-          _getProjectTimePlan(),
-          SizedBox(height: 16),
-          // 진행도
-          ProjectProgressBar(textColor: AppColors.grey900, project: project),
-          SizedBox(height: 16),
-          // 멤버 아이콘들
-          ProjectMemberIcons(),
-        ],
+    return GestureDetector(
+      onTap: () {
+        navigateToPage(context, ProjectDetailPage(projectId: project.id));
+      },
+      child: Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: project.color,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 제목 + 알림 + 메뉴
+            _getProjectTitle(),
+            SizedBox(height: 4),
+            _getProjectTimePlan(),
+            SizedBox(height: 16),
+            // 진행도
+            ProjectProgressBar(textColor: AppColors.grey900, project: project),
+            SizedBox(height: 16),
+            // 멤버 아이콘들
+            ProjectMemberIcons(),
+          ],
+        ),
       ),
     );
   }
