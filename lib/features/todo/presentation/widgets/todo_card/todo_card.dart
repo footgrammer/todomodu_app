@@ -59,13 +59,12 @@ class TodoCard extends ConsumerWidget {
                   AppTextStyles.body3.copyWith(color: AppColors.grey700),
             ),
             if (showDateRange) ...[
-              const SizedBox(height: 4),
               Text(
                 dateRange,
                 style: AppTextStyles.body3.copyWith(color: AppColors.grey500),
               ),
             ],
-            const SizedBox(height: 14),
+            const SizedBox(height: 8),
             asyncSubs.when(
               data:
                   (subs) => Column(
@@ -81,34 +80,29 @@ class TodoCard extends ConsumerWidget {
                                 isDone: !s.isDone,
                               );
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SvgPicture.asset(
-                                      s.isDone
-                                          ? 'assets/images/check_box_true.svg'
-                                          : 'assets/images/check_box_false.svg',
-                                      width: 24,
-                                      height: 24,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  s.isDone
+                                      ? 'assets/images/check_box_true.svg'
+                                      : 'assets/images/check_box_false.svg',
+                                  width: 24,
+                                  height: 24,
+                                ),
+                                SizedBox(width: 10,),
+                                Expanded(
+                                  child: Text(
+                                    s.title,
+                                    style: AppTextStyles.body2.copyWith(
+                                      color: AppColors.grey900,
+                                      decoration:
+                                          s.isDone
+                                              ? TextDecoration.lineThrough
+                                              : null,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Text(
-                                      s.title,
-                                      style: AppTextStyles.body2.copyWith(
-                                        color: AppColors.grey900,
-                                        decoration:
-                                            s.isDone
-                                                ? TextDecoration.lineThrough
-                                                : null,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           );
                         }).toList(),
