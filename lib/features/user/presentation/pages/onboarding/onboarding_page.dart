@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/onboarding/onboarding_screen.dart';
-import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -44,9 +44,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary50,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
+          SizedBox(height: 100),
           Expanded(
             child: PageView.builder(
               controller: _pageController,
@@ -72,7 +73,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
-                width: _currentPage == index ? 20 : 8,
+                width: _currentPage == index ? 32 : 8,
                 height: 8,
                 decoration: BoxDecoration(
                   color:
@@ -85,8 +86,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
             }),
           ),
           SafeArea(
+            top: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const EdgeInsets.all(24),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -99,15 +101,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary500,
                     foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(50),
+                    minimumSize: const Size.fromHeight(56),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text(
-                    '시작하기',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  child: const Text('시작하기', style: AppTextStyles.subtitle1),
                 ),
               ),
             ),
