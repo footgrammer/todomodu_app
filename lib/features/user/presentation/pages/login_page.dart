@@ -1,80 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/login_button.dart';
-import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
 
+  Future<void> handleLogin({
+    required BuildContext context,
+    required Future<dynamic> Function() loginMethod,
+  }) async {
+    final userCred = await loginMethod();
+    if (userCred != null) {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('accessToken', 'your_token_here');
+      replaceAllWithPage(context, const MainPage());
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.read(authProvider);
 
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Spacer(),
-            Spacer(),
-            SvgPicture.asset('assets/images/login_img.svg'),
-            const Text(
-              textAlign: TextAlign.center,
-              '투두모두와 함께\n하루를 계획해보세요!',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
-            const Text(
-              '쉽고 간편한 스케줄러를 만나보세요',
-              style: TextStyle(color: AppColors.grey500),
-            ),
-            Spacer(),
-            Builder(
-              builder: (context) {
-                return LoginButton(
-                  path: 'assets/images/apple_logo.png',
-                  onPressed: () async {
-                    final userCred = await auth.signInWithApple();
-                    if (userCred != null) {
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setString('accessToken', 'your_token_here');
-                      replaceAllWithPage(context, const MainPage());
-                    }
-                  },
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            LoginButton(
-              path: 'assets/images/kakao_logo.png',
-              onPressed: () async {
-                final userCred = await auth.signInWithKakao();
-                if (userCred != null) {
-                  final prefs = await SharedPreferences.getInstance();
-                  prefs.setString('accessToken', 'your_token_here');
-                  replaceAllWithPage(context, const MainPage());
-                }
-              },
-            ),
-            const SizedBox(height: 8),
-            LoginButton(
-              path: 'assets/images/google_logo.png',
-              onPressed: () async {
-                final userCred = await auth.signInWithGoogle();
-                if (userCred != null) {
-                  final prefs = await SharedPreferences.getInstance();
-                  prefs.setString('accessToken', 'your_token_here');
-                  replaceAllWithPage(context, const MainPage());
-                }
-              },
-            ),
-            Spacer(),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.white, AppColors.primary50],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Spacer(flex: 2),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 48),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: SvgPicture.asset('assets/images/login_img.svg'),
+                ),
+              ),
+              const SizedBox(height: 26),
+              const Text(
+                textAlign: TextAlign.center,
+                '투두모두와 함께\n하루를 계획해보세요!',
+                style: AppTextStyles.header1,
+              ),
+              Text(
+                '쉽고 간편한 스케줄러를 만나보세요',
+                style: AppTextStyles.body3.copyWith(color: AppColors.grey400),
+              ),
+              const SizedBox(height: 110),
+              LoginButton(
+                platform: '애플',
+                path: 'assets/images/apple_logo.png',
+                onPressed:
+                    () => handleLogin(
+                      context: context,
+                      loginMethod: auth.signInWithApple,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              LoginButton(
+                platform: '카카오',
+                color: Colors.yellow,
+                path: 'assets/images/kakao_logo.png',
+                onPressed:
+                    () => handleLogin(
+                      context: context,
+                      loginMethod: auth.signInWithKakao,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              LoginButton(
+                platform: '구글',
+                path: 'assets/images/google_logo.png',
+                onPressed:
+                    () => handleLogin(
+                      context: context,
+                      loginMethod: auth.signInWithGoogle,
+                    ),
+              ),
+              Spacer(),
+            ],
+          ),
         ),
       ),
     );
