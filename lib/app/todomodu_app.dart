@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/splash/splash_page.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
@@ -13,7 +14,7 @@ class TodomoduApp extends StatelessWidget {
       title: 'Todomodu App',
 
       theme: AppTheme.lightTheme,
-      home: SplashPage(),
+      home: LoginPage(),
 
     );
   }

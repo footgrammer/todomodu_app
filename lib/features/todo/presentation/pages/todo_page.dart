@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/todo/presentation/providers/todo_stream_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_card/todo_card.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
 final selectedDateProvider = StateProvider<DateTime>((ref) => DateTime.now());
@@ -19,9 +21,10 @@ class TodoPage extends ConsumerWidget {
         (todo.endDate.isAfter(date) || todo.endDate.isAtSameMomentAs(date));
   }
 
-  List<DateTime> _getWeekDates(DateTime reference) {
-    final startOfWeek = reference.subtract(Duration(days: reference.weekday % 7));
-    return List.generate(7, (i) => startOfWeek.add(Duration(days: i)));
+  List<DateTime> _getMonthDates(DateTime reference) {
+    final firstDay = DateTime(reference.year, reference.month, 1);
+    final lastDay = DateTime(reference.year, reference.month + 1, 0);
+    return List.generate(lastDay.day, (i) => DateTime(reference.year, reference.month, i + 1));
   }
 
   String _yearMonthString(DateTime date) {
@@ -37,7 +40,7 @@ class TodoPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final todosAsync = ref.watch(todoStreamProvider(projectId));
     final selectedDate = ref.watch(selectedDateProvider);
-    final weekDates = _getWeekDates(selectedDate);
+    final monthDates = _getMonthDates(selectedDate);
 
     return Scaffold(
       appBar: AppBar(
@@ -61,54 +64,83 @@ class TodoPage extends ConsumerWidget {
           children: [
             const SizedBox(height: 16),
             Text(
-              _yearMonthString(selectedDate),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              '사용자 님, 안녕하세요',
+              style: AppTextStyles.body2.copyWith(color: AppColors.grey500),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: weekDates.map((date) {
-                final isSelected = date.year == selectedDate.year &&
-                    date.month == selectedDate.month &&
-                    date.day == selectedDate.day;
-                return GestureDetector(
-                  onTap: () => ref.read(selectedDateProvider.notifier).state = date,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF706FBF) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          _weekdayString(date),
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black54,
-                            fontWeight: FontWeight.w600,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios, size: 18),
+                  onPressed: () {
+                    ref.read(selectedDateProvider.notifier).state =
+                        DateTime(selectedDate.year, selectedDate.month - 1, 1);
+                  },
+                ),
+                Text(
+                  _yearMonthString(selectedDate),
+                  style: AppTextStyles.header1.copyWith(color: AppColors.grey800),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                  onPressed: () {
+                    ref.read(selectedDateProvider.notifier).state =
+                        DateTime(selectedDate.year, selectedDate.month + 1, 1);
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 56,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: monthDates.length,
+                itemBuilder: (context, index) {
+                  final date = monthDates[index];
+                  final isSelected = date.year == selectedDate.year &&
+                      date.month == selectedDate.month &&
+                      date.day == selectedDate.day;
+
+                  return GestureDetector(
+                    onTap: () => ref.read(selectedDateProvider.notifier).state = date,
+                    child: Container(
+                      width: 56,
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.primary500 : AppColors.grey75,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _weekdayString(date),
+                            style: AppTextStyles.subtitle3.copyWith(
+                              color: isSelected ? Colors.white : AppColors.grey400,
                           ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          date.day.toString(),
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black87,
-                            fontSize: 14,
                           ),
-                        ),
-                      ],
+                          Text(
+                            date.day.toString(),
+                            style: AppTextStyles.subtitle3.copyWith(
+                              color: isSelected ? Colors.white : AppColors.grey400,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 20),
             Expanded(
               child: todosAsync.when(
                 data: (todos) {
-                  final filtered = todos
-                      .where((t) => _isInRange(t, selectedDate))
-                      .toList();
+                  final filtered = todos.where((t) => _isInRange(t, selectedDate)).toList();
 
                   return filtered.isEmpty
                       ? Center(
@@ -117,20 +149,25 @@ class TodoPage extends ConsumerWidget {
                             children: [
                               SvgPicture.asset(
                                 'assets/images/todo_empty_img.svg',
-                                height: 160,
+                                height: 88,
+                                width: 62,
                               ),
-                              const SizedBox(height: 24),
-                              const Text(
+                              const SizedBox(height: 15),
+                              Text(
                                 '아직 등록된 할 일이 없습니다.',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                style: AppTextStyles.body2.copyWith(
+                                  color: AppColors.grey800,
+                                ),
                               ),
-                              const SizedBox(height: 8),
-                              const Text(
+                              const SizedBox(height: 4),
+                              Text(
                                 '프로젝트를 생성하여\n오늘의 할 일을 만들어 보세요!',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.black54),
+                                style: AppTextStyles.body2.copyWith(
+                                  color: AppColors.grey500,
                               ),
-                              const SizedBox(height: 24),
+                              ),
+                              const SizedBox(height: 16),
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.push(
@@ -139,23 +176,44 @@ class TodoPage extends ConsumerWidget {
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  foregroundColor: const Color(0xFF706FBF),
                                   backgroundColor: Colors.white,
-                                  side: const BorderSide(color: Color(0xFF706FBF)),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                  side: BorderSide(color: AppColors.primary600,
+                                  width: 1,
                                   ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                                 ),
-                                child: const Text('프로젝트 생성하기'),
+                                child: Text('프로젝트 생성하기',
+                                style: AppTextStyles.subtitle4.copyWith(
+                                  color: AppColors.primary600,
+                                ),),
                               ),
                             ],
                           ),
                         )
-                      : ListView.builder(
-                          padding: const EdgeInsets.only(bottom: 64),
-                          itemCount: filtered.length,
-                          itemBuilder: (context, i) => TodoCard(todo: filtered[i]),
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '할 일 ${filtered.length}개',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Expanded(
+                              child: ListView.builder(
+                                padding: const EdgeInsets.only(bottom: 64),
+                                itemCount: filtered.length,
+                                itemBuilder: (context, i) => TodoCard(todo: filtered[i]),
+                              ),
+                            ),
+                          ],
                         );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
