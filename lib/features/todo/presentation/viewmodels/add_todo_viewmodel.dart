@@ -10,13 +10,29 @@ class AddTodoViewModel extends ChangeNotifier {
   final CreateTodoUseCase createTodoUseCase;
   final String projectId;
 
-  AddTodoViewModel(this.createTodoUseCase, {required this.projectId});
+  AddTodoViewModel(this.createTodoUseCase, {required this.projectId}) {
+    titleController.addListener(_onTitleChanged);
+  }
 
   final TextEditingController titleController = TextEditingController();
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   final String pendingTodoId = const Uuid().v4();
 
+  ///  제출 버튼 활성화 조건
+  bool get canSubmit {
+    final trimmedTitle = titleController.text.trim();
+    return trimmedTitle.isNotEmpty &&
+        startDate != null &&
+        endDate != null;
+  }
+
+  /// 제목 입력 감지 시 상태 갱신
+  void _onTitleChanged() {
+    notifyListeners(); // 버튼 활성화 상태 갱신
+  }
+
+  /// 🔹 날짜 선택
   Future<void> pickDate(BuildContext context, bool isStart) async {
     final DateTime initial = isStart ? startDate : endDate;
     final DateTime? picked = await showDatePicker(
@@ -32,10 +48,11 @@ class AddTodoViewModel extends ChangeNotifier {
       } else {
         endDate = picked.isBefore(startDate) ? startDate : picked;
       }
-      notifyListeners();
+      notifyListeners(); // 변경 감지
     }
   }
 
+  /// 할 일 + 세부 할 일 저장
   Future<void> submitWithSubtasks() async {
     final trimmedTitle = titleController.text.trim();
     if (trimmedTitle.isEmpty) return;
@@ -50,6 +67,19 @@ class AddTodoViewModel extends ChangeNotifier {
     final subtasks = subtasksSnapshot.docs.map((doc) {
       return SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity();
     }).toList();
+
+    // subtasks 비어 있으면 자동 생성
+    if (subtasks.isEmpty) {
+      subtasks.add(
+        Subtask(
+          id: const Uuid().v4(),
+          title: trimmedTitle,
+          isDone: false,
+          todoId: pendingTodoId,
+          projectId: projectId,
+        ),
+      );
+    }
 
     final todo = Todo(
       id: pendingTodoId,
@@ -66,6 +96,7 @@ class AddTodoViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    titleController.removeListener(_onTitleChanged);
     titleController.dispose();
     super.dispose();
   }

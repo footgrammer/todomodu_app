@@ -9,7 +9,7 @@ class SubmitButton extends StatelessWidget {
   const SubmitButton({
     required this.label,
     required this.onPressed,
-    this.enabled = false,
+    required this.enabled,
     super.key,
   });
 

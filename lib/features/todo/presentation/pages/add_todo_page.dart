@@ -20,8 +20,10 @@ class AddTodoPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('할 일 추가하기',
-        style: AppTextStyles.header3.copyWith(color: AppColors.grey800),),
+        title: Text(
+          '할 일 추가하기',
+          style: AppTextStyles.header3.copyWith(color: AppColors.grey800),
+        ),
         centerTitle: false,
         leading: const BackButton(),
       ),
@@ -42,8 +44,8 @@ class AddTodoPage extends ConsumerWidget {
               const SizedBox(height: 32),
               Text(
                 '할 일 목록',
-                style: AppTextStyles.body3.copyWith(color: AppColors.grey500,
-              ),),
+                style: AppTextStyles.body3.copyWith(color: AppColors.grey500),
+              ),
               const SizedBox(height: 8),
               SubtaskList(
                 projectId: projectId,
@@ -55,12 +57,13 @@ class AddTodoPage extends ConsumerWidget {
       ),
       bottomNavigationBar: SubmitButton(
         label: '추가하기',
+        enabled: viewModel.canSubmit,
         onPressed: () async {
           await viewModel.submitWithSubtasks();
           if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('할 일이 추가되었습니다')),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('할 일이 추가되었습니다')));
             Navigator.pop(context);
           }
         },
