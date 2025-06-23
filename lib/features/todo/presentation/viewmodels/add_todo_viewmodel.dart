@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/subtask.dart';
 import '../../domain/entities/todo.dart';
 import '../../application/usecases/create_todo_usecase.dart';
+import '../../data/models/subtask_dto.dart';
 
 class AddTodoViewModel extends ChangeNotifier {
   final CreateTodoUseCase createTodoUseCase;
@@ -14,7 +15,6 @@ class AddTodoViewModel extends ChangeNotifier {
   final TextEditingController titleController = TextEditingController();
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
-
   final String pendingTodoId = const Uuid().v4();
 
   Future<void> pickDate(BuildContext context, bool isStart) async {
@@ -30,11 +30,7 @@ class AddTodoViewModel extends ChangeNotifier {
         startDate = picked;
         if (startDate.isAfter(endDate)) endDate = startDate;
       } else {
-        if (picked.isBefore(startDate)) {
-          endDate = startDate;
-        } else {
-          endDate = picked;
-        }
+        endDate = picked.isBefore(startDate) ? startDate : picked;
       }
       notifyListeners();
     }
@@ -51,9 +47,9 @@ class AddTodoViewModel extends ChangeNotifier {
         .where('todoId', isEqualTo: pendingTodoId)
         .get();
 
-    final subtasks = subtasksSnapshot.docs
-        .map((doc) => Subtask.fromMap(doc.data()))
-        .toList();
+    final subtasks = subtasksSnapshot.docs.map((doc) {
+      return SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity();
+    }).toList();
 
     final todo = Todo(
       id: pendingTodoId,

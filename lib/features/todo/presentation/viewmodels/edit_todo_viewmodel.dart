@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todomodu_app/features/todo/data/models/subtask_dto.dart';
 import '../../application/usecases/update_todo_usecase.dart';
 import '../../domain/entities/subtask.dart';
 import '../../domain/entities/todo.dart';
 import '../states/edit_todo_state.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EditTodoViewModel extends StateNotifier<EditTodoState> {
   final UpdateTodoUseCase updateTodoUseCase;
@@ -48,9 +48,9 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
         .where('todoId', isEqualTo: todoId)
         .get();
 
-    final subtasks = subtasksSnapshot.docs
-        .map((doc) => Subtask.fromMap(doc.data()))
-        .toList();
+    final subtasks = subtasksSnapshot.docs.map((doc) {
+      return SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity();
+    }).toList();
 
     final todo = Todo(
       id: todoId,
