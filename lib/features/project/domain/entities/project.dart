@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
@@ -12,6 +13,7 @@ class Project {
   List<Todo> todos;
   String invitationCode;
   bool isDone;
+  Color color;
 
   Project({
     required this.id,
@@ -24,5 +26,6 @@ class Project {
     required this.todos,
     required this.invitationCode,
     required this.isDone,
+    required this.color,
   });
 }
