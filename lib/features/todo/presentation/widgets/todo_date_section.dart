@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/date_picker_box.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class TodoDateSection extends StatelessWidget {
   final DateTime startDate;
@@ -22,25 +23,29 @@ class TodoDateSection extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: const Text(
+                        child: Text(
                           '시작일',
                           style:
-                              TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              AppTextStyles.body3.copyWith(
+                                color: AppColors.grey500,
+                              ),
                         ),
                       ),
                       SizedBox(
-                        width: 24,
+                        width: 16,
                       ),
                       Expanded(
-                        child: const Text(
+                        child: Text(
                           '종료일',
                           style:
-                              TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              AppTextStyles.body3.copyWith(
+                                color: AppColors.grey500,
+                              ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 5,),
                   Row(
                     children: [
                       Expanded(
@@ -49,7 +54,7 @@ class TodoDateSection extends StatelessWidget {
                           onTap: onStartTap,
                         ),
                       ),
-                      SizedBox(width: 24),
+                      SizedBox(width: 16),
                       Expanded(
                           child: DatePickerBox(
                               date: endDate, onTap: onEndTap))

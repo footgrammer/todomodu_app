@@ -6,6 +6,7 @@ import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_sectio
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/subtask/subtask_list.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:uuid/uuid.dart';
 
 class AddTodoPage extends ConsumerWidget {
@@ -19,29 +20,30 @@ class AddTodoPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('할 일 추가하기'),
+        title: Text('할 일 추가하기',
+        style: AppTextStyles.header3.copyWith(color: AppColors.grey800),),
         centerTitle: false,
         leading: const BackButton(),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TodoTitleInput(controller: viewModel.titleController),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               TodoDateSection(
                 startDate: viewModel.startDate,
                 endDate: viewModel.endDate,
                 onStartTap: () => viewModel.pickDate(context, true),
                 onEndTap: () => viewModel.pickDate(context, false),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              const SizedBox(height: 32),
+              Text(
                 '할 일 목록',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+                style: AppTextStyles.body3.copyWith(color: AppColors.grey500,
+              ),),
               const SizedBox(height: 8),
               SubtaskList(
                 projectId: projectId,
@@ -52,7 +54,7 @@ class AddTodoPage extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: SubmitButton(
-        label: '완료',
+        label: '추가하기',
         onPressed: () async {
           await viewModel.submitWithSubtasks();
           if (context.mounted) {
