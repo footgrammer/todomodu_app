@@ -36,19 +36,18 @@ class ProjectDto {
       startDate: (json['startDate'] as Timestamp).toDate(),
       endDate: (json['endDate'] as Timestamp).toDate(),
       ownerId: json['ownerId'] as String,
-      color: Color(json['color'] ?? Color(0xFFFFFFFF)),
+      color: Color(json['color'] ?? 0xFFFFFFFF),
       invitationCode: json['invitationCode'] as String,
       isDone: json['isDone'] as bool,
     );
   }
 
-  // toJson
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'title': title,
       'description': description,
-      'color': color.value, // Color → int 저장
+      'color': color.value,
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),
       'ownerId': ownerId,
@@ -75,6 +74,7 @@ class ProjectDto {
     required UserEntity owner,
     required List<UserEntity> members,
     required List<Todo> todos,
+    required double progress, // ✅ progress 추가
   }) {
     return Project(
       id: id,
@@ -88,6 +88,7 @@ class ProjectDto {
       invitationCode: invitationCode,
       isDone: isDone,
       color: color,
+      progress: progress, // ✅ progress 할당
     );
   }
 }
