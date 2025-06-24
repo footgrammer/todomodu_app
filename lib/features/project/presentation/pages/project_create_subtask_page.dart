@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_todo_subtask_list.dart';
+import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
+import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
@@ -57,8 +64,8 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
               child: CommonElevatedButton(
                 text: '완료',
                 buttonColor: AppColors.primary500,
-                onPressed: () {
-                  navigateToPage(context, MainPage());
+                onPressed: () async {
+                  _createProject(ref, context, state);
                 },
               ),
             ),
@@ -66,5 +73,36 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _createProject(
+    WidgetRef ref,
+    BuildContext context,
+    ProjectCreateState state,
+  ) async {
+    final userEntity = await ref.read(userViewModelProvider.notifier).fetchUser();
+    final invitationCode = '';
+    final color = AppColors.colorList1;
+    List<Todo> todos = state.selectedTodos.map((todoTitle){
+      final subtasks = state.selectedSubtasks[todoTitle]!.map((subtaskTitle){
+        return Subtask(id: '', title: subtaskTitle, isDone: false, todoId: '', projectId: '');
+      }).toList();
+      return Todo(
+        id: '',
+        projectId: '',
+      title: todoTitle,
+      subtasks: subtasks,
+      startDate: DateTime(2025-05-10),
+      endDate: DateTime(2025-05-30),
+      isDone: false
+    );
+    } ).toList();
+    final project = Project(title: state.title, description: state.description, startDate: state.startDate!, endDate: state.endDate!, owner: userEntity!, members: [userEntity!], todos: todos, invitationCode: invitationCode, isDone: false, color: color)
+
+    await ref
+        .read(projectCreateViewModelProvider.notifier)
+        .createProject(project, todos, ref.read(createProjectUsecaseProvider));
+
+    navigateToPage(context, MainPage());
   }
 }

@@ -1,8 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/usecases/create_project_usecase.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 
 class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   Map<String, Set<String>>? _initialSubtaskSnapshot;
+
+  // 프로젝트 생성하기
+  Future<void> createProject(
+    Project project,
+    List<Todo> todos,
+    CreateProjectUsecase usecase,
+  ) async {
+    final Map<String, List<String>> selectedSubtasks = {
+      for (var entry in state.selectedSubtasks.entries)
+        entry.key: entry.value.toList(),
+    };
+
+    await usecase.execute(project, todos, selectedSubtasks);
+  }
 
   void cacheInitialSubtasks(Map<String, Set<String>> snapshot) {
     _initialSubtaskSnapshot ??= {
@@ -86,8 +103,3 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
     state = ProjectCreateState();
   }
 }
-
-final projectCreateViewModelProvider =
-    NotifierProvider<ProjectCreateViewModel, ProjectCreateState>(() {
-      return ProjectCreateViewModel();
-    });

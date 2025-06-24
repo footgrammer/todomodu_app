@@ -3,7 +3,7 @@ import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class Project {
-  String id;
+  String? id;
   String title;
   String description;
   DateTime startDate;
@@ -16,7 +16,7 @@ class Project {
   Color color;
 
   Project({
-    required this.id,
+    this.id,
     required this.title,
     required this.description,
     required this.startDate,
