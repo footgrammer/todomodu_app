@@ -76,24 +76,38 @@ class SubtaskRepositoryImpl implements SubtaskRepository {
         .update({'isDone': isDone});
   }
 
-  @override
-  Future<Result<List<Subtask>>> getSubtasksByProjectAndTodoId(
-    String projectId,
-    String todoId,
-  ) async {
-    final result = await dataSource.getSubtasksByProjectAndTodoId(projectId, todoId);
-    return result.when(
-      ok: (dtos) => Result.ok(dtos.map((dto) => dto.toEntity()).toList()),
-      error: (e) => Result.error(e),
-    );
+@override
+Future<Result<List<Subtask>>> getSubtasksByProjectAndTodoId(
+  String projectId,
+  String todoId,
+) async {
+  final result = await dataSource.getSubtasksByProjectAndTodoId(projectId, todoId);
+
+  if (result is Ok<List<SubtaskDto>>) {
+    final dtos = result.value;
+    final List<Subtask> entities =
+        dtos.map((dto) => dto.toEntity()).toList();
+    return Result<List<Subtask>>.ok(entities);
+  } else if (result is Error<List<SubtaskDto>>) {
+    return Result<List<Subtask>>.error(result.error);
   }
 
-  @override
-  Future<Result<List<Subtask>>> getSubtasksByProjectId(String projectId) async {
-    final result = await dataSource.getSubtasksByProjectId(projectId);
-    return result.when(
-      ok: (dtos) => Result.ok(dtos.map((dto) => dto.toEntity()).toList()),
-      error: (e) => Result.error(e),
-    );
-  }
+  return Result<List<Subtask>>.error(Exception('Unexpected Result type'));
+}
+
+@override
+Future<Result<List<Subtask>>> getSubtasksByProjectId(String projectId) async {
+  final result = await dataSource.getSubtasksByProjectId(projectId);
+
+  return result.when(
+    ok: (dtos) {
+      final List<Subtask> entities =
+          dtos.map((dto) => dto.toEntity()).toList();
+      return Result<List<Subtask>>.ok(entities);
+    },
+    error: (e) {
+      return Result<List<Subtask>>.error(e);
+    },
+  );
+}
 }

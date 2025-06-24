@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_list_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_list_page.dart';
+import 'package:todomodu_app/features/todo/presentation/pages/todo_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';

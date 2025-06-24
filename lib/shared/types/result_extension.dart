@@ -1,5 +1,3 @@
-// Result에 사용할 when 확장 메서드 추가
-
 import 'package:todomodu_app/shared/types/result.dart';
 
 extension ResultWhen<T> on Result<T> {
