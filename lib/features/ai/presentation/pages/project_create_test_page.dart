@@ -102,7 +102,7 @@ class _ProjectCreateTestPageState extends ConsumerState<ProjectCreateTestPage> {
                                   'Todo Period: ${response.todos[index].todoStartDate} ~ ${response.todos[index].todoEndDate}',
                                 ),
                                 Text(
-                                  'SubTasks: ${response.todos[index].subTasks}',
+                                  'Subtasks: ${response.todos[index].subtasks}',
                                 ),
                                 const Divider(),
                               ],

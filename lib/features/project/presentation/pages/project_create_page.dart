@@ -106,7 +106,7 @@ class ProjectCreatePage extends ConsumerWidget {
     TextEditingController descriptionController,
     AutoDisposeProvider<FocusNode> titleFocusNodeProvider,
     AutoDisposeProvider<FocusNode> descriptionFocusNodeProvider,
-  ) {
+  ) async {
     final title = titleController.text.trim();
     final description = descriptionController.text.trim();
     final startDate = ref.read(startDateProvider);
@@ -159,10 +159,12 @@ class ProjectCreatePage extends ConsumerWidget {
       projectEndDate: endDate!,
       prompt: descriptionController.text,
     );
-    final responseAsyncValue = ref.watch(openaiResponseProvider(openaiParams));
+    final responseAsyncValue = await ref.read(
+      openaiResponseProvider(openaiParams).future,
+    );
 
     print('openAIParams : ${openaiParams}');
-    print('openAI : ${responseAsyncValue.value}');
+    print('openAI : ${responseAsyncValue}');
 
     // chat GPT API 함수
     Future<Map<String, dynamic>> requestChatGPTApi(String prompt) async {
