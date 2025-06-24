@@ -61,9 +61,10 @@ class _SubtaskItemState extends State<SubtaskItem> {
                   child: TextField(
                     controller: _controller,
                     maxLength: 50,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: '세부 할 일을 입력하세요',
                       border: InputBorder.none,
+                      hintStyle: AppTextStyles.body2.copyWith(color: AppColors.grey400),
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 16,
