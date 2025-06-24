@@ -38,7 +38,6 @@ class ProjectDataSourceImpl implements ProjectDataSource {
 
       final projectList = await Future.wait(futures);
       final validProjects = projectList.whereType<ProjectDto>().toList();
-
       return Result.ok(validProjects);
     } catch (e) {
       return Result.error(Exception('Failed to load projects: $e'));

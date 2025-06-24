@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_todo_subtask_list.dart';
+import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 class ProjectCreateSubtaskPage extends ConsumerWidget {
@@ -55,7 +57,9 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
               child: CommonElevatedButton(
                 text: '완료',
                 buttonColor: AppColors.primary500,
-                onPressed: () {},
+                onPressed: () {
+                  navigateToPage(context, MainPage());
+                },
               ),
             ),
           ],

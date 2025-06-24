@@ -154,6 +154,11 @@ class AppTheme {
         onError: Colors.white,
         brightness: Brightness.light,
       ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Colors.white, // ✅ 원하는 색상으로 설정
+        selectedItemColor: AppColors.primary500,
+        unselectedItemColor: AppColors.grey400,
+      ),
     );
   }
 }
