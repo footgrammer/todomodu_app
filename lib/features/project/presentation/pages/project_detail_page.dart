@@ -7,6 +7,8 @@ import 'package:todomodu_app/features/todo/presentation/pages/add_todo_page.dart
 import 'package:todomodu_app/features/todo/presentation/providers/todo_list_viewmodel_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_card/todo_card.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/subtask/add_subtask_list.dart';
 
 class ProjectDetailPage extends ConsumerWidget {
   final String projectId;
@@ -23,6 +25,15 @@ class ProjectDetailPage extends ConsumerWidget {
     final startDate = DateFormat('yyyy.MM.dd').format(DateTime(2025, 6, 18));
     final endDate = DateFormat('yyyy.MM.dd').format(DateTime(2025, 7, 10));
     final progress = 0.6;
+    final dummyMembers = [
+      UserEntity(
+        userId: 'u1',
+        name: '고한동',
+        profileImageUrl: '',
+        email: 'hd@example.com',
+        createdAt: DateTime.now(),
+      ),
+    ];
 
     return DefaultTabController(
       length: 3,
@@ -86,12 +97,11 @@ class ProjectDetailPage extends ConsumerWidget {
           bottom: true,
           minimum: EdgeInsets.only(bottom: 34),
           child: Column(
-          
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 24, left: 24, top: 8),
                 child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 프로젝트 제목
                     Text(
@@ -214,7 +224,7 @@ class ProjectDetailPage extends ConsumerWidget {
                   ],
                 ),
               ),
-          
+
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(color: AppColors.grey75),
@@ -232,17 +242,30 @@ class ProjectDetailPage extends ConsumerWidget {
                         return const Center(child: Text('할 일이 없습니다.'));
                       }
                       return ListView.separated(
-                        padding: const EdgeInsets.only(top: 16, right: 24, left: 24, bottom: 34),
+                        padding: const EdgeInsets.only(
+                          top: 16,
+                          right: 24,
+                          left: 24,
+                          bottom: 34,
+                        ),
                         itemCount: todos.length,
                         itemBuilder: (context, index) {
                           final todo = todos[index];
-                          return TodoCard(
-                            todo: todo,
-                            showProjectTitle: false,
-                            showDateRange: true,
-                            todoTitleTextStyle: AppTextStyles.body1.copyWith(
-                              color: AppColors.grey800,
-                            ),
+                          return Column(
+                            children: [
+                              TodoCard(
+                                todo: todo,
+                                showProjectTitle: false,
+                                showDateRange: true,
+                                todoTitleTextStyle: AppTextStyles.body1
+                                    .copyWith(color: AppColors.grey800),
+                              ),
+                              AddSubtaskList(
+                                projectId: projectId,
+                                todoId: todo.id,
+                                projectMembers: dummyMembers,
+                              ), 
+                            ],
                           );
                         },
                         separatorBuilder:
