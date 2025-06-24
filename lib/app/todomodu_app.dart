@@ -19,7 +19,7 @@ class TodomoduApp extends StatelessWidget {
 
       theme: AppTheme.lightTheme,
 
-      home: SplashPage(),
+      home: AddTodoPage(projectId: 'hAnnSjCaGr3XZPgXaeyA'),
     );
   }
 }

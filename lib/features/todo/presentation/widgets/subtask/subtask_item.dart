@@ -1,6 +1,7 @@
 //add_subtask_list.dart, edit_subtask_list.dart에서 반복되는 블록
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class SubtaskItem extends StatefulWidget {
@@ -33,6 +34,20 @@ class _SubtaskItemState extends State<SubtaskItem> {
     widget.onChanged(widget.subtask.copyWith(title: _controller.text));
   }
 
+  void _onTapAssigneeEdit() async {
+    // 추후 bottom sheet 띄우기
+    // 현재는 더미 UserEntity 적용 (테스트 목적)
+    final dummyUser = UserEntity(
+      userId: '1',
+      name: '고한동',
+      profileImageUrl: '',
+      email: 'test@ex.com',
+      createdAt: DateTime.now(),
+    );
+
+    widget.onChanged(widget.subtask.copyWith(assignee: dummyUser));
+  }
+
   @override
   void dispose() {
     _controller.removeListener(_onTextChanged);
@@ -43,6 +58,7 @@ class _SubtaskItemState extends State<SubtaskItem> {
   @override
   Widget build(BuildContext context) {
     final length = _controller.text.characters.length;
+    final assignee = widget.subtask.assignee;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -65,26 +81,44 @@ class _SubtaskItemState extends State<SubtaskItem> {
                       hintText: '세부 할 일을 입력하세요',
                       border: InputBorder.none,
                       hintStyle: AppTextStyles.body2.copyWith(color: AppColors.grey400),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
-                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                       counterText: '',
                     ),
-                    style: AppTextStyles.body2.copyWith(
-                      color: AppColors.grey800,
-                    ),
+                    style: AppTextStyles.body2.copyWith(color: AppColors.grey800),
                   ),
                 ),
+
+                // 글자수 카운터
                 Positioned(
                   right: 16,
                   bottom: 8,
                   child: Text(
                     '$length/50',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.grey400,
-                    ),
+                    style: const TextStyle(fontSize: 12, color: AppColors.grey400),
+                  ),
+                ),
+
+                // 담당자 아이콘 or 프로필
+                Positioned(
+                  right: 16,
+                  top: 12,
+                  child: GestureDetector(
+                    onTap: _onTapAssigneeEdit,
+                    child: assignee == null
+                        ? const Icon(Icons.person_add_alt_outlined, color: AppColors.grey900, size: 24)
+                        : CircleAvatar(
+                            radius: 10,
+                            backgroundColor: Colors.grey[300],
+                            backgroundImage: assignee.profileImageUrl.isNotEmpty
+                                ? NetworkImage(assignee.profileImageUrl)
+                                : null,
+                            child: assignee.profileImageUrl.isEmpty
+                                ? Text(
+                                    assignee.name.characters.first,
+                                    style: const TextStyle(fontSize: 10, color: Colors.white),
+                                  )
+                                : null,
+                          ),
                   ),
                 ),
               ],
