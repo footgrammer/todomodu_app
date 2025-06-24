@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/project/data/models/Project.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectProgressBar extends ConsumerWidget {
