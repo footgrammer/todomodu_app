@@ -22,9 +22,7 @@ class AddTodoViewModel extends ChangeNotifier {
   ///  제출 버튼 활성화 조건
   bool get canSubmit {
     final trimmedTitle = titleController.text.trim();
-    return trimmedTitle.isNotEmpty &&
-        startDate != null &&
-        endDate != null;
+    return trimmedTitle.isNotEmpty && startDate != null && endDate != null;
   }
 
   /// 제목 입력 감지 시 상태 갱신
@@ -57,16 +55,21 @@ class AddTodoViewModel extends ChangeNotifier {
     final trimmedTitle = titleController.text.trim();
     if (trimmedTitle.isEmpty) return;
 
-    final subtasksSnapshot = await FirebaseFirestore.instance
-        .collection('projects')
-        .doc(projectId)
-        .collection('subtasks')
-        .where('todoId', isEqualTo: pendingTodoId)
-        .get();
+    final subtasksSnapshot =
+        await FirebaseFirestore.instance
+            .collection('projects')
+            .doc(projectId)
+            .collection('subtasks')
+            .where('todoId', isEqualTo: pendingTodoId)
+            .get();
 
-    final subtasks = subtasksSnapshot.docs.map((doc) {
-      return SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity();
-    }).toList();
+    final subtasks =
+        subtasksSnapshot.docs
+            .map(
+              (doc) => SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity(),
+            )
+            .where((subtask) => subtask.title.trim().isNotEmpty)
+            .toList();
 
     // subtasks 비어 있으면 자동 생성
     if (subtasks.isEmpty) {

@@ -10,26 +10,26 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
   final UpdateTodoUseCase updateTodoUseCase;
   final String todoId;
   final String projectId;
-  
-  bool get canSubmit {
-  return state.title.trim().isNotEmpty &&
-         state.startDate != null &&
-         state.endDate != null;
-}
 
-  EditTodoViewModel({
-    required Todo todo,
-    required this.updateTodoUseCase,
-  })  : todoId = todo.id,
-        projectId = todo.projectId,
-        super(EditTodoState(
+  bool get canSubmit {
+    return state.title.trim().isNotEmpty &&
+        state.startDate != null &&
+        state.endDate != null;
+  }
+
+  EditTodoViewModel({required Todo todo, required this.updateTodoUseCase})
+    : todoId = todo.id,
+      projectId = todo.projectId,
+      super(
+        EditTodoState(
           id: todo.id,
           projectId: todo.projectId,
           title: todo.title,
           startDate: todo.startDate,
           endDate: todo.endDate,
           subtasks: const [],
-        ));
+        ),
+      );
 
   void changeTitle(String title) {
     state = state.copyWith(title: title);
@@ -47,16 +47,21 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
     final trimmedTitle = state.title.trim();
     if (trimmedTitle.isEmpty) return;
 
-    final subtasksSnapshot = await FirebaseFirestore.instance
-        .collection('projects')
-        .doc(projectId)
-        .collection('subtasks')
-        .where('todoId', isEqualTo: todoId)
-        .get();
+    final subtasksSnapshot =
+        await FirebaseFirestore.instance
+            .collection('projects')
+            .doc(projectId)
+            .collection('subtasks')
+            .where('todoId', isEqualTo: todoId)
+            .get();
 
-    final subtasks = subtasksSnapshot.docs.map((doc) {
-      return SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity();
-    }).toList();
+    final subtasks =
+        subtasksSnapshot.docs
+            .map(
+              (doc) => SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity(),
+            )
+            .where((subtask) => subtask.title.trim().isNotEmpty)
+            .toList();
 
     final todo = Todo(
       id: todoId,

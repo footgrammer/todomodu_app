@@ -37,7 +37,7 @@ class EditSubtaskList extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Center(
               child: IconButton(
                 icon: const Icon(
