@@ -63,6 +63,16 @@ class ProgressController extends Notifier<ProjectProgressState> {
     }
   }
 
+  Future<void> completeRequest() async {
+    state = ProjectProgressState(
+      percent: 1.0,
+      stepIndex: _steps.length,
+      message: '완료되었습니다.',
+    );
+
+    await Future.delayed(Duration(seconds: 1));
+  }
+
   Future<void> waitForApi<T>(
     Future<T> Function() apiCall,
     void Function(T result) onComplete,

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/ai/domain/models/openai_response.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_subtask_page.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_todo_list.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 class ProjectCreateTodoPage extends ConsumerWidget {
-  final Map<String, dynamic> apiResult;
+  final OpenaiResponse response;
 
-  const ProjectCreateTodoPage({super.key, required this.apiResult});
+  const ProjectCreateTodoPage({super.key, required this.response});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todos = apiResult['todos'] as List<dynamic>;
+    final todos = response.todos;
     final selectedTodos = ref.watch(
       projectCreateViewModelProvider.select((state) => state.selectedTodos),
     );
@@ -27,6 +30,12 @@ class ProjectCreateTodoPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            navigateToPage(context, ProjectCreatePage());
+          },
+          child: Icon(Icons.arrow_back_ios),
+        ),
         title: Row(children: [Text('프로젝트 추가하기', style: AppTextStyles.header2)]),
       ),
       body: Padding(
@@ -44,14 +53,20 @@ class ProjectCreateTodoPage extends ConsumerWidget {
               style: AppTextStyles.subtitle3.copyWith(color: AppColors.grey500),
             ),
             const SizedBox(height: 48),
-            ProjectTodoList(
-              todos: todos,
-              selectedTodos: selectedTodos,
-              viewModel: viewModel,
+            Expanded(
+              child: ListView(
+                children: [
+                  ProjectTodoList(
+                    todos: todos,
+                    selectedTodos: selectedTodos,
+                    viewModel: viewModel,
+                  ),
+                ],
+              ),
             ),
-            const Spacer(),
+
             Padding(
-              padding: EdgeInsets.only(bottom: 40, top: 10),
+              padding: EdgeInsets.only(bottom: 64, top: 10),
               child: CommonElevatedButton(
                 text: '다음',
                 buttonColor: AppColors.primary500,

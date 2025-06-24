@@ -18,15 +18,15 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   }
 
   void selectAllTodos(List<dynamic> todos) {
-    final allTodos = todos.map((todo) => todo['todoTitle'] as String).toSet();
+    final allTodos = todos.map((todo) => todo.todoTitle as String).toSet();
     state = state.copyWith(selectedTodos: allTodos);
   }
 
   void selectAllSubtasks(List<dynamic> todos) {
     final Map<String, Set<String>> newSelectedSubtasks = {};
     for (final todo in todos) {
-      final String todoTitle = todo['todoTitle'];
-      final List<dynamic> subtasks = todo['subtasks'];
+      final String todoTitle = todo.todoTitle;
+      final List<dynamic> subtasks = todo.subtasks;
 
       if (state.selectedTodos.contains(todoTitle)) {
         newSelectedSubtasks[todoTitle] =
