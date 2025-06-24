@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({
@@ -18,22 +17,21 @@ class OnboardingScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Spacer(),
-        Spacer(),
-        Spacer(),
-        SvgPicture.asset(path),
-        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 106),
+          child: Image.asset(path),
+        ),
+        const SizedBox(height: 24),
         Text(
           title,
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          style: AppTextStyles.header1.copyWith(color: AppColors.grey900),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Text(
           description,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, color: AppColors.grey600),
+          style: AppTextStyles.body2.copyWith(color: AppColors.grey500),
         ),
-        Spacer(),
       ],
     );
   }

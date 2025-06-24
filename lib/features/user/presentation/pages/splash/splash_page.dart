@@ -47,9 +47,17 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary500,
-      body: Center(
-        child: SvgPicture.asset('assets/images/splash_logo_img.svg'),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [AppColors.primary400, AppColors.primary500],
+          ),
+        ),
+        child: Center(
+          child: SvgPicture.asset('assets/images/splash_logo_img.svg'),
+        ),
       ),
     );
   }

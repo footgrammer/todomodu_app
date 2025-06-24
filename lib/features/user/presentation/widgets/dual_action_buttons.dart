@@ -23,7 +23,7 @@ class DualActionButtons extends StatelessWidget {
             onPressed: onCancel,
             style: TextButton.styleFrom(
               foregroundColor: const Color(0xFFCAC7DA),
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.fromLTRB(0, 17.5, 0, 16.5),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
@@ -40,9 +40,9 @@ class DualActionButtons extends StatelessWidget {
           child: TextButton(
             onPressed: onConfirm,
             style: TextButton.styleFrom(
-              backgroundColor: const Color(0xFFF2EEFF),
+              backgroundColor: const Color(0xFFF0F0F3),
               foregroundColor: const Color(0xFF5752EA),
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.fromLTRB(0, 17.5, 0, 16.5),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(20),
