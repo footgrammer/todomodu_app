@@ -53,7 +53,7 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
               },
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 40, top: 10),
+              padding: EdgeInsets.only(bottom: 64, top: 10),
               child: CommonElevatedButton(
                 text: '완료',
                 buttonColor: AppColors.primary500,

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
+import 'package:todomodu_app/features/todo/data/models/subtask_dto.dart';
+import 'package:todomodu_app/features/todo/data/models/todo_dto.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
 class ProjectDataSourceImpl implements ProjectDataSource {
@@ -58,6 +60,48 @@ class ProjectDataSourceImpl implements ProjectDataSource {
       return Result.ok(ids);
     } catch (e) {
       return Result.error(Exception('Failed to fetch memberIds: $e'));
+    }
+  }
+
+  Future<void> createProject(
+    ProjectDto projectDto,
+    List<TodoDto> todoDtos,
+    Map<String, List<String>> subtasks,
+  ) async {
+    // 프로젝트 생성
+    final projectRef = await _firestore
+        .collection('projects')
+        .add(projectDto.toJson());
+    await projectRef.update({'id': projectRef.id});
+
+    //members 생성
+    final memberRef = projectRef.collection('members').doc(projectDto.ownerId);
+    memberRef.set({'userId': projectDto.ownerId});
+
+    // todo 생성
+    for (final todo in todoDtos) {
+      final todoRef = projectRef.collection('todos').doc();
+
+      await todoRef.set({
+        'id': todoRef.id,
+        'projectId': projectRef.id,
+        'title': todo.title,
+        'startDate': Timestamp.fromDate(todo.startDate),
+        'endDate': Timestamp.fromDate(todo.endDate),
+        'isDone': false,
+      });
+
+      // subtask 생성
+      for (final subtask in subtasks[todo.title]!) {
+        final subtaskRef = projectRef.collection('subtasks').doc();
+        await todoRef.set({
+          'id': subtaskRef.id,
+          'todoId': todoRef.id,
+          'projectId': projectRef.id,
+          'title': subtask,
+          'assigneeId': null,
+        });
+      }
     }
   }
 }
