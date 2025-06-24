@@ -4,7 +4,7 @@ import 'package:todomodu_app/features/todo/presentation/providers/add_todo_viewm
 import 'package:todomodu_app/features/todo/presentation/widgets/submit_button.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
-import 'package:todomodu_app/features/todo/presentation/widgets/subtask/subtask_list.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/subtask/add_subtask_list.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:uuid/uuid.dart';
@@ -47,7 +47,7 @@ class AddTodoPage extends ConsumerWidget {
                 style: AppTextStyles.body3.copyWith(color: AppColors.grey500),
               ),
               const SizedBox(height: 8),
-              SubtaskList(
+              AddSubtaskList(
                 projectId: projectId,
                 todoId: viewModel.pendingTodoId,
               ),

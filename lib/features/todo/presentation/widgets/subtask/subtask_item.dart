@@ -1,4 +1,4 @@
-
+//add_subtask_list.dart, edit_subtask_list.dart에서 반복되는 블록
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
@@ -16,11 +16,11 @@ class SubtaskItem extends StatefulWidget {
   });
 
   @override
-  _SubtaskItemState createState() => _SubtaskItemState();
+  State<SubtaskItem> createState() => _SubtaskItemState();
 }
 
 class _SubtaskItemState extends State<SubtaskItem> {
-  late TextEditingController _controller;
+  late final TextEditingController _controller;
 
   @override
   void initState() {
@@ -31,15 +31,6 @@ class _SubtaskItemState extends State<SubtaskItem> {
 
   void _onTextChanged() {
     widget.onChanged(widget.subtask.copyWith(title: _controller.text));
-    setState(() {}); // counter 업데이트
-  }
-
-  @override
-  void didUpdateWidget(covariant SubtaskItem old) {
-    super.didUpdateWidget(old);
-    if (old.subtask.title != widget.subtask.title) {
-      _controller.text = widget.subtask.title;
-    }
   }
 
   @override
@@ -51,6 +42,8 @@ class _SubtaskItemState extends State<SubtaskItem> {
 
   @override
   Widget build(BuildContext context) {
+    final length = _controller.text.characters.length;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -71,18 +64,26 @@ class _SubtaskItemState extends State<SubtaskItem> {
                     decoration: const InputDecoration(
                       hintText: '세부 할 일을 입력하세요',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                       counterText: '',
                     ),
-                    style: AppTextStyles.body2.copyWith(color: AppColors.grey800),
+                    style: AppTextStyles.body2.copyWith(
+                      color: AppColors.grey800,
+                    ),
                   ),
                 ),
                 Positioned(
                   right: 16,
                   bottom: 8,
                   child: Text(
-                    '${_controller.text.length}/50',
-                    style: const TextStyle(fontSize: 12, color: AppColors.grey400),
+                    '$length/50',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.grey400,
+                    ),
                   ),
                 ),
               ],

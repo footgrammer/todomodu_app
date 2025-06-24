@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/subtask/edit_subtask_list.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import '../../domain/entities/todo.dart';
 import '../providers/edit_todo_viewmodel_provider.dart';
 import '../widgets/todo_date_section.dart';
 import '../widgets/submit_button.dart';
 import '../widgets/todo_title_input.dart';
-import '../widgets/subtask/subtask_list.dart';
+import '../widgets/subtask/add_subtask_list.dart';
 
 class EditTodoPage extends ConsumerWidget {
   final Todo todo;
@@ -68,7 +69,7 @@ class EditTodoPage extends ConsumerWidget {
                 style: AppTextStyles.body3.copyWith(color: AppColors.grey500,
               ),),
               const SizedBox(height: 8),
-              SubtaskList(
+              EditSubtaskList(
                 projectId: todo.projectId,
                 todoId: todo.id,
               ),

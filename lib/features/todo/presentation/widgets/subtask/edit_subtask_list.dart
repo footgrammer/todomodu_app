@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/subtask/subtask_item.dart';
+import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:uuid/uuid.dart';
 import '../../../domain/entities/subtask.dart';
 import '../../providers/subtask/subtask_stream_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/viewmodels/subtask_viewmodel.dart';
-
 
 class EditSubtaskList extends ConsumerWidget {
   final String projectId;
@@ -24,21 +25,39 @@ class EditSubtaskList extends ConsumerWidget {
     return asyncSubtasks.when(
       data: (subtasks) {
         return Column(
-          children: subtasks.map((subtask) {
-            return SubtaskItem(
-              key: ValueKey(subtask.id),
-              subtask: subtask,
-              onChanged: (updated) {
-                viewModel.update(updated);
-              },
-              onDelete: () {
-                viewModel.delete(
+          children: [
+            ...subtasks.map(
+              (subtask) => SubtaskItem(
+                key: ValueKey(subtask.id),
+                subtask: subtask,
+                onChanged: (updated) => viewModel.update(updated),
+                onDelete: () => viewModel.delete(
                   projectId: projectId,
                   subtaskId: subtask.id,
-                );
-              },
-            );
-          }).toList(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Center(
+              child: IconButton(
+                icon: const Icon(
+                  Icons.add_circle,
+                  size: 48,
+                  color: AppColors.primary200,
+                ),
+                onPressed: () {
+                  final subtask = Subtask(
+                    id: const Uuid().v4(),
+                    title: '',
+                    isDone: false,
+                    todoId: todoId,
+                    projectId: projectId,
+                  );
+                  viewModel.create(subtask);
+                },
+              ),
+            ),
+          ],
         );
       },
       loading: () => const CircularProgressIndicator(),
