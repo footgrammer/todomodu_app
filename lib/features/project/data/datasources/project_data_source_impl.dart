@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
-import 'package:todomodu_app/features/todo/data/models/subtask_dto.dart';
-import 'package:todomodu_app/features/todo/data/models/todo_dto.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
 class ProjectDataSourceImpl implements ProjectDataSource {
@@ -63,9 +62,10 @@ class ProjectDataSourceImpl implements ProjectDataSource {
     }
   }
 
+  @override
   Future<void> createProject(
     ProjectDto projectDto,
-    List<TodoDto> todoDtos,
+    List<Todo> todoDtos,
     Map<String, List<String>> subtasks,
   ) async {
     // 프로젝트 생성

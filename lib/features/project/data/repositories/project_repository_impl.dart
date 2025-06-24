@@ -50,7 +50,8 @@ class ProjectRepositoryImpl implements ProjectRepository {
           final members = membersResult.value;
 
           // 3. 투두 정보 가져오기 (현재 생략)
-          final todosResult = await _todoRepository.getTodosWithSubtasksByProjectId(dto.id);
+          final todosResult = await _todoRepository
+              .getTodosWithSubtasksByProjectId(dto.id);
           if (todosResult is! Ok<List<Todo>>) return null;
           final todos = todosResult.value;
 
@@ -79,5 +80,19 @@ class ProjectRepositoryImpl implements ProjectRepository {
     } catch (e) {
       return Result.error(Exception('Failed to map ProjectDto to Project: $e'));
     }
+  }
+
+  @override
+  Future<void> createProject(
+    Project project,
+    List<Todo> todos,
+    Map<String, List<String>> subtasks,
+  ) async {
+    final projectDto = ProjectDto.fromEntity(project);
+    await _dataSource.createProject(
+      projectDto,
+      todos, // pass entity directly to let data layer handle id logic
+      subtasks,
+    );
   }
 }
