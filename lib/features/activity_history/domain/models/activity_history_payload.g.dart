@@ -8,16 +8,14 @@ part of 'activity_history_payload.dart';
 
 MemberJoinedPayload _$MemberJoinedPayloadFromJson(Map<String, dynamic> json) =>
     MemberJoinedPayload(
-      memberId: json['memberId'] as String,
-      invitedById: json['invitedById'] as String,
+      joinedUserId: json['joinedUserId'] as String,
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$MemberJoinedPayloadToJson(
   MemberJoinedPayload instance,
 ) => <String, dynamic>{
-  'memberId': instance.memberId,
-  'invitedById': instance.invitedById,
+  'joinedUserId': instance.joinedUserId,
   'runtimeType': instance.$type,
 };
 

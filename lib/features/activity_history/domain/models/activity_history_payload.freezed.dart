@@ -108,11 +108,10 @@ $ActivityHistoryPayloadCopyWith(ActivityHistoryPayload _, $Res Function(Activity
 @JsonSerializable()
 
 class MemberJoinedPayload extends ActivityHistoryPayload {
-  const MemberJoinedPayload({required this.memberId, required this.invitedById, final  String? $type}): $type = $type ?? 'memberJoined',super._();
+  const MemberJoinedPayload({required this.joinedUserId, final  String? $type}): $type = $type ?? 'memberJoined',super._();
   factory MemberJoinedPayload.fromJson(Map<String, dynamic> json) => _$MemberJoinedPayloadFromJson(json);
 
- final  String memberId;
- final  String invitedById;
+ final  String joinedUserId;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -131,16 +130,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberJoinedPayload&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.invitedById, invitedById) || other.invitedById == invitedById));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberJoinedPayload&&(identical(other.joinedUserId, joinedUserId) || other.joinedUserId == joinedUserId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,memberId,invitedById);
+int get hashCode => Object.hash(runtimeType,joinedUserId);
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.memberJoined(memberId: $memberId, invitedById: $invitedById)';
+  return 'ActivityHistoryPayload.memberJoined(joinedUserId: $joinedUserId)';
 }
 
 
@@ -151,7 +150,7 @@ abstract mixin class $MemberJoinedPayloadCopyWith<$Res> implements $ActivityHist
   factory $MemberJoinedPayloadCopyWith(MemberJoinedPayload value, $Res Function(MemberJoinedPayload) _then) = _$MemberJoinedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String memberId, String invitedById
+ String joinedUserId
 });
 
 
@@ -168,10 +167,9 @@ class _$MemberJoinedPayloadCopyWithImpl<$Res>
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? memberId = null,Object? invitedById = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? joinedUserId = null,}) {
   return _then(MemberJoinedPayload(
-memberId: null == memberId ? _self.memberId : memberId // ignore: cast_nullable_to_non_nullable
-as String,invitedById: null == invitedById ? _self.invitedById : invitedById // ignore: cast_nullable_to_non_nullable
+joinedUserId: null == joinedUserId ? _self.joinedUserId : joinedUserId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

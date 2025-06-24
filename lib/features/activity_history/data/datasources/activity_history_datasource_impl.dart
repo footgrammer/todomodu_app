@@ -10,19 +10,23 @@ class ActivityHistoryDatasourceImpl implements ActivityHistoryDatasource {
   ActivityHistoryDatasourceImpl({required FirebaseFirestore firestore})
     : _firestore = firestore;
 
-  CollectionReference<Map<String, dynamic>> get _collection =>
-      _firestore.collection('activities');
-
   @override
   Future<Result<void>> save(ActivityHistory activity) async {
     try {
       final dto = ActivityHistoryDto.fromEntity(activity);
 
+      final projectRef = _firestore
+          .collection('projects')
+          .doc(activity.projectId);
+      final activityCollection = projectRef.collection('activity_histories');
+
       final json =
           dto.toJson()
-            ..['createdAt'] = FieldValue.serverTimestamp(); // 서버 타임 강제 삽입
+            ..remove('projectId') // 🔧 경로에 포함되므로 제거
+            ..['createdAt'] = FieldValue.serverTimestamp();
 
-      await _collection.doc(activity.id).set(json);
+      await activityCollection.add(json); // 🔧 자동 ID로 저장
+
       return const Ok(null);
     } catch (e, st) {
       return Error(Exception('Failed to save activity: $e\n$st'));
@@ -35,15 +39,16 @@ class ActivityHistoryDatasourceImpl implements ActivityHistoryDatasource {
   ) async {
     try {
       final snapshot =
-          await _collection
-              .where('projectId', isEqualTo: projectId)
+          await _firestore
+              .collection('projects')
+              .doc(projectId)
+              .collection('activity_histories')
               .orderBy('createdAt', descending: true)
               .get();
 
       final activities =
           snapshot.docs.map((doc) {
-            final data = doc.data();
-            final dto = ActivityHistoryDto.fromJson(data, doc.id);
+            final dto = ActivityHistoryDto.fromJson(doc.data(), doc.id);
             return dto.toEntity();
           }).toList();
 

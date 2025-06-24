@@ -8,8 +8,7 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
   const ActivityHistoryPayload._(); // ✅ toJson 직접 구현을 위한 생성자
 
   const factory ActivityHistoryPayload.memberJoined({
-    required String memberId,
-    required String invitedById,
+    required String joinedUserId,
   }) = MemberJoinedPayload;
 
   const factory ActivityHistoryPayload.memberLeft({
