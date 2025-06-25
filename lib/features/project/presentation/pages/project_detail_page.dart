@@ -5,6 +5,7 @@ import 'package:todomodu_app/features/project/presentation/providers/project_pro
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/project_info_header.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/project_member_section.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/project_tab_bar.dart';
+import 'package:todomodu_app/features/todo/presentation/pages/add_todo_page.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectDetailPage extends ConsumerWidget {
@@ -24,7 +25,7 @@ class ProjectDetailPage extends ConsumerWidget {
           length: 3,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('프로젝트 상세'),
+              title: const Text(''),
               leading: const BackButton(),
               actions: [_popupMenu()],
             ),
@@ -60,7 +61,10 @@ class ProjectDetailPage extends ConsumerWidget {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/add-todo', arguments: projectId);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => AddTodoPage(
+                      projectId: projectId,
+                      projectMembers: project.members,
+                    )));
                   },
                   icon: const Icon(Icons.add),
                   label: Text('할 일 추가', style: AppTextStyles.subtitle1),
