@@ -54,7 +54,12 @@ class ProjectTodoSubtaskList extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(todo, style: AppTextStyles.subtitle1),
+                          Text(
+                            todo,
+                            style: AppTextStyles.subtitle1,
+                            softWrap: true,
+                            overflow: TextOverflow.visible, // 또는 ellipsis
+                          ),
                           Icon(
                             isExpanded ? Icons.expand_less : Icons.expand_more,
                             size: 24,

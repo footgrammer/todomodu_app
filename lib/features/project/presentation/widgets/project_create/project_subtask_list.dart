@@ -46,6 +46,8 @@ class ProjectSubtaskList extends StatelessWidget {
                                   ? AppColors.grey800
                                   : AppColors.grey300,
                         ),
+                        softWrap: true,
+                        overflow: TextOverflow.visible,
                       ),
                       Icon(
                         isSelected ? Icons.remove : Icons.add,
