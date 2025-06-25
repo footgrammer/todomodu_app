@@ -21,8 +21,9 @@ final subtaskStreamProvider = StreamProvider.family<List<Subtask>, (String proje
   return snapshots.asyncMap((querySnap) async {
     final futures = querySnap.docs.map((doc) async {
       final dto = SubtaskDto.fromJson(doc.data(), id: doc.id);
+      
 UserEntity? assignee;
-if (dto.assigneeId != null) {
+if (dto.assigneeId != null && dto.assigneeId!.isNotEmpty) {
   assignee = await getUserById.execute(dto.assigneeId!).first;
 }
       return dto.toEntity(assignee: assignee);
