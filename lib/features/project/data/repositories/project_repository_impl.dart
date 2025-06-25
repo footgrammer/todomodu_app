@@ -83,16 +83,8 @@ class ProjectRepositoryImpl implements ProjectRepository {
   }
 
   @override
-  Future<void> createProject(
-    Project project,
-    List<Todo> todos,
-    Map<String, List<String>> subtasks,
-  ) async {
+  Future<void> createProject(Project project) async {
     final projectDto = ProjectDto.fromEntity(project);
-    await _dataSource.createProject(
-      projectDto,
-      todos, // pass entity directly to let data layer handle id logic
-      subtasks,
-    );
+    await _dataSource.createProject(projectDto, project.todos);
   }
 }

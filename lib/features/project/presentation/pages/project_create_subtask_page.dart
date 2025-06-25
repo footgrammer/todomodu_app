@@ -84,37 +84,43 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
     );
   }
 
+  List<Color> colorList = [
+    AppColors.colorList1,
+    AppColors.colorList2,
+    AppColors.colorList3,
+    AppColors.colorList4,
+    AppColors.colorList5,
+    AppColors.colorList6,
+    AppColors.colorList7,
+    AppColors.colorList8,
+    AppColors.colorList9,
+    AppColors.colorList10,
+    AppColors.colorList11,
+    AppColors.colorList12,
+    AppColors.colorList13,
+    AppColors.colorList14,
+    AppColors.colorList15,
+    AppColors.colorList16,
+  ];
+
   Future<void> _createProject(
     WidgetRef ref,
     BuildContext context,
     ProjectCreateState state,
   ) async {
+    //현재 유저 가지고 오기
     final userEntity =
         await ref.read(userViewModelProvider.notifier).fetchUser();
+    if (userEntity == null) {
+      throw Exception('프로젝트 생성에 필요한 필수 정보가 누락되었습니다.');
+    }
 
-    List<Color> colorList = [
-      AppColors.colorList1,
-      AppColors.colorList2,
-      AppColors.colorList3,
-      AppColors.colorList4,
-      AppColors.colorList5,
-      AppColors.colorList6,
-      AppColors.colorList7,
-      AppColors.colorList8,
-      AppColors.colorList9,
-      AppColors.colorList10,
-      AppColors.colorList11,
-      AppColors.colorList12,
-      AppColors.colorList13,
-      AppColors.colorList14,
-      AppColors.colorList15,
-      AppColors.colorList16,
-    ];
     final random = Random();
     final color = colorList[random.nextInt(16)];
     final invitationCode = (random.nextInt(900000) + 100000).toString();
     List<Todo> finalTodos =
         state.selectedTodos.map((todoTitle) {
+          // 서브테스트 형성
           final subtasks =
               state.selectedSubtasks[todoTitle]!.map((subtaskTitle) {
                 return Subtask(
@@ -126,6 +132,8 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
                 );
               }).toList();
 
+          // Chat GPT 응답으로부터 startDate, eadDate 값을 todo에 추가하기 위해 타이틀이 같은 responseTodo를 가지고 옴
+          // responseTodo 의 startDate, endDate의 타입은 String (2025-04-20)
           final responseTodo =
               responseTodos
                   .where((todo) => todo.todoTitle == todoTitle)
@@ -141,9 +149,6 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
             isDone: false,
           );
         }).toList();
-    if (userEntity == null) {
-      throw Exception('프로젝트 생성에 필요한 필수 정보가 누락되었습니다.');
-    }
 
     final project = Project(
       id: '',
@@ -151,21 +156,18 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
       description: state.description,
       startDate: projectStartDate,
       endDate: projectEndDate,
-      owner: userEntity!,
+      owner: userEntity,
       members: [userEntity],
       todos: finalTodos,
       invitationCode: invitationCode,
       isDone: false,
       color: color,
     );
-    // await ref
-    //     .read(projectCreateViewModelProvider.notifier)
-    //     .createProject(
-    //       project,
-    //       finalTodos,
-    //       ref.read(createProjectUsecaseProvider),
-    //     );
+    final createProjectUsecase = ref.read(createProjectUsecaseProvider);
+    await ref
+        .read(projectCreateViewModelProvider.notifier)
+        .createProject(project, createProjectUsecase);
 
-    // navigateToPage(context, MainPage());
+    navigateToPage(context, MainPage());
   }
 }

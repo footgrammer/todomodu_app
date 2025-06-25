@@ -101,11 +101,7 @@ class ProjectDataSourceImpl implements ProjectDataSource {
   }
 
   @override
-  Future<void> createProject(
-    ProjectDto projectDto,
-    List<Todo> todoDtos,
-    Map<String, List<String>> subtasks,
-  ) async {
+  Future<void> createProject(ProjectDto projectDto, List<Todo> todos) async {
     // 프로젝트 생성
     final projectRef = await _firestore
         .collection('projects')
@@ -117,7 +113,7 @@ class ProjectDataSourceImpl implements ProjectDataSource {
     memberRef.set({'userId': projectDto.ownerId});
 
     // todo 생성
-    for (final todo in todoDtos) {
+    for (final todo in todos) {
       final todoRef = projectRef.collection('todos').doc();
 
       await todoRef.set({
@@ -130,14 +126,14 @@ class ProjectDataSourceImpl implements ProjectDataSource {
       });
 
       // subtask 생성
-      for (final subtask in subtasks[todo.title]!) {
+      for (final subtask in todo.subtasks) {
         final subtaskRef = projectRef.collection('subtasks').doc();
         await todoRef.set({
           'id': subtaskRef.id,
           'todoId': todoRef.id,
           'projectId': projectRef.id,
-          'title': subtask,
-          'assigneeId': null,
+          'title': subtask.title,
+          'assigneeId': '',
         });
       }
     }

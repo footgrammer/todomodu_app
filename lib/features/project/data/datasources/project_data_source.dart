@@ -7,9 +7,5 @@ abstract interface class ProjectDataSource {
   Future<Result<List<String>>> getMemberIdsByProjectId(String projectId);
 
   Future<List<ProjectDto>> fetchProjectsByUserId(String userId);
-  Future<void> createProject(
-    ProjectDto projectDto,
-    List<Todo> todoDto,
-    Map<String, List<String>> subtasks,
-  );
+  Future<void> createProject(ProjectDto projectDto, List<Todo> todoDto);
 }

@@ -10,15 +10,22 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   // 프로젝트 생성하기
   Future<void> createProject(
     Project project,
-    List<Todo> todos,
     CreateProjectUsecase usecase,
   ) async {
-    final Map<String, List<String>> selectedSubtasks = {
-      for (var entry in state.selectedSubtasks.entries)
-        entry.key: entry.value.toList(),
-    };
+    // 로딩 시작
+    state = state.copyWith(isLoading: true, errorMessage: null);
 
-    await usecase.execute(project, todos, selectedSubtasks);
+    try {
+      await usecase.execute(project);
+      // 완료 후 로딩 false(에러 없음)
+      state = state.copyWith(isLoading: false);
+    } catch (error) {
+      //실패 시 에러 메시지 추가
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: '프로젝트 생성 실패 : $error',
+      );
+    }
   }
 
   void cacheInitialSubtasks(Map<String, Set<String>> snapshot) {
@@ -31,7 +38,7 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
 
   @override
   ProjectCreateState build() {
-    return ProjectCreateState();
+    return ProjectCreateState(isLoading: false);
   }
 
   void selectAllTodos(List<dynamic> todos) {
