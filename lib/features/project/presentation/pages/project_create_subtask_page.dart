@@ -161,6 +161,6 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
         .read(projectCreateViewModelProvider.notifier)
         .createProject(project, createProjectUsecase);
 
-    navigateToPage(context, MainPage());
+    replaceAllWithPage(context, MainPage());
   }
 }
