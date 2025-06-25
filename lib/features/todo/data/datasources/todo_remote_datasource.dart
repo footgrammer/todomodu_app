@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/todo/data/models/todo_dto.dart';
 import 'package:todomodu_app/shared/types/result.dart';
@@ -49,14 +51,23 @@ class TodoRemoteDataSource {
               .collection('todos')
               .get();
 
-      final todos =
-          snapshot.docs.map((doc) {
-            final data = doc.data();
-            return TodoDto.fromJson(data, id: doc.id);
-          }).toList();
-
+      final todos = <TodoDto>[];
+      for (final doc in snapshot.docs) {
+        try {
+          final data = doc.data();
+          final dto = TodoDto.fromJson(data, id: doc.id);
+          todos.add(dto);
+          log('✅ TodoDto 파싱 성공: ${dto.title} (${dto.id})');
+        } catch (e) {
+          log(
+            '❌ TodoDto.fromJson 실패: project=$projectId, todoId=${doc.id}, error=$e',
+          );
+          // continue; // 생략 가능
+        }
+      }
       return Result.ok(todos);
     } catch (e) {
+      log('❌ TodoDto 파싱 실패: error: $e');
       return Result.error(
         Exception('Failed to load todos for project $projectId: $e'),
       );

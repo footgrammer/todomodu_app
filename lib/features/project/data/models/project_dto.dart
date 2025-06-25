@@ -29,16 +29,16 @@ class ProjectDto {
 
   factory ProjectDto.fromJson(Map<String, dynamic> json) {
     return ProjectDto(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
+      id: json['id'] as String ?? '',
+      title: json['title'] as String ?? '',
+      description: json['description'] as String ?? '',
       // Timestamp → DateTime
-      startDate: (json['startDate'] as Timestamp).toDate(),
-      endDate: (json['endDate'] as Timestamp).toDate(),
-      ownerId: json['ownerId'] as String,
-      color: json['color'] as int,
+      startDate: (json['startDate'] as Timestamp).toDate() ?? DateTime.now(),
+      endDate: (json['endDate'] as Timestamp).toDate() ?? DateTime.now(),
+      ownerId: json['ownerId'] as String ?? '',
+      color: json['color'] as int ?? 4294240446,
       invitationCode: json['invitationCode'] as String,
-      isDone: json['isDone'] as bool,
+      isDone: json['isDone'] as bool ?? false,
     );
   }
 

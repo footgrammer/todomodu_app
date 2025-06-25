@@ -5,7 +5,6 @@ import 'package:todomodu_app/features/project/data/datasources/project_data_sour
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/shared/types/result.dart';
-import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 
 class ProjectDataSourceImpl implements ProjectDataSource {
   final FirebaseFirestore _firestore;
@@ -22,7 +21,7 @@ class ProjectDataSourceImpl implements ProjectDataSource {
               .collectionGroup('members')
               .where('userId', isEqualTo: userId)
               .get();
-
+      log('members 문서 수 : ${memberDocs.docs.length}');
       // 2. 각 member 문서의 상위 projectId 추출
       final projectIds =
           memberDocs.docs
@@ -46,6 +45,9 @@ class ProjectDataSourceImpl implements ProjectDataSource {
       );
 
       //4. 유효한 프로젝트만 필터링
+      log(
+        'project list 수 : ${projectList.whereType<ProjectDto>().toList().length}',
+      );
       return projectList.whereType<ProjectDto>().toList();
     } catch (e, stack) {
       log('🔥 프로젝트 불러오기 실패: $e\n$stack');
@@ -140,6 +142,7 @@ class ProjectDataSourceImpl implements ProjectDataSource {
             'projectId': projectRef.id,
             'title': subtask.title,
             'assigneeId': '',
+            'isDone': false,
           });
         }
       }

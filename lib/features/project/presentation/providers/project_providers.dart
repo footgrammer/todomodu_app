@@ -5,6 +5,7 @@ import 'package:todomodu_app/features/project/data/repositories/project_reposito
 import 'package:todomodu_app/features/project/domain/repositories/project_repository.dart';
 import 'package:todomodu_app/features/project/domain/usecases/create_project_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_id_usecase.dart';
+import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_usecase.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_list_state.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
@@ -24,12 +25,13 @@ final projectRepositoryProvider = Provider<ProjectRepository>((ref) {
   );
 });
 
-final fetchProjectsByUserIdUsecaseProvider =
-    Provider<FetchProjectsByUserIdUsecase>((ref) {
-      return FetchProjectsByUserIdUsecase(
-        projectRepository: ref.read(projectRepositoryProvider),
-      );
-    });
+final fetchProjectsByUserUsecaseProvider = Provider<FetchProjectsByUserUsecase>(
+  (ref) {
+    return FetchProjectsByUserUsecase(
+      projectRepository: ref.read(projectRepositoryProvider),
+    );
+  },
+);
 
 final projectListViewModelProvider =
     NotifierProvider<ProjectListViewModel, ProjectListState>(() {
@@ -42,5 +44,12 @@ final projectCreateViewModelProvider =
     });
 
 final createProjectUsecaseProvider = Provider<CreateProjectUsecase>((ref) {
-  return CreateProjectUsecase(ref.watch(projectRepository));
+  return CreateProjectUsecase(ref.watch(projectRepositoryProvider));
 });
+
+final fetchProjectsByUserIdUsecaseProvider =
+    Provider<FetchProjectsByUserIdUsecase>((ref) {
+      return FetchProjectsByUserIdUsecase(
+        projectRepository: ref.read(projectRepositoryProvider),
+      );
+    });

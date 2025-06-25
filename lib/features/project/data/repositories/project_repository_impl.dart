@@ -94,6 +94,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
   @override
   Future<List<Project>> fetchProjectsByUserId(String userId) async {
     final projectDtos = await _dataSource.fetchProjectsByUserId(userId);
+    log('repo_impl dto 수 : ${projectDtos.length}');
     try {
       final projects = await Future.wait(
         projectDtos.map((dto) async {
@@ -101,41 +102,57 @@ class ProjectRepositoryImpl implements ProjectRepository {
           final memberIdsResult = await _dataSource.getMemberIdsByProjectId(
             dto.id,
           );
-          if (memberIdsResult is! Ok<List<String>>) return null;
+          if (memberIdsResult is! Ok<List<String>>) {
+            log('⚠️ 멤버 ID 가져오기 실패: ${dto.id}');
+            return null;
+          }
           final memberIds = memberIdsResult.value;
 
           // 2. 멤버 정보 가져오기
           final membersResult = await _userRepository.getUsersByIds(memberIds);
-          if (membersResult is! Ok<List<UserEntity>>) return null;
+          if (membersResult is! Ok<List<UserEntity>>) {
+            log('⚠️ 멤버 정보 가져오기 실패: ${dto.id}');
+            return null;
+          }
           final members = membersResult.value;
 
           // 3. 투두 정보 가져오기 (현재 생략)
           final todosResult = await _todoRepository
               .getTodosWithSubtasksByProjectId(dto.id);
-          if (todosResult is! Ok<List<Todo>>) return null;
+          log('⚠️ TODO Result: ${todosResult}');
+          if (todosResult is! Ok<List<Todo>>) {
+            log('⚠️ TODO 가져오기 실패: ${dto.id}');
+            return null;
+          }
           final todos = todosResult.value;
 
           // 4. Owner 찾기
-          final owner = members.firstWhere(
-            (m) => m.userId == dto.ownerId,
-            orElse: () {
-              throw Exception(
-                'Owner with ID ${dto.ownerId} not found among project members.',
-              );
-            },
-          );
-
-          // 5. DTO → Entity 매핑
-          return dto.toEntity(
-            owner: owner,
-            members: members,
-            todos: todos, // 투두 연결 필요 시 주석 해제
-          );
+          try {
+            final owner = members.firstWhere(
+              (m) => m.userId == dto.ownerId,
+              orElse: () {
+                throw Exception(
+                  'Owner with ID ${dto.ownerId} not found among project members.',
+                );
+              },
+            );
+            // 5. DTO → Entity 매핑
+            return dto.toEntity(
+              owner: owner,
+              members: members,
+              todos: todos, // 투두 연결 필요 시 주석 해제
+            );
+          } catch (e) {
+            log(
+              '⚠️ Owner 찾기 실패: ${dto.ownerId} not in members for project ${dto.id}',
+            );
+          }
         }),
       );
 
       // 6. null 필터링 후 반환
       final validProjects = projects.whereType<Project>().toList();
+      log('repo_impl validProjects 수 : ${validProjects.length}');
       return validProjects;
       // return projectDtos.map((dto) => dto.toEntity(...)).toList(); // toEntity는 owner/members/todos 넣어야 함
     } catch (e) {

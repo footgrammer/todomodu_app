@@ -14,7 +14,7 @@ class ProjectCardList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return (projects != null && projects!.length != 0)
+    return (projects != null && projects!.isNotEmpty)
         ? Expanded(
           child: ListView.separated(
             itemCount: projects == null ? 0 : projects!.length,
