@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/retrieve_notices_by_projects_usecase.dart';
@@ -123,5 +124,22 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
             .toList();
 
     state = state.copyWith(selectedNotices: filtered);
+  }
+
+  Color getColorByNotice(Notice notice){
+    return state.projects.firstWhere((p) => p.id == notice.projectId).color;
+  }
+
+  void onClickAllChip(){
+    if(state.selectedProjects.length != state.projects.length){
+      state = state.copyWith(selectedProjects: List.from(state.projects));
+    } else {
+      state = state.copyWith(selectedNotices: []);
+    }
+    filterNoticesBySelection();
+  }
+
+  bool isAllProjectsSelected(){
+    return state.selectedProjects.length != state.projects.length;
   }
 }

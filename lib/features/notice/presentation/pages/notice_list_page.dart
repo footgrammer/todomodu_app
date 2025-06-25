@@ -18,7 +18,7 @@ class NoticeListPage extends ConsumerStatefulWidget {
 
 class _NoticeListPageState extends ConsumerState<NoticeListPage> {
   bool _initialized = false;
-  
+
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue<UserEntity?>>(userProvider, (prev, next) {
@@ -31,6 +31,7 @@ class _NoticeListPageState extends ConsumerState<NoticeListPage> {
 
     final userAsync = ref.watch(userProvider);
     final noticeListState = ref.watch(noticeListViewModelProvider);
+    final noticeListVm = ref.watch(noticeListViewModelProvider.notifier);
 
     return SafeArea(
       child: Scaffold(
@@ -72,9 +73,25 @@ class _NoticeListPageState extends ConsumerState<NoticeListPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: ProjectChipList(
-                    projects: noticeListState.projects,
-                    selectedProjects: noticeListState.selectedProjects,
+                  child: Row(
+                    children: [
+                      ChoiceChip(
+                        label: const Text('전체'),
+                        selected: !noticeListVm.isAllProjectsSelected(),
+                        showCheckmark: false,
+                        shape: const StadiumBorder(side: BorderSide.none),
+                        onSelected: (_) {
+                          noticeListVm.onClickAllChip();
+                        },
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: ProjectChipList(
+                          projects: noticeListState.projects,
+                          selectedProjects: noticeListState.selectedProjects,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 10),
