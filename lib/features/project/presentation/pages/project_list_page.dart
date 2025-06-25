@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
@@ -60,12 +59,17 @@ class ProjectListPage extends ConsumerWidget {
         ),
         body: Padding(
           padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              ProjectSearchBar(controller: controller),
-              SizedBox(height: 16),
-              ProjectCardList(projects: state.projects),
-            ],
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await viewModel.fetchProjectsByUserId();
+            },
+            child: Column(
+              children: [
+                ProjectSearchBar(controller: controller),
+                SizedBox(height: 16),
+                ProjectCardList(projects: state.projects),
+              ],
+            ),
           ),
         ),
 
