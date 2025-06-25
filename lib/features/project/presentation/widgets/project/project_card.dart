@@ -87,7 +87,7 @@ class ProjectCard extends ConsumerWidget {
     );
     if (isMyIdIncluded) {
       // 팀원이면
-      navigateToPage(context, ProjectDetailPage(projectId: project.id));
+      navigateToPage(context, ProjectDetailPage(project: project));
     } else {
       // 팀원이 아니면 가입 다이얼로그 띄우기
       CustomYesOrNoDialog(
@@ -103,7 +103,7 @@ class ProjectCard extends ConsumerWidget {
               .read(projectListViewModelProvider.notifier)
               .addMemberToProject(projectId: project.id, userId: user.userId);
 
-          replaceAllWithPage(context, ProjectDetailPage(projectId: project.id));
+          replaceAllWithPage(context, ProjectDetailPage(project: project));
         },
         onNegativePressed: () {
           // 취소 로직
