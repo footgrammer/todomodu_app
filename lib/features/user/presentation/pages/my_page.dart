@@ -1,13 +1,22 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:todomodu_app/features/user/presentation/pages/closed_project_list_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/notification_settings_page.dart';
+import 'package:todomodu_app/features/user/presentation/pages/splash/splash_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/terms_and_privacy_page.dart';
+import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/custom_menu_bar.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/edit_nickname_dialog.dart';
-import 'package:todomodu_app/features/user/presentation/widgets/logout_dialog.dart';
+import 'package:todomodu_app/features/user/presentation/widgets/custom_dialog.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/my_profile_image.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
@@ -131,7 +140,39 @@ class MyPage extends ConsumerWidget {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (context) => LogoutDialog(),
+                            builder:
+                                (context) => CustomDialog(
+                                  title: '로그아웃',
+                                  subTitle: '로그아웃하시겠습니까?',
+                                  onConfirmed: () async {
+                                    final authRepo = ref.read(authProvider);
+                                    await authRepo.signOut();
+                                    ref.invalidate(userProvider);
+                                    Navigator.of(context)
+                                      ..pop()
+                                      ..pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) => LoginPage(),
+                                        ),
+                                      );
+                                  },
+                                ),
+                          );
+                        },
+                      ),
+                      CustomMenuBar(
+                        text: '회원 탈퇴',
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => CustomDialog(
+                                  title: '탈퇴',
+                                  subTitle: '정말 탈퇴하시겠습니까?',
+                                  onConfirmed: () async {
+                                    withdraw(context);
+                                  },
+                                ),
                           );
                         },
                       ),
@@ -142,5 +183,80 @@ class MyPage extends ConsumerWidget {
             );
       },
     );
+  }
+}
+
+Future<void> reauthenticateWithGoogle() async {
+  final googleUser = await GoogleSignIn().signIn();
+  final googleAuth = await googleUser?.authentication;
+
+  if (googleAuth == null) throw Exception("Google auth failed");
+
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
+  );
+
+  await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(
+    credential,
+  );
+}
+
+Future<void> reauthenticateWithApple() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) throw Exception('사용자가 로그인되어 있지 않습니다.');
+
+  final appleCredential = await SignInWithApple.getAppleIDCredential(
+    scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ],
+  );
+
+  final oauthCredential = OAuthProvider("apple.com").credential(
+    idToken: appleCredential.identityToken,
+    accessToken: appleCredential.authorizationCode,
+  );
+
+  await user.reauthenticateWithCredential(oauthCredential);
+}
+
+Future<void> withdraw(BuildContext context) async {
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (user == null) {
+    log('사용자 없음');
+    return;
+  }
+
+  try {
+    final providerIds = user.providerData.map((e) => e.providerId).toList();
+
+    if (providerIds.contains('google.com')) {
+      log('구글 연동 유저');
+      await reauthenticateWithGoogle();
+    } else if (providerIds.contains('apple.com')) {
+      log('애플 연동 유저');
+      await reauthenticateWithApple();
+    } else if (providerIds.contains('oidc.kakao')) {
+      // 카카오는 다로 처
+      log('카카오 연동 유저');
+    }
+
+    await FirebaseAuth.instance.currentUser!.delete(); // firebaseAuth 계정 삭제
+    log('firebaseAuth 계정 삭제');
+    final userId = user.uid;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .delete(); // 유저 문서 삭제
+    log('문서 삭제 완료');
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear(); // 분기 초기화
+    log('분기 초기화');
+
+    replaceAllWithPage(context, SplashPage()); // 스플래시화면, 로그인화면 고민중
+  } catch (e) {
+    log('회원탈퇴 실패: $e');
   }
 }
