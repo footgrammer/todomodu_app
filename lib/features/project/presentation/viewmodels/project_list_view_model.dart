@@ -31,4 +31,16 @@ class ProjectListViewModel extends Notifier<ProjectListState> {
       state = state.copyWith(projects: []);
     }
   }
+
+  Future<void> getProjectByInvitationCode(String code) async {
+    //usecase 가져오기
+    final usecase = ref.read(getProjectByInvitationCodeUsecaseProvider);
+    final project = await usecase.execute(code);
+    if (project != null) {
+      //검색 성공 : 상태에 저장
+      state = state.copyWith(projects: [project]);
+    } else {
+      state = state.copyWith(projects: []);
+    }
+  }
 }

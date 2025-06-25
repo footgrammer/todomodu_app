@@ -157,4 +157,54 @@ class ProjectDataSourceImpl implements ProjectDataSource {
       log('error : $error');
     }
   }
+
+  @override
+  Future<ProjectDto?> getProjectByInvitationCode(String code) async {
+    try {
+      final query =
+          await _firestore
+              .collection('projects')
+              .where('invitationCode', isEqualTo: code)
+              .limit(1)
+              .get();
+
+      if (query.docs.isEmpty) return null;
+      final doc = query.docs.first;
+      return ProjectDto.fromJson({...doc.data(), 'id': doc.id});
+    } catch (error) {
+      log('project_data_source_impl/getProjectByInvitationCode error : $error');
+    }
+  }
+
+  //팀원 추가하기
+  @override
+  Future<void> addMemberToProject({
+    required String projectId,
+    required String userId,
+  }) async {
+    final memberRef = _firestore
+        .collection('projects')
+        .doc(projectId)
+        .collection('members')
+        .doc(userId);
+
+    await memberRef.set({'userId': userId});
+  }
+
+  @override
+  Future<void> deleteProject(String projectId) async {
+    final projectRef = _firestore.collection('projects').doc(projectId);
+
+    // 1. 서브컬렉션 삭제
+    final subCollections = ['todos', 'notices', 'members', 'subtasks'];
+    for (final name in subCollections) {
+      final querySnapshot = await projectRef.collection(name).get();
+      for (final doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+    }
+
+    // 2. 최종적으로 project 문서 삭제
+    await projectRef.delete();
+  }
 }

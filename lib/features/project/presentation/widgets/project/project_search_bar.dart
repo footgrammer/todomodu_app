@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectSearchBar extends ConsumerWidget {
@@ -27,6 +28,12 @@ class ProjectSearchBar extends ConsumerWidget {
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
               ),
+              onFieldSubmitted: (code) {
+                ref
+                    .read(projectListViewModelProvider.notifier)
+                    .getProjectByInvitationCode(code.trim());
+                _searchProject(code);
+              },
             ),
           ),
         ],
@@ -34,3 +41,5 @@ class ProjectSearchBar extends ConsumerWidget {
     );
   }
 }
+
+void _searchProject(String code) {}
