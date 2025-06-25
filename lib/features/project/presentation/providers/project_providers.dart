@@ -53,3 +53,6 @@ final fetchProjectsByUserIdUsecaseProvider =
         projectRepository: ref.read(projectRepositoryProvider),
       );
     });
+
+// 프로젝트 가져올 때 1번만 가져올 수 있도록 함
+final hasFetchedProvider = StateProvider<bool>((ref) => false);

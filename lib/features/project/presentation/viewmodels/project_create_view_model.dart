@@ -122,6 +122,6 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   }
 
   void reset() {
-    state = ProjectCreateState();
+    state = ProjectCreateState(isLoading: false);
   }
 }

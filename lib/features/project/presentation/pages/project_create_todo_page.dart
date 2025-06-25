@@ -5,7 +5,9 @@ import 'package:todomodu_app/features/project/presentation/pages/project_create_
 import 'package:todomodu_app/features/project/presentation/pages/project_create_subtask_page.dart';
 import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
+import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_todo_list.dart';
+import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
@@ -17,6 +19,8 @@ class ProjectCreateTodoPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // 로딩 관련 상태 초기화하기
+    ref.invalidate(projectProgressProvider);
     final todos = response.todos;
     final selectedTodos = ref.watch(
       projectCreateViewModelProvider.select((state) => state.selectedTodos),
@@ -33,7 +37,14 @@ class ProjectCreateTodoPage extends ConsumerWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            navigateToPage(context, ProjectCreatePage());
+            // 🔄 로딩 상태 초기화
+            ref.invalidate(projectProgressProvider);
+
+            // 🧼 생성 상태 초기화 (ViewModel의 reset 사용)
+            ref.read(projectCreateViewModelProvider.notifier).reset();
+
+            // 👈 메인으로 이동
+            replaceAllWithPage(context, MainPage());
           },
           child: Icon(Icons.arrow_back_ios),
         ),

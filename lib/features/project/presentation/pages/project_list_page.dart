@@ -15,8 +15,6 @@ final projectCodeControllerProvider =
       (ref) => TextEditingController(),
     );
 
-final _hasFetchedProvider = StateProvider<bool>((ref) => false);
-
 class ProjectListPage extends ConsumerWidget {
   ProjectListPage({super.key});
   @override
@@ -25,10 +23,10 @@ class ProjectListPage extends ConsumerWidget {
     final viewModel = ref.read(projectListViewModelProvider.notifier);
 
     //한번만 실행될 수 있도록
-    final hasFetched = ref.watch(_hasFetchedProvider);
+    final hasFetched = ref.watch(hasFetchedProvider);
     if (!hasFetched) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(_hasFetchedProvider.notifier).state = true;
+        ref.read(hasFetchedProvider.notifier).state = true;
         viewModel.fetchProjectsByUserId();
       });
     }

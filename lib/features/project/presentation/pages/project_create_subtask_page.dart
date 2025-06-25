@@ -6,13 +6,13 @@ import 'package:todomodu_app/features/ai/domain/models/openai_response.dart'
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
 import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
+import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_todo_subtask_list.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
-import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
@@ -37,6 +37,19 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            // 🔄 로딩 상태 초기화
+            ref.invalidate(projectProgressProvider);
+
+            // 🧼 생성 상태 초기화 (ViewModel의 reset 사용)
+            ref.read(projectCreateViewModelProvider.notifier).reset();
+
+            // 👈 메인으로 이동
+            replaceAllWithPage(context, MainPage());
+          },
+          child: Icon(Icons.arrow_back_ios),
+        ),
         title: Row(children: [Text('프로젝트 추가하기', style: AppTextStyles.header2)]),
       ),
       body: Padding(
@@ -161,6 +174,15 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
         .read(projectCreateViewModelProvider.notifier)
         .createProject(project, createProjectUsecase);
 
+    ref.invalidate(hasFetchedProvider); // 새로 프로젝트를 불러올 수 있도록 상태 초기화
+
+    // 🔄 로딩 상태 초기화
+    ref.invalidate(projectProgressProvider);
+
+    // 🧼 생성 상태 초기화 (ViewModel의 reset 사용)
+    ref.read(projectCreateViewModelProvider.notifier).reset();
+
+    // 👈 메인으로 이동
     replaceAllWithPage(context, MainPage());
   }
 }
