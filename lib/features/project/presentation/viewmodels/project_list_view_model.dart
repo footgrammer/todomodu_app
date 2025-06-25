@@ -43,4 +43,8 @@ class ProjectListViewModel extends Notifier<ProjectListState> {
       state = state.copyWith(projects: []);
     }
   }
+
+  void setFetchType(String type) {
+    state = state.copyWith(fetchType: type);
+  }
 }

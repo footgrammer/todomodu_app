@@ -9,6 +9,7 @@ class ProjectSearchBar extends ConsumerWidget {
   ProjectSearchBar({super.key, required this.controller});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final projectListState = ref.watch(projectListViewModelProvider);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
@@ -29,10 +30,15 @@ class ProjectSearchBar extends ConsumerWidget {
                 enabledBorder: InputBorder.none,
               ),
               onFieldSubmitted: (code) {
-                ref
-                    .read(projectListViewModelProvider.notifier)
-                    .getProjectByInvitationCode(code.trim());
-                _searchProject(code);
+                final viewModel = ref.read(
+                  projectListViewModelProvider.notifier,
+                );
+                if (code.trim() == '') {
+                  viewModel.fetchProjectsByUserId();
+                } else {
+                  viewModel.setFetchType('invitationCode');
+                  viewModel.getProjectByInvitationCode(code.trim());
+                }
               },
             ),
           ),
@@ -41,5 +47,3 @@ class ProjectSearchBar extends ConsumerWidget {
     );
   }
 }
-
-void _searchProject(String code) {}
