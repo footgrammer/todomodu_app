@@ -35,7 +35,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity?>> {
 }
 
 final userViewModelProvider =
-    StateNotifierProvider.autoDispose<UserViewModel, AsyncValue<UserEntity?>>((
+    StateNotifierProvider<UserViewModel, AsyncValue<UserEntity?>>((
       ref,
     ) {
       final usecase = ref.read(getCurrentUserUsecaseProvider);

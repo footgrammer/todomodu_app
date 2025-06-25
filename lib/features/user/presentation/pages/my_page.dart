@@ -149,7 +149,7 @@ class MyPage extends ConsumerWidget {
                                   onConfirmed: () async {
                                     final authRepo = ref.read(authProvider);
                                     await authRepo.signOut();
-                                    ref.invalidate(userProvider);
+                                    ref.invalidate(userViewModelProvider); // userViewModel dispose
                                     Navigator.of(context)
                                       ..pop()
                                       ..pushReplacement(
@@ -248,6 +248,8 @@ Future<void> withdraw(BuildContext context, WidgetRef ref) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear(); // 분기 초기화
     log('분기 초기화');
+
+    ref.invalidate(userViewModelProvider); // userViewModel dispose
 
     replaceAllWithPage(context, SplashPage()); // 스플래시화면, 로그인화면 고민중
   } catch (e) {
