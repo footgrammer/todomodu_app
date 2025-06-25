@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
@@ -9,6 +11,42 @@ class ProjectDataSourceImpl implements ProjectDataSource {
 
   ProjectDataSourceImpl({required FirebaseFirestore firestore})
     : _firestore = firestore;
+
+  @override
+  Future<List<ProjectDto>> fetchProjectsByUserId(String userId) async {
+    try {
+      final memberDocs =
+          await _firestore
+              .collectionGroup('members')
+              .where('userId', isEqualTo: userId)
+              .get();
+
+      final projectIds =
+          memberDocs.docs
+              .map((doc) => doc.reference.parent.parent?.id)
+              .whereType<String>()
+              .toSet();
+
+      if (projectIds.isEmpty) return [];
+
+      final projectList = await Future.wait(
+        projectIds.map((id) async {
+          final doc = await _firestore.collection('projects').doc(id).get();
+          if (!doc.exists) return null;
+
+          final data = doc.data();
+          if (data == null) return null;
+
+          return ProjectDto.fromJson({...data, 'id': doc.id});
+        }),
+      );
+
+      return projectList.whereType<ProjectDto>().toList();
+    } catch (e, stack) {
+      log('Failed to load projects: $e\n$stack');
+      return [];
+    }
+  }
 
   @override
   Future<Result<List<ProjectDto>>> getProjectsByUserId(String userId) async {

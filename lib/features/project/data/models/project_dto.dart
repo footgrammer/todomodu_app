@@ -13,7 +13,7 @@ class ProjectDto {
   String ownerId;
   String invitationCode;
   bool isDone;
-  Color color;
+  int color;
 
   ProjectDto({
     required this.id,
@@ -36,7 +36,7 @@ class ProjectDto {
       startDate: (json['startDate'] as Timestamp).toDate(),
       endDate: (json['endDate'] as Timestamp).toDate(),
       ownerId: json['ownerId'] as String,
-      color: Color(json['color'] ?? Color(0xFFFFFFFF)),
+      color: json['color'] as int,
       invitationCode: json['invitationCode'] as String,
       isDone: json['isDone'] as bool,
     );
@@ -48,7 +48,7 @@ class ProjectDto {
       'id': id,
       'title': title,
       'description': description,
-      'color': color.value, // Color → int 저장
+      'color': color, // Color → int 저장
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),
       'ownerId': ownerId,
@@ -67,7 +67,7 @@ class ProjectDto {
       ownerId: entity.owner.userId,
       invitationCode: entity.invitationCode,
       isDone: entity.isDone,
-      color: entity.color,
+      color: entity.color.value,
     );
   }
 
@@ -87,7 +87,7 @@ class ProjectDto {
       todos: todos,
       invitationCode: invitationCode,
       isDone: isDone,
-      color: color,
+      color: Color(color),
     );
   }
 }

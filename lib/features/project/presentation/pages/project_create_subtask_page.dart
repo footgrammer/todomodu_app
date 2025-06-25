@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
@@ -15,7 +16,15 @@ import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 class ProjectCreateSubtaskPage extends ConsumerWidget {
-  const ProjectCreateSubtaskPage({super.key});
+  List<dynamic> responseTodos;
+  DateTime projectStartDate;
+  DateTime projectEndDate;
+  ProjectCreateSubtaskPage({
+    super.key,
+    required this.responseTodos,
+    required this.projectStartDate,
+    required this.projectEndDate,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -80,29 +89,83 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
     BuildContext context,
     ProjectCreateState state,
   ) async {
-    final userEntity = await ref.read(userViewModelProvider.notifier).fetchUser();
-    final invitationCode = '';
-    final color = AppColors.colorList1;
-    List<Todo> todos = state.selectedTodos.map((todoTitle){
-      final subtasks = state.selectedSubtasks[todoTitle]!.map((subtaskTitle){
-        return Subtask(id: '', title: subtaskTitle, isDone: false, todoId: '', projectId: '');
-      }).toList();
-      return Todo(
-        id: '',
-        projectId: '',
-      title: todoTitle,
-      subtasks: subtasks,
-      startDate: DateTime(2025-05-10),
-      endDate: DateTime(2025-05-30),
-      isDone: false
+    final userEntity =
+        await ref.read(userViewModelProvider.notifier).fetchUser();
+
+    List<Color> colorList = [
+      AppColors.colorList1,
+      AppColors.colorList2,
+      AppColors.colorList3,
+      AppColors.colorList4,
+      AppColors.colorList5,
+      AppColors.colorList6,
+      AppColors.colorList7,
+      AppColors.colorList8,
+      AppColors.colorList9,
+      AppColors.colorList10,
+      AppColors.colorList11,
+      AppColors.colorList12,
+      AppColors.colorList13,
+      AppColors.colorList14,
+      AppColors.colorList15,
+      AppColors.colorList16,
+    ];
+    final random = Random();
+    final color = colorList[random.nextInt(16)];
+    final invitationCode = (random.nextInt(900000) + 100000).toString();
+    List<Todo> finalTodos =
+        state.selectedTodos.map((todoTitle) {
+          final subtasks =
+              state.selectedSubtasks[todoTitle]!.map((subtaskTitle) {
+                return Subtask(
+                  id: '',
+                  title: subtaskTitle,
+                  isDone: false,
+                  todoId: '',
+                  projectId: '',
+                );
+              }).toList();
+
+          final responseTodo =
+              responseTodos
+                  .where((todo) => todo.todoTitle == todoTitle)
+                  .toList()
+                  .first;
+          return Todo(
+            id: '',
+            projectId: '',
+            title: todoTitle,
+            subtasks: subtasks,
+            startDate: DateTime.parse(responseTodo.todoStartDate),
+            endDate: DateTime.parse(responseTodo.todoEndDate),
+            isDone: false,
+          );
+        }).toList();
+    if (userEntity == null) {
+      throw Exception('프로젝트 생성에 필요한 필수 정보가 누락되었습니다.');
+    }
+
+    final project = Project(
+      id: '',
+      title: state.title,
+      description: state.description,
+      startDate: projectStartDate,
+      endDate: projectEndDate,
+      owner: userEntity!,
+      members: [userEntity],
+      todos: finalTodos,
+      invitationCode: invitationCode,
+      isDone: false,
+      color: color,
     );
-    } ).toList();
-    final project = Project(title: state.title, description: state.description, startDate: state.startDate!, endDate: state.endDate!, owner: userEntity!, members: [userEntity!], todos: todos, invitationCode: invitationCode, isDone: false, color: color)
+    // await ref
+    //     .read(projectCreateViewModelProvider.notifier)
+    //     .createProject(
+    //       project,
+    //       finalTodos,
+    //       ref.read(createProjectUsecaseProvider),
+    //     );
 
-    await ref
-        .read(projectCreateViewModelProvider.notifier)
-        .createProject(project, todos, ref.read(createProjectUsecaseProvider));
-
-    navigateToPage(context, MainPage());
+    // navigateToPage(context, MainPage());
   }
 }

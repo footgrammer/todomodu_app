@@ -33,7 +33,6 @@ class ProjectListPage extends ConsumerWidget {
       }
     });
 
-    final userAsync = ref.watch(userProvider);
     final noticeListState = ref.watch(noticeListViewModelProvider);
 
     return GestureDetector(
@@ -59,30 +58,15 @@ class ProjectListPage extends ConsumerWidget {
             ),
           ],
         ),
-        body: userAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('에러 발생: $e')),
-          data: (user) {
-            if (user == null) {
-              return const Center(child: Text('로그인이 필요합니다.'));
-            }
-            if (noticeListState.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (noticeListState.error != null) {
-              return Center(child: Text('에러: ${noticeListState.error}'));
-            }
-            return Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  ProjectSearchBar(controller: controller),
-                  SizedBox(height: 16),
-                  ProjectCardList(projects: noticeListState.projects),
-                ],
-              ),
-            );
-          },
+        body: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              ProjectSearchBar(controller: controller),
+              SizedBox(height: 16),
+              ProjectCardList(projects: noticeListState.projects),
+            ],
+          ),
         ),
 
         // ➕ 플로팅 버튼

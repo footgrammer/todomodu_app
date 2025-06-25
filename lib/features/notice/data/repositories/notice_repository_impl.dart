@@ -45,7 +45,9 @@ class NoticeRepositoryImpl implements NoticeRepository {
   Future<Result<List<Notice>>> fetchNoticesbyProjects(
     List<Project> projects,
   ) async {
-    final result = await _datasource.getNoticesByProjectIds(projects.map((e) => e.id,).toList());
+    final result = await _datasource.getNoticesByProjectIds(
+      projects.map((e) => e.id).toList(),
+    );
 
     return switch (result) {
       Ok(value: final dtoList) => Result.ok(

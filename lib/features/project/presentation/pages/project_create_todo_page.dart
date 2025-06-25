@@ -92,7 +92,14 @@ class ProjectCreateTodoPage extends ConsumerWidget {
       viewModel.selectAllSubtasks(todos); // 상태 변경
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ProjectCreateSubtaskPage()),
+        MaterialPageRoute(
+          builder:
+              (context) => ProjectCreateSubtaskPage(
+                responseTodos: todos,
+                projectStartDate: DateTime.parse(response.projectStartDate),
+                projectEndDate: DateTime.parse(response.projectEndDate),
+              ),
+        ),
       );
     });
   }
