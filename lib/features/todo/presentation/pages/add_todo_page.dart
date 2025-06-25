@@ -5,14 +5,18 @@ import 'package:todomodu_app/features/todo/presentation/widgets/submit_button.da
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/subtask/add_subtask_list.dart';
-import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
-import 'package:uuid/uuid.dart';
 
 class AddTodoPage extends ConsumerWidget {
   final String projectId;
+  final List<UserEntity> projectMembers;
 
-  const AddTodoPage({super.key, required this.projectId});
+  const AddTodoPage({
+    super.key,
+    required this.projectId,
+    required this.projectMembers,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,6 +54,7 @@ class AddTodoPage extends ConsumerWidget {
               AddSubtaskList(
                 projectId: projectId,
                 todoId: viewModel.pendingTodoId,
+                projectMembers: projectMembers,
               ),
             ],
           ),
@@ -61,9 +66,9 @@ class AddTodoPage extends ConsumerWidget {
         onPressed: () async {
           await viewModel.submitWithSubtasks();
           if (context.mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('할 일이 추가되었습니다')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('할 일이 추가되었습니다')),
+            );
             Navigator.pop(context);
           }
         },

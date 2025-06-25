@@ -206,15 +206,18 @@ class TodoPage extends ConsumerWidget {
                             const SizedBox(height: 16),
                             Expanded(
                               child: ListView.builder(
-                                padding: const EdgeInsets.only(bottom: 64),
+                                padding: const EdgeInsets.only(bottom: 56),
                                 itemCount: filtered.length,
-                                itemBuilder: (context, i) => TodoCard(
-                                  todo: filtered[i],
-                                  showProjectTitle: true,
-                                  showDateRange: false,
-                                  todoTitleTextStyle: AppTextStyles.body3.copyWith(
-                                    color: AppColors.grey700,
-                                  ),),
+                                itemBuilder: (context, i) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: TodoCard(
+                                    todo: filtered[i],
+                                    showProjectTitle: true,
+                                    showDateRange: false,
+                                    todoTitleTextStyle: AppTextStyles.body3.copyWith(
+                                      color: AppColors.grey700,
+                                    ),),
+                                ),
                               ),
                             ),
                           ],

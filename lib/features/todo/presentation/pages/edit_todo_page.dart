@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/submit_button.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/todo_date_section.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/todo_title_input.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/subtask/edit_subtask_list.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
-import '../../domain/entities/todo.dart';
 import '../providers/edit_todo_viewmodel_provider.dart';
-import '../widgets/todo_date_section.dart';
-import '../widgets/submit_button.dart';
-import '../widgets/todo_title_input.dart';
-import '../widgets/subtask/add_subtask_list.dart';
 
 class EditTodoPage extends ConsumerWidget {
   final Todo todo;
+  final List<UserEntity> projectMembers;
 
-  const EditTodoPage({super.key, required this.todo});
+  const EditTodoPage({
+    super.key,
+    required this.todo,
+    required this.projectMembers,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,20 +71,21 @@ class EditTodoPage extends ConsumerWidget {
               const SizedBox(height: 32),
               Text(
                 '할 일 목록',
-                style: AppTextStyles.body3.copyWith(color: AppColors.grey500,
-              ),),
+                style: AppTextStyles.body3.copyWith(color: AppColors.grey500),
+              ),
               const SizedBox(height: 8),
               EditSubtaskList(
                 projectId: todo.projectId,
                 todoId: todo.id,
+                projectMembers: projectMembers,
               ),
             ],
           ),
         ),
       ),
       bottomNavigationBar: SubmitButton(
-         enabled: viewModel.canSubmit,
         label: '수정 완료',
+        enabled: viewModel.canSubmit,
         onPressed: () async {
           await viewModel.submit();
           if (context.mounted) {

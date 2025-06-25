@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/user_search_bottom_sheet.dart';
+
 
 class SubtaskItem extends StatefulWidget {
   final Subtask subtask;
   final void Function(Subtask updated) onChanged;
   final VoidCallback onDelete;
+  final List<UserEntity> projectMembers;
 
   const SubtaskItem({
+    super.key,
     required this.subtask,
     required this.onChanged,
     required this.onDelete,
-    super.key,
+    required this.projectMembers,
   });
 
   @override
@@ -34,18 +38,25 @@ class _SubtaskItemState extends State<SubtaskItem> {
     widget.onChanged(widget.subtask.copyWith(title: _controller.text));
   }
 
-  void _onTapAssigneeEdit() async {
-    // 추후 bottom sheet 띄우기
-    // 현재는 더미 UserEntity 적용 (테스트 목적)
-    final dummyUser = UserEntity(
-      userId: '1',
-      name: '고한동',
-      profileImageUrl: '',
-      email: 'test@ex.com',
-      createdAt: DateTime.now(),
+  Future<void> _onTapAssigneeEdit() async {
+    final selected = await showModalBottomSheet<List<UserEntity>>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => UserSearchBottomSheet(
+        members: widget.projectMembers,
+        selectedUsers: widget.subtask.assignee != null
+            ? [widget.subtask.assignee!]
+            : [],
+        onConfirm: (users) {
+          Navigator.pop(context, users);
+        },
+      ),
     );
 
-    widget.onChanged(widget.subtask.copyWith(assignee: dummyUser));
+    if (selected != null && selected.isNotEmpty) {
+      widget.onChanged(widget.subtask.copyWith(assignee: selected.first));
+    }
   }
 
   @override
@@ -81,14 +92,14 @@ class _SubtaskItemState extends State<SubtaskItem> {
                       hintText: '세부 할 일을 입력하세요',
                       border: InputBorder.none,
                       hintStyle: AppTextStyles.body2.copyWith(color: AppColors.grey400),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                       counterText: '',
                     ),
                     style: AppTextStyles.body2.copyWith(color: AppColors.grey800),
                   ),
                 ),
-
-                // 글자수 카운터
+                // 글자수
                 Positioned(
                   right: 16,
                   bottom: 8,
@@ -97,15 +108,14 @@ class _SubtaskItemState extends State<SubtaskItem> {
                     style: const TextStyle(fontSize: 12, color: AppColors.grey400),
                   ),
                 ),
-
-                // 담당자 아이콘 or 프로필
+                // 담당자 아이콘
                 Positioned(
                   right: 16,
-                  top: 12,
+                  top: 8,
                   child: GestureDetector(
                     onTap: _onTapAssigneeEdit,
                     child: assignee == null
-                        ? const Icon(Icons.person_add_alt_outlined, color: AppColors.grey900, size: 24)
+                        ? const Icon(Icons.person_add_alt, size: 20, color: AppColors.grey400)
                         : CircleAvatar(
                             radius: 10,
                             backgroundColor: Colors.grey[300],

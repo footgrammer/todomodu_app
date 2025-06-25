@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/subtask/subtask_item.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:uuid/uuid.dart';
 import '../../../domain/entities/subtask.dart';
@@ -10,8 +11,14 @@ import '../../viewmodels/subtask_viewmodel.dart';
 class AddSubtaskList extends ConsumerWidget {
   final String projectId;
   final String todoId;
+  final List<UserEntity> projectMembers;
 
-  const AddSubtaskList({super.key, required this.projectId, required this.todoId});
+  const AddSubtaskList({
+    super.key,
+    required this.projectId,
+    required this.todoId,
+    required this.projectMembers,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +34,7 @@ class AddSubtaskList extends ConsumerWidget {
                 return SubtaskItem(
                   key: ValueKey(subtask.id),
                   subtask: subtask,
+                  projectMembers: projectMembers,
                   onChanged: (updated) {
                     subtaskViewModel.update(updated);
                   },
