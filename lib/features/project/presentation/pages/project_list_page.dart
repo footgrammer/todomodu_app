@@ -33,7 +33,6 @@ class ProjectListPage extends ConsumerWidget {
         viewModel.fetchProjectsByUserId();
       });
     }
-    log('page project 수 : ${state.projects!.length}');
 
     final controller = ref.watch(projectCodeControllerProvider);
     return GestureDetector(

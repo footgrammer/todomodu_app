@@ -9,7 +9,6 @@ import 'package:todomodu_app/features/todo/domain/repositories/todo_repository.d
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/domain/repositories/user_repository.dart';
 import 'package:todomodu_app/shared/types/result.dart';
-import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 
 class ProjectRepositoryImpl implements ProjectRepository {
   final ProjectDataSource _dataSource;
@@ -94,7 +93,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
   @override
   Future<List<Project>> fetchProjectsByUserId(String userId) async {
     final projectDtos = await _dataSource.fetchProjectsByUserId(userId);
-    log('repo_impl dto 수 : ${projectDtos.length}');
     try {
       final projects = await Future.wait(
         projectDtos.map((dto) async {
@@ -103,7 +101,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
             dto.id,
           );
           if (memberIdsResult is! Ok<List<String>>) {
-            log('⚠️ 멤버 ID 가져오기 실패: ${dto.id}');
             return null;
           }
           final memberIds = memberIdsResult.value;
@@ -111,7 +108,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
           // 2. 멤버 정보 가져오기
           final membersResult = await _userRepository.getUsersByIds(memberIds);
           if (membersResult is! Ok<List<UserEntity>>) {
-            log('⚠️ 멤버 정보 가져오기 실패: ${dto.id}');
             return null;
           }
           final members = membersResult.value;
@@ -119,9 +115,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
           // 3. 투두 정보 가져오기 (현재 생략)
           final todosResult = await _todoRepository
               .getTodosWithSubtasksByProjectId(dto.id);
-          log('⚠️ TODO Result: ${todosResult}');
           if (todosResult is! Ok<List<Todo>>) {
-            log('⚠️ TODO 가져오기 실패: ${dto.id}');
             return null;
           }
           final todos = todosResult.value;
@@ -152,9 +146,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
 
       // 6. null 필터링 후 반환
       final validProjects = projects.whereType<Project>().toList();
-      log('repo_impl validProjects 수 : ${validProjects.length}');
       return validProjects;
-      // return projectDtos.map((dto) => dto.toEntity(...)).toList(); // toEntity는 owner/members/todos 넣어야 함
     } catch (e) {
       log('project_repository_impl : fetchProjectsByUserId $e');
       return [];

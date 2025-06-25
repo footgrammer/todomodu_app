@@ -18,7 +18,6 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity?>> {
   Future<UserEntity?> fetchUser() async {
     try {
       final user = await _usecase.execute().first;
-      log('fetchUser 성공: $user');
       state = AsyncValue.data(user);
       return user;
     } catch (e, st) {

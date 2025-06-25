@@ -25,7 +25,6 @@ class ProjectListViewModel extends Notifier<ProjectListState> {
         fetchProjectsByUserIdUsecaseProvider,
       );
       final projects = await fetchProjectsByUserIdUsecase.execute(user.userId);
-      log('viewmodel 수 : ${projects.length}');
       state = state.copyWith(projects: projects);
     } catch (e) {
       log('project_list_view_model error : $e');

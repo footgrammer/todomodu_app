@@ -21,7 +21,6 @@ class ProjectDataSourceImpl implements ProjectDataSource {
               .collectionGroup('members')
               .where('userId', isEqualTo: userId)
               .get();
-      log('members 문서 수 : ${memberDocs.docs.length}');
       // 2. 각 member 문서의 상위 projectId 추출
       final projectIds =
           memberDocs.docs
@@ -45,9 +44,6 @@ class ProjectDataSourceImpl implements ProjectDataSource {
       );
 
       //4. 유효한 프로젝트만 필터링
-      log(
-        'project list 수 : ${projectList.whereType<ProjectDto>().toList().length}',
-      );
       return projectList.whereType<ProjectDto>().toList();
     } catch (e, stack) {
       log('🔥 프로젝트 불러오기 실패: $e\n$stack');
