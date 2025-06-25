@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todomodu_app/features/user/data/models/user_dto.dart';
@@ -69,5 +71,17 @@ class UserDataSourceImpl implements UserDataSource {
       if (!doc.exists) return null;
       return UserDto.fromJson(doc.data()!);
     });
+  }
+
+  Future<UserDto?> getFutureUserByUserId(String userId) async {
+    try {
+      final doc = await _firestore.collection('users').doc(userId).get();
+      if (!doc.exists) return null;
+      return UserDto.fromJson(doc.data()!..['userId'] = doc.id);
+    } catch (e) {
+      log('user_data_source_impl/getFutureUserByUserId');
+      log('error : $e');
+      return null;
+    }
   }
 }

@@ -5,4 +5,5 @@ abstract interface class UserDataSource {
   Stream<UserDto?> getCurrentUser();
   Future<Result<List<UserDto>>> getUsersByIds(List<String> ids);
   Stream<UserDto?> getUserByUserId(String userId);
+  Future<UserDto?> getFutureUserByUserId(String userId);
 }

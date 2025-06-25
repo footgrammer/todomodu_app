@@ -258,7 +258,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
       owner: owner,
       members: members,
       todos: todos,
-      progress: 50.0,
+      progress: 10.0,
     );
   }
 
