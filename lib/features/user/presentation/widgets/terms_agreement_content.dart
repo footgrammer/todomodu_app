@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/terms_and_privacy_page.dart';
+import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
@@ -148,27 +150,36 @@ class _TermsAgreementContentState extends State<TermsAgreementContent> {
             }),
             const SizedBox(height: 24),
 
-            ElevatedButton(
-              onPressed:
-                  isButtonEnabled
-                      ? () {
-                        replaceAllWithPage(context, MainPage());
-                      }
-                      : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    isButtonEnabled ? AppColors.primary500 : AppColors.grey100,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                minimumSize: Size.fromHeight(56),
-              ),
-              child: Text(
-                '계속 진행하기',
-                style: AppTextStyles.subtitle1.copyWith(
-                  color: isButtonEnabled ? Colors.white : AppColors.grey400,
-                ),
-              ),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return ElevatedButton(
+                  onPressed:
+                      isButtonEnabled
+                          ? () {
+                            ref
+                                .read(userViewModelProvider.notifier)
+                                .fetchUser();
+                            replaceAllWithPage(context, MainPage());
+                          }
+                          : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        isButtonEnabled
+                            ? AppColors.primary500
+                            : AppColors.grey100,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    minimumSize: Size.fromHeight(56),
+                  ),
+                  child: Text(
+                    '계속 진행하기',
+                    style: AppTextStyles.subtitle1.copyWith(
+                      color: isButtonEnabled ? Colors.white : AppColors.grey400,
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
