@@ -22,12 +22,14 @@ class ProjectCreateTodoPage extends ConsumerWidget {
     // 로딩 관련 상태 초기화하기
     ref.invalidate(projectProgressProvider);
     final todos = response.todos;
-    final selectedTodos = ref.watch(
-      projectCreateViewModelProvider.select((state) => state.selectedTodos),
-    );
+    final state = ref.watch(projectCreateViewModelProvider);
+    final selectedTodos = state.selectedTodos;
     final viewModel = ref.read(projectCreateViewModelProvider.notifier);
     // ✅ 상태 변경은 build 이후에 수행
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModel.initialSubtasks.isEmpty) {
+        viewModel.cacheInitialSubtasks(state.selectedSubtasks);
+      }
       if (selectedTodos.isEmpty) {
         viewModel.selectAllTodos(todos);
       }
