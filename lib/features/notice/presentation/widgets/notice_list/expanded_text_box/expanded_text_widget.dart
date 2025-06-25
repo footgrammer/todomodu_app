@@ -41,7 +41,7 @@ class _ExpandedTextWidgetState extends State<ExpandedTextWidget>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                NoticeCheckButton(isChecked: false,),
+                // NoticeCheckButton(isChecked: false,),
                 if (isOverflowing)
                   FadeInTextToggleButton(
                     toggleTrueText: '접기',
