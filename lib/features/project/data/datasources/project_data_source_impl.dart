@@ -16,12 +16,14 @@ class ProjectDataSourceImpl implements ProjectDataSource {
   @override
   Future<List<ProjectDto>> fetchProjectsByUserId(String userId) async {
     try {
+      // 1. userId로 members 문서들 조회
       final memberDocs =
           await _firestore
               .collectionGroup('members')
               .where('userId', isEqualTo: userId)
               .get();
 
+      // 2. 각 member 문서의 상위 projectId 추출
       final projectIds =
           memberDocs.docs
               .map((doc) => doc.reference.parent.parent?.id)
@@ -30,6 +32,7 @@ class ProjectDataSourceImpl implements ProjectDataSource {
 
       if (projectIds.isEmpty) return [];
 
+      // 3. projectId로 projects 문서들 불러오기
       final projectList = await Future.wait(
         projectIds.map((id) async {
           final doc = await _firestore.collection('projects').doc(id).get();
@@ -42,9 +45,10 @@ class ProjectDataSourceImpl implements ProjectDataSource {
         }),
       );
 
+      //4. 유효한 프로젝트만 필터링
       return projectList.whereType<ProjectDto>().toList();
     } catch (e, stack) {
-      log('Failed to load projects: $e\n$stack');
+      log('🔥 프로젝트 불러오기 실패: $e\n$stack');
       return [];
     }
   }

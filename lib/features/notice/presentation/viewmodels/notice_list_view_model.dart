@@ -4,7 +4,7 @@ import 'package:todomodu_app/features/notice/domain/usecase/retrieve_notices_by_
 import 'package:todomodu_app/features/notice/domain/usecase/mark_notice_as_read_usecase.dart';
 import 'package:todomodu_app/features/notice/presentation/models/notice_list_model.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
-import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_usecase.dart';
+import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_id_usecase.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
