@@ -202,11 +202,6 @@ class ProjectDetailPage extends ConsumerWidget {
                                     showDateRange: true,
                                     todoTitleTextStyle: AppTextStyles.body1.copyWith(color: AppColors.grey800),
                                   ),
-                                  AddSubtaskList(
-                                    projectId: projectId,
-                                    todoId: todo.id,
-                                    projectMembers: projectMembers, // ✅ 실데이터 연결
-                                  ),
                                 ],
                               );
                             },
