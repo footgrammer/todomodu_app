@@ -1,23 +1,28 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_member_icons.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_progress_bar.dart';
+import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
+import 'package:todomodu_app/shared/widgets/custom_yes_or_no_dialog.dart';
 
-class ProjectCard extends StatelessWidget {
+class ProjectCard extends ConsumerWidget {
   final int index;
   final Project project;
   const ProjectCard({super.key, required this.index, required this.project});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        navigateToPage(context, ProjectDetailPage(projectId: project.id));
+        _handleJoinProject(ref, context);
       },
       child: Container(
         padding: EdgeInsets.all(20),
@@ -67,5 +72,36 @@ class ProjectCard extends StatelessWidget {
       '${DateFormat('yyyy.MM.dd').format(project.startDate)} - ${DateFormat('yyyy.MM.dd').format(project.endDate)}',
       style: AppTextStyles.body3.copyWith(color: AppColors.grey700),
     );
+  }
+
+  // 프로젝트 참가여부를 묻는 메서드
+  void _handleJoinProject(WidgetRef ref, BuildContext context) async {
+    // 1. 팀원인지 체크하기
+    // 내 정보 가지고 오기
+    final user = await ref.read(userViewModelProvider.notifier).fetchUser();
+    if (user == null) return null;
+    // 프로젝트 팀원 여부
+    final isMyIdIncluded = project.members.any(
+      (member) => member.userId == user.userId,
+    );
+    if (isMyIdIncluded) {
+      // 팀원이면
+      navigateToPage(context, ProjectDetailPage(projectId: project.id));
+    } else {
+      // 팀원이 아니면 가입 다이얼로그 띄우기
+      CustomYesOrNoDialog(
+        context: context,
+        title: '프로젝트 참여',
+        message: '이 프로젝트에 참여하시겠습니까?',
+        onPositivePressed: () {
+          // 참여 로직
+        },
+        onNegativePressed: () {
+          // 취소 로직
+          Navigator.pop(context);
+        },
+        positiveText: "참가하기",
+      );
+    }
   }
 }
