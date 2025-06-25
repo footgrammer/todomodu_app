@@ -11,17 +11,20 @@ class ProjectTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const TabBar(
-          labelColor: AppColors.primary600,
-          labelStyle: AppTextStyles.subtitle1,
-          unselectedLabelColor: AppColors.grey400,
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicatorColor: AppColors.primary600,
-          tabs: [
-            Tab(text: '할 일'),
-            Tab(text: '공지'),
-            Tab(text: '타임라인'),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: const TabBar(
+            labelColor: AppColors.primary600,
+            labelStyle: AppTextStyles.subtitle1,
+            unselectedLabelColor: AppColors.grey400,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorColor: AppColors.primary600,
+            tabs: [
+              Tab(text: '할 일'),
+              Tab(text: '공지'),
+              Tab(text: '타임라인'),
+            ],
+          ),
         ),
         Expanded(
           child: TabBarView(

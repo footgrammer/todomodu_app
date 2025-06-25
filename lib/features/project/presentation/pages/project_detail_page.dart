@@ -41,7 +41,7 @@ class ProjectDetailPage extends ConsumerWidget {
                         ProjectInfoHeader(project: project),
                         const SizedBox(height: 32),
                         ProjectMemberSection(members: project.members),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),

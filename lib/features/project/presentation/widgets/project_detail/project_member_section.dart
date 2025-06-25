@@ -20,7 +20,7 @@ class ProjectMemberSection extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: CircleAvatar(
-                  radius: 16,
+                  radius: 24,
                   backgroundImage: member.profileImageUrl.isNotEmpty
                       ? NetworkImage(member.profileImageUrl)
                       : null,
