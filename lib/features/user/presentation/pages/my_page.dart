@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:todomodu_app/features/user/data/datasources/auth_data_source.dart';
 import 'package:todomodu_app/features/user/presentation/pages/closed_project_list_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/notification_settings_page.dart';
@@ -14,6 +15,7 @@ import 'package:todomodu_app/features/user/presentation/pages/splash/splash_page
 import 'package:todomodu_app/features/user/presentation/pages/terms_and_privacy_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/custom_menu_bar.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/edit_nickname_dialog.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/custom_dialog.dart';
@@ -27,7 +29,7 @@ class MyPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userAsync = ref.watch(userProvider);
+    final userAsync = ref.watch(userViewModelProvider);
     return userAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text('$error')),
@@ -170,7 +172,7 @@ class MyPage extends ConsumerWidget {
                                   title: '탈퇴',
                                   subTitle: '정말 탈퇴하시겠습니까?',
                                   onConfirmed: () async {
-                                    withdraw(context);
+                                    withdraw(context, ref);
                                   },
                                 ),
                           );
@@ -186,42 +188,34 @@ class MyPage extends ConsumerWidget {
   }
 }
 
-Future<void> reauthenticateWithGoogle() async {
-  final googleUser = await GoogleSignIn().signIn();
-  final googleAuth = await googleUser?.authentication;
-
-  if (googleAuth == null) throw Exception("Google auth failed");
-
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth.accessToken,
-    idToken: googleAuth.idToken,
-  );
+Future<void> reauthenticateWithGoogle(WidgetRef ref) async {
+  final authDataSource = ref.read(authDataSourceProvider);
+  final credential = await authDataSource.signInWithGoogle();
 
   await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(
-    credential,
+    credential!,
   );
 }
 
-Future<void> reauthenticateWithApple() async {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null) throw Exception('사용자가 로그인되어 있지 않습니다.');
+Future<void> reauthenticateWithApple(WidgetRef ref) async {
+  final authDataSource = ref.read(authDataSourceProvider);
+  final credential = await authDataSource.signInWithApple();
 
-  final appleCredential = await SignInWithApple.getAppleIDCredential(
-    scopes: [
-      AppleIDAuthorizationScopes.email,
-      AppleIDAuthorizationScopes.fullName,
-    ],
+  await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(
+    credential!,
   );
-
-  final oauthCredential = OAuthProvider("apple.com").credential(
-    idToken: appleCredential.identityToken,
-    accessToken: appleCredential.authorizationCode,
-  );
-
-  await user.reauthenticateWithCredential(oauthCredential);
 }
 
-Future<void> withdraw(BuildContext context) async {
+Future<void> reauthenticateWithKakao(WidgetRef ref) async {
+  final authDataSource = ref.read(authDataSourceProvider);
+  final credential = await authDataSource.signInWithKakao();
+
+  await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(
+    credential!,
+  );
+}
+
+Future<void> withdraw(BuildContext context, WidgetRef ref) async {
   final user = FirebaseAuth.instance.currentUser;
 
   if (user == null) {
@@ -234,13 +228,13 @@ Future<void> withdraw(BuildContext context) async {
 
     if (providerIds.contains('google.com')) {
       log('구글 연동 유저');
-      await reauthenticateWithGoogle();
+      await reauthenticateWithGoogle(ref);
     } else if (providerIds.contains('apple.com')) {
       log('애플 연동 유저');
-      await reauthenticateWithApple();
+      await reauthenticateWithApple(ref);
     } else if (providerIds.contains('oidc.kakao')) {
-      // 카카오는 다로 처
       log('카카오 연동 유저');
+      await reauthenticateWithKakao(ref);
     }
 
     await FirebaseAuth.instance.currentUser!.delete(); // firebaseAuth 계정 삭제
