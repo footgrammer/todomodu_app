@@ -18,7 +18,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity?>> {
   Future<UserEntity?> fetchUser() async {
     try {
       final user = await _usecase.execute().first;
-      log('fetchUser 성공: $user');
+      log('fetchUser 성공: ${user!.userId}');
       state = AsyncValue.data(user);
       return user;
     } catch (e, st) {
@@ -35,7 +35,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity?>> {
 }
 
 final userViewModelProvider =
-    StateNotifierProvider<UserViewModel, AsyncValue<UserEntity?>>((ref) {
+    StateNotifierProvider.autoDispose<UserViewModel, AsyncValue<UserEntity?>>((ref) {
       final usecase = ref.read(getCurrentUserUsecaseProvider);
       final userRepository = ref.read(userRepositoryProvider);
       return UserViewModel(usecase, userRepository);
