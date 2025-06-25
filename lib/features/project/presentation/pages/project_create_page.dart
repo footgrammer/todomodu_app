@@ -6,14 +6,13 @@ import 'package:todomodu_app/features/ai/domain/models/openai_params.dart';
 import 'package:todomodu_app/features/ai/presentation/providers/openai_providers.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_todo_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_loading_page.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/utils/project_validator.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_form_field.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/dialog_utils.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
-
-TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 
 // 상태 관리용 Provider
 final titleControllerProvider = Provider.autoDispose<TextEditingController>(
@@ -57,7 +56,9 @@ class ProjectCreatePage extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Row(children: [Text('프로젝트 추가하기', style: header2)]),
+          title: Row(
+            children: [Text('프로젝트 추가하기', style: AppTextStyles.header2)],
+          ),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,14 +156,25 @@ class ProjectCreatePage extends ConsumerWidget {
       );
       return;
     }
+
+    //상태값 저장해 놓기
+    ref
+        .read(projectCreateViewModelProvider.notifier)
+        .updateProjectInfo(
+          title: title,
+          description: description,
+          startDate: startDate!,
+          endDate: endDate!,
+        );
+
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (_) => const ProjectLoadingPage()));
 
     final openaiParams = OpenaiParams(
       projectTitle: title,
-      projectStartDate: startDate!,
-      projectEndDate: endDate!,
+      projectStartDate: startDate,
+      projectEndDate: endDate,
       prompt: description,
     );
 

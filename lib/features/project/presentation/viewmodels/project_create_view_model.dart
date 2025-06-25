@@ -3,9 +3,15 @@ import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/domain/usecases/create_project_usecase.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
+import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 
 class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   Map<String, Set<String>>? _initialSubtaskSnapshot;
+
+  @override
+  ProjectCreateState build() {
+    return ProjectCreateState(isLoading: false);
+  }
 
   // 프로젝트 생성하기
   Future<void> createProject(
@@ -28,6 +34,20 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
     }
   }
 
+  void updateProjectInfo({
+    required String title,
+    required String description,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) {
+    state = state.copyWith(
+      title: title,
+      description: description,
+      startDate: startDate,
+      endDate: endDate,
+    );
+  }
+
   void cacheInitialSubtasks(Map<String, Set<String>> snapshot) {
     _initialSubtaskSnapshot ??= {
       for (final entry in snapshot.entries) entry.key: {...entry.value},
@@ -35,11 +55,6 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   }
 
   Map<String, Set<String>> get initialSubtasks => _initialSubtaskSnapshot ?? {};
-
-  @override
-  ProjectCreateState build() {
-    return ProjectCreateState(isLoading: false);
-  }
 
   void selectAllTodos(List<dynamic> todos) {
     final allTodos = todos.map((todo) => todo.todoTitle as String).toSet();

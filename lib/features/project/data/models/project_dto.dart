@@ -48,7 +48,7 @@ class ProjectDto {
       'id': id,
       'title': title,
       'description': description,
-      'color': color, // Color → int 저장
+      'color': color,
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),
       'ownerId': ownerId,

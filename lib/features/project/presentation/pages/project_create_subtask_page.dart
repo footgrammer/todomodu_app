@@ -1,30 +1,24 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/ai/domain/models/openai_response.dart'
+    as openai;
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
 import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
-import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_todo_subtask_list.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
-import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 class ProjectCreateSubtaskPage extends ConsumerWidget {
-  List<dynamic> responseTodos;
-  DateTime projectStartDate;
-  DateTime projectEndDate;
-  ProjectCreateSubtaskPage({
-    super.key,
-    required this.responseTodos,
-    required this.projectStartDate,
-    required this.projectEndDate,
-  });
+  openai.OpenaiResponse response;
+  ProjectCreateSubtaskPage({super.key, required this.response});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -135,7 +129,7 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
           // Chat GPT 응답으로부터 startDate, eadDate 값을 todo에 추가하기 위해 타이틀이 같은 responseTodo를 가지고 옴
           // responseTodo 의 startDate, endDate의 타입은 String (2025-04-20)
           final responseTodo =
-              responseTodos
+              response.todos
                   .where((todo) => todo.todoTitle == todoTitle)
                   .toList()
                   .first;
@@ -149,13 +143,12 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
             isDone: false,
           );
         }).toList();
-
     final project = Project(
       id: '',
       title: state.title,
       description: state.description,
-      startDate: projectStartDate,
-      endDate: projectEndDate,
+      startDate: state.startDate ?? DateTime.parse(response.projectStartDate),
+      endDate: state.endDate ?? DateTime.parse(response.projectStartDate),
       owner: userEntity,
       members: [userEntity],
       todos: finalTodos,

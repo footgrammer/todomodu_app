@@ -93,12 +93,7 @@ class ProjectCreateTodoPage extends ConsumerWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder:
-              (context) => ProjectCreateSubtaskPage(
-                responseTodos: todos,
-                projectStartDate: DateTime.parse(response.projectStartDate),
-                projectEndDate: DateTime.parse(response.projectEndDate),
-              ),
+          builder: (context) => ProjectCreateSubtaskPage(response: response),
         ),
       );
     });

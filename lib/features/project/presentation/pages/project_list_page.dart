@@ -19,19 +19,10 @@ final projectCodeControllerProvider =
 
 class ProjectListPage extends ConsumerWidget {
   ProjectListPage({super.key});
-  bool _initialized = false;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(projectCodeControllerProvider);
-
-    ref.listen<AsyncValue<UserEntity?>>(userProvider, (prev, next) {
-      final user = next.asData?.value;
-      if (user != null && !_initialized) {
-        _initialized = true;
-        ref.read(noticeListViewModelProvider.notifier).initialize(user);
-      }
-    });
 
     final noticeListState = ref.watch(noticeListViewModelProvider);
 

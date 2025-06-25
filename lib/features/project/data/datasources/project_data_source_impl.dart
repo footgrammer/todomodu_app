@@ -5,6 +5,7 @@ import 'package:todomodu_app/features/project/data/datasources/project_data_sour
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/shared/types/result.dart';
+import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 
 class ProjectDataSourceImpl implements ProjectDataSource {
   final FirebaseFirestore _firestore;
@@ -102,40 +103,44 @@ class ProjectDataSourceImpl implements ProjectDataSource {
 
   @override
   Future<void> createProject(ProjectDto projectDto, List<Todo> todos) async {
-    // 프로젝트 생성
-    final projectRef = await _firestore
-        .collection('projects')
-        .add(projectDto.toJson());
-    await projectRef.update({'id': projectRef.id});
+    try {
+      // 프로젝트 생성
+      final projectRef = await _firestore
+          .collection('projects')
+          .add(projectDto.toJson());
+      await projectRef.update({'id': projectRef.id});
+      //members 생성
+      final memberRef = projectRef
+          .collection('members')
+          .doc(projectDto.ownerId);
+      memberRef.set({'userId': projectDto.ownerId});
 
-    //members 생성
-    final memberRef = projectRef.collection('members').doc(projectDto.ownerId);
-    memberRef.set({'userId': projectDto.ownerId});
-
-    // todo 생성
-    for (final todo in todos) {
-      final todoRef = projectRef.collection('todos').doc();
-
-      await todoRef.set({
-        'id': todoRef.id,
-        'projectId': projectRef.id,
-        'title': todo.title,
-        'startDate': Timestamp.fromDate(todo.startDate),
-        'endDate': Timestamp.fromDate(todo.endDate),
-        'isDone': false,
-      });
-
-      // subtask 생성
-      for (final subtask in todo.subtasks) {
-        final subtaskRef = projectRef.collection('subtasks').doc();
+      // todo 생성
+      for (final todo in todos) {
+        final todoRef = projectRef.collection('todos').doc();
         await todoRef.set({
-          'id': subtaskRef.id,
-          'todoId': todoRef.id,
+          'id': todoRef.id,
           'projectId': projectRef.id,
-          'title': subtask.title,
-          'assigneeId': '',
+          'title': todo.title,
+          'startDate': Timestamp.fromDate(todo.startDate),
+          'endDate': Timestamp.fromDate(todo.endDate),
+          'isDone': false,
         });
+
+        // subtask 생성
+        for (final subtask in todo.subtasks) {
+          final subtaskRef = projectRef.collection('subtasks').doc();
+          await subtaskRef.set({
+            'id': subtaskRef.id,
+            'todoId': todoRef.id,
+            'projectId': projectRef.id,
+            'title': subtask.title,
+            'assigneeId': '',
+          });
+        }
       }
+    } catch (error) {
+      log('error : $error');
     }
   }
 }
