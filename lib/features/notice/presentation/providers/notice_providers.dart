@@ -17,7 +17,10 @@ final _noticeDataSourceProvider = Provider<NoticeDataSourceImpl>((ref) {
 });
 
 final noticeRepositoryProvider = Provider<NoticeRepositoryImpl>((ref) {
-  return NoticeRepositoryImpl(datasource: ref.watch(_noticeDataSourceProvider));
+  return NoticeRepositoryImpl(
+    datasource: ref.watch(_noticeDataSourceProvider),
+    userRepository: ref.watch(userRepositoryProvider),
+  );
 });
 
 final createNoticeUsecaseProvider = Provider<CreateNoticeUsecase>((ref) {
