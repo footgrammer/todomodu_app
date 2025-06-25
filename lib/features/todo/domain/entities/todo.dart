@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 
 class Todo {
@@ -35,8 +36,8 @@ class Todo {
       title: map['title'] ?? '',
       isDone: map['isDone'] ?? false,
       projectId: map['projectId'] ?? '',
-      startDate: DateTime.parse(map['startDate']),
-      endDate: DateTime.parse(map['endDate']),
+      startDate: (map['startDate'] as Timestamp).toDate(),
+      endDate: (map['endDate'] as Timestamp).toDate(),
       subtasks: [],
     );
   }
