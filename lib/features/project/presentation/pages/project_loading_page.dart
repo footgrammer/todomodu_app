@@ -1,40 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/project/presentation/pages/project_create_todo_page.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_loading_progress.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_loading_task_text.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_loading_text.dart';
 
 class ProjectLoadingPage extends ConsumerWidget {
-  final Future<Map<String, dynamic>> Function(String) requestChatGPTApi;
+  // final Future<Map<String, dynamic>> Function(String) requestChatGPTApi;
 
-  const ProjectLoadingPage({super.key, required this.requestChatGPTApi});
+  const ProjectLoadingPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(projectProgressProvider);
-    final controller = ref.read(projectProgressProvider.notifier);
-
-    // API 대기 시작 (최초 한 번만 실행)
-    ref.listen<ProjectProgressState>(projectProgressProvider, (prev, next) {
-      if (next.percent == 0.25) {
-        controller.waitForApi<Map<String, dynamic>>(
-          () => requestChatGPTApi('chatGPT prompt'),
-          (apiResult) async {
-            if (context.mounted) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => ProjectCreateTodoPage(apiResult: apiResult),
-                ),
-              );
-              await Future.delayed(Duration(seconds: 1));
-              controller.reset();
-            }
-          },
-        );
-      }
-    });
 
     final stepMessages = [
       '당신의 계획을 이해하고 있어요...',

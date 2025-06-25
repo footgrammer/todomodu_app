@@ -97,7 +97,7 @@ class OpenaiResponseDto {
                   todoTitle: todoJson['todo_title'],
                   todoStartDate: todoJson['todo_start_date'],
                   todoEndDate: todoJson['todo_end_date'],
-                  subTasks: List<String>.from(todoJson['sub_tasks']),
+                  subtasks: List<String>.from(todoJson['sub_tasks']),
                 ),
               )
               .toList(),

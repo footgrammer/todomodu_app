@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:todomodu_app/features/todo/data/models/todo_dto.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/features/todo/domain/repositories/subtask_repository.dart';
@@ -46,15 +48,19 @@ class TodoRepositoryImpl implements TodoRepository {
     String projectId,
   ) async {
     final todosResult = await _remoteDataSource.getTodosByProjectId(projectId);
-    if (todosResult is! Ok<List<TodoDto>>)
+    if (todosResult is! Ok<List<TodoDto>>) {
+      log('❗ getTodosWithSubtasksByProjectId, error: $todosResult');
       return Result.error(Exception('Todo load failed'));
+    }
     final todoDtos = todosResult.value;
 
     final subtasksResult = await _subtaskRepository.getSubtasksByProjectId(
       projectId,
     );
-    if (subtasksResult is! Ok<List<Subtask>>)
+    if (subtasksResult is! Ok<List<Subtask>>) {
+      log('❗ getSubtasksByProjectId, error: $subtasksResult');
       return Result.error(Exception('Subtask load failed'));
+    }
     final subtasks = subtasksResult.value;
 
     // Group subtasks by todoId

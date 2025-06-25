@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/retrieve_notices_by_projects_usecase.dart';
@@ -91,13 +93,23 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     required Notice notice,
     required UserEntity user,
   }) async {
-    final result = await _markAsReadUsecase.execute(notice: notice);
+    final result = await _markAsReadUsecase.execute(notice: notice, user: user);
 
     if (result is Ok<Notice>) {
       final updated = result.value;
-      final updatedList =
+
+      final updatedNotices =
           state.notices.map((n) => n.id == updated.id ? updated : n).toList();
-      state = state.copyWith(notices: updatedList);
+
+      final updatedSelected =
+          state.selectedNotices
+              .map((n) => n.id == updated.id ? updated : n)
+              .toList();
+
+      state = state.copyWith(
+        notices: updatedNotices,
+        selectedNotices: updatedSelected, // ✅ 이것도 함께 갱신
+      );
     }
   }
 

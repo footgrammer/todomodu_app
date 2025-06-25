@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
-import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
-import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/dual_action_buttons.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
-class LogoutDialog extends StatelessWidget {
-  const LogoutDialog({super.key});
+class CustomDialog extends StatelessWidget {
+  const CustomDialog({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.onConfirmed,
+  });
 
+  final String title;
+  final String subTitle;
+  final VoidCallback onConfirmed;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,7 +33,7 @@ class LogoutDialog extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '로그아웃',
+                    title,
                     style: AppTextStyles.header4.copyWith(
                       color: AppColors.grey800,
                     ),
@@ -37,7 +42,7 @@ class LogoutDialog extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
-                      '로그아웃 하시겠습니까?',
+                      subTitle,
                       textAlign: TextAlign.center,
                       style: AppTextStyles.body2.copyWith(
                         color: AppColors.grey800,
@@ -55,18 +60,7 @@ class LogoutDialog extends StatelessWidget {
                         onCancel: () {
                           Navigator.pop(context);
                         },
-                        onConfirm: () async {
-                          final authRepo = ref.read(authProvider);
-                          await authRepo.signOut();
-                          ref.invalidate(userProvider);
-                          Navigator.of(context)
-                            ..pop()
-                            ..pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => LoginPage(),
-                              ),
-                            );
-                        },
+                        onConfirm: onConfirmed,
                       );
                     },
                   ),
