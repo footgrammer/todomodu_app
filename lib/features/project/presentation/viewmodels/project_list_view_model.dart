@@ -47,4 +47,13 @@ class ProjectListViewModel extends Notifier<ProjectListState> {
   void setFetchType(String type) {
     state = state.copyWith(fetchType: type);
   }
+
+  Future<void> addMemberToProject({
+    required String projectId,
+    required String userId,
+  }) async {
+    //usecase 가져오기
+    final usecase = ref.read(addMemberToProjectUsecaseProvider);
+    final project = await usecase.execute(projectId: projectId, userId: userId);
+  }
 }

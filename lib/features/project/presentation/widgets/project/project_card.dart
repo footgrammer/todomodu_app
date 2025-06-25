@@ -6,6 +6,7 @@ import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_member_icons.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_progress_bar.dart';
 import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
@@ -93,8 +94,16 @@ class ProjectCard extends ConsumerWidget {
         context: context,
         title: '프로젝트 참여',
         message: '이 프로젝트에 참여하시겠습니까?',
-        onPositivePressed: () {
+        onPositivePressed: () async {
           // 참여 로직
+          final user =
+              await ref.read(userViewModelProvider.notifier).fetchUser();
+          if (user == null) return;
+          ref
+              .read(projectListViewModelProvider.notifier)
+              .addMemberToProject(projectId: project.id, userId: user.userId);
+
+          replaceAllWithPage(context, ProjectDetailPage(projectId: project.id));
         },
         onNegativePressed: () {
           // 취소 로직

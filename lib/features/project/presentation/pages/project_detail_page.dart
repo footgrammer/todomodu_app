@@ -52,7 +52,9 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
     final projectAsync = ref.watch(projectProvider(widget.projectId));
 
     return projectAsync.when(
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading:
+          () =>
+              const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(body: Center(child: Text('프로젝트 로딩 실패: $e'))),
       data: (project) {
         return Scaffold(
@@ -67,7 +69,10 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 8,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -92,7 +97,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
             context: context,
             projectId: widget.projectId,
             projectMembers: project.members,
-            ref : ref,
+            ref: ref,
           ),
         );
       },

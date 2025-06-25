@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/data/datasources/project_data_source_impl.dart';
 import 'package:todomodu_app/features/project/data/repositories/project_repository_impl.dart';
 import 'package:todomodu_app/features/project/domain/repositories/project_repository.dart';
+import 'package:todomodu_app/features/project/domain/usecases/add_member_to_project_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/create_project_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_id_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_usecase.dart';
@@ -90,3 +91,9 @@ final getProjectByInvitationCodeUsecaseProvider =
         ref.read(projectRepositoryProvider),
       );
     });
+
+final addMemberToProjectUsecaseProvider = Provider<AddMemberToProjectUsecase>((
+  ref,
+) {
+  return AddMemberToProjectUsecase(ref.read(projectRepositoryProvider));
+});

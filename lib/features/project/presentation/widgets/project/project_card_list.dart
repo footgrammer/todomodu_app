@@ -24,8 +24,11 @@ class ProjectCardList extends ConsumerWidget {
     return (projects != null && projects!.isNotEmpty)
         ? Expanded(
           child: ListView.separated(
-            itemCount: projects == null ? 0 : projects!.length,
+            itemCount: projects == null ? 0 : projects!.length + 1,
             itemBuilder: (context, index) {
+              if (index == projects!.length) {
+                return const SizedBox(height: 44); // 👈 마지막 여백
+              }
               return ProjectCard(index: index, project: projects![index]);
             },
             separatorBuilder: (context, index) => SizedBox(height: 12),
