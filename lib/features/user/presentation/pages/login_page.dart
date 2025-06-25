@@ -6,6 +6,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/providers/auth_providers.dart';
 import 'package:todomodu_app/features/user/presentation/widgets/login_button.dart';
+import 'package:todomodu_app/features/user/presentation/widgets/terms_agreement_content.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
@@ -18,10 +19,22 @@ class LoginPage extends ConsumerWidget {
   }) async {
     final userCred = await loginMethod();
     if (userCred != null) {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('accessToken', 'your_token_here');
-      replaceAllWithPage(context, const MainPage());
+      showTermsModal(context);
     }
+  }
+
+  Future<void> showTermsModal(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: false,
+      enableDrag: false,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      builder: (_) => const TermsAgreementContent(),
+    );
   }
 
   @override
