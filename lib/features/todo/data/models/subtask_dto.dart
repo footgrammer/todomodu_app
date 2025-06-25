@@ -19,10 +19,7 @@ class SubtaskDto {
   });
 
   /// Firestore → Dto
-  factory SubtaskDto.fromJson(
-    Map<String, dynamic> json, {
-    required String id,
-  }) {
+  factory SubtaskDto.fromJson(Map<String, dynamic> json, {required String id}) {
     return SubtaskDto(
       id: id,
       projectId: json['projectId'] as String,

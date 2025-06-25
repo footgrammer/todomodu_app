@@ -8,6 +8,8 @@ class ProjectCreateState {
   final Set<String> selectedTodos;
   final Map<String, Set<String>> selectedSubtasks;
   final Set<String>? expandedItems;
+  final bool isLoading;
+  final String? errorMessage;
 
   ProjectCreateState({
     this.title = '',
@@ -17,6 +19,8 @@ class ProjectCreateState {
     this.selectedTodos = const {},
     this.selectedSubtasks = const {},
     this.expandedItems,
+    this.isLoading = false,
+    this.errorMessage,
   });
 
   ProjectCreateState copyWith({
@@ -27,6 +31,8 @@ class ProjectCreateState {
     Set<String>? selectedTodos,
     Map<String, Set<String>>? selectedSubtasks,
     Set<String>? expandedItems,
+    bool? isLoading,
+    String? errorMessage,
   }) {
     return ProjectCreateState(
       title: title ?? this.title,
@@ -36,6 +42,8 @@ class ProjectCreateState {
       selectedTodos: selectedTodos ?? this.selectedTodos,
       selectedSubtasks: selectedSubtasks ?? this.selectedSubtasks,
       expandedItems: expandedItems ?? this.expandedItems,
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 

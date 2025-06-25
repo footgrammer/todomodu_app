@@ -1,8 +1,52 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/usecases/create_project_usecase.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
+import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 
 class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   Map<String, Set<String>>? _initialSubtaskSnapshot;
+
+  @override
+  ProjectCreateState build() {
+    return ProjectCreateState(isLoading: false);
+  }
+
+  // 프로젝트 생성하기
+  Future<void> createProject(
+    Project project,
+    CreateProjectUsecase usecase,
+  ) async {
+    // 로딩 시작
+    state = state.copyWith(isLoading: true, errorMessage: null);
+
+    try {
+      await usecase.execute(project);
+      // 완료 후 로딩 false(에러 없음)
+      state = state.copyWith(isLoading: false);
+    } catch (error) {
+      //실패 시 에러 메시지 추가
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: '프로젝트 생성 실패 : $error',
+      );
+    }
+  }
+
+  void updateProjectInfo({
+    required String title,
+    required String description,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) {
+    state = state.copyWith(
+      title: title,
+      description: description,
+      startDate: startDate,
+      endDate: endDate,
+    );
+  }
 
   void cacheInitialSubtasks(Map<String, Set<String>> snapshot) {
     _initialSubtaskSnapshot ??= {
@@ -12,21 +56,16 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
 
   Map<String, Set<String>> get initialSubtasks => _initialSubtaskSnapshot ?? {};
 
-  @override
-  ProjectCreateState build() {
-    return ProjectCreateState();
-  }
-
   void selectAllTodos(List<dynamic> todos) {
-    final allTodos = todos.map((todo) => todo['todoTitle'] as String).toSet();
+    final allTodos = todos.map((todo) => todo.todoTitle as String).toSet();
     state = state.copyWith(selectedTodos: allTodos);
   }
 
   void selectAllSubtasks(List<dynamic> todos) {
     final Map<String, Set<String>> newSelectedSubtasks = {};
     for (final todo in todos) {
-      final String todoTitle = todo['todoTitle'];
-      final List<dynamic> subtasks = todo['subtasks'];
+      final String todoTitle = todo.todoTitle;
+      final List<dynamic> subtasks = todo.subtasks;
 
       if (state.selectedTodos.contains(todoTitle)) {
         newSelectedSubtasks[todoTitle] =
@@ -83,11 +122,6 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   }
 
   void reset() {
-    state = ProjectCreateState();
+    state = ProjectCreateState(isLoading: false);
   }
 }
-
-final projectCreateViewModelProvider =
-    NotifierProvider<ProjectCreateViewModel, ProjectCreateState>(() {
-      return ProjectCreateViewModel();
-    });

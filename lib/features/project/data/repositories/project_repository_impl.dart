@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
@@ -31,7 +32,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
     };
   }
 
-  /// ✅ 새로 추가: 단일 projectId 기반 상세 조회
+  /// 새로 추가: 단일 projectId 기반 상세 조회(프로젝트 상세 페이지 등)
   @override
   Future<Result<Project>> fetchProjectById(String projectId) async {
     try {
@@ -61,7 +62,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
       final todos =
           todosResult is Ok<List<Todo>> ? todosResult.value : <Todo>[];
 
-      // ✅ progress 계산: 모든 subtask 개수 및 완료된 개수 기반
+      //  progress 계산: 모든 subtask 개수 및 완료된 개수 기반
       final allSubtasks = todos.expand((t) => t.subtasks).toList();
       final totalSubs = allSubtasks.length;
       final doneSubs = allSubtasks.where((s) => s.isDone).length;
@@ -78,7 +79,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
         owner: owner,
         members: members,
         todos: todos,
-        progress: progress, // ✅ 수정된 부분: progress 전달
+        progress: progress, //  수정된 부분: progress 전달
       ));
     } catch (e) {
       return Result.error(Exception('fetchProjectById error: $e'));
@@ -98,12 +99,15 @@ class ProjectRepositoryImpl implements ProjectRepository {
               await _userRepository.getUsersByIds(memberIdsResult.value);
           if (membersResult is! Ok<List<UserEntity>>) return null;
 
+
           final todosResult =
               await _todoRepository.getTodosWithSubtasksByProjectId(dto.id);
+
+          // 3. 프로젝트별 투두, 서브태스크 정보 가져오기
           if (todosResult is! Ok<List<Todo>>) return null;
           final todos = todosResult.value;
 
-          // ✅ progress 계산 추가
+          //  progress 계산 추가
           final allSubtasks = todos.expand((t) => t.subtasks).toList();
           final totalSubs = allSubtasks.length;
           final doneSubs = allSubtasks.where((s) => s.isDone).length;
@@ -118,7 +122,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
             owner: owner,
             members: membersResult.value,
             todos: todos,
-            progress: progress, // ✅ 수정된 부분: progress 전달
+            progress: progress, // 수정된 부분: progress 전달
           );
         }),
       );
@@ -127,6 +131,84 @@ class ProjectRepositoryImpl implements ProjectRepository {
       return Result.ok(list);
     } catch (e) {
       return Result.error(Exception('Mapping error: $e'));
+    }
+  }
+
+  @override
+  Future<void> createProject(Project project) async {
+    final projectDto = ProjectDto.fromEntity(project);
+    await _dataSource.createProject(projectDto, project.todos);
+  }
+
+
+//어쩌다보니 기능이 같은 코드를 중복해서 만든 것 같습니다.
+  @override
+  Future<List<Project>> fetchProjectsByUserId(String userId) async {
+    final projectDtos = await _dataSource.fetchProjectsByUserId(userId);
+    try {
+      final projects = await Future.wait(
+        projectDtos.map((dto) async {
+          // 1. 멤버 ID 가져오기
+          final memberIdsResult = await _dataSource.getMemberIdsByProjectId(
+            dto.id,
+          );
+          if (memberIdsResult is! Ok<List<String>>) {
+            return null;
+          }
+          final memberIds = memberIdsResult.value;
+
+          // 2. 멤버 정보 가져오기
+          final membersResult = await _userRepository.getUsersByIds(memberIds);
+          if (membersResult is! Ok<List<UserEntity>>) {
+            return null;
+          }
+          final members = membersResult.value;
+
+          // 3. 투두 정보 가져오기 (현재 생략)
+          final todosResult = await _todoRepository
+              .getTodosWithSubtasksByProjectId(dto.id);
+          if (todosResult is! Ok<List<Todo>>) {
+            return null;
+          }
+          final todos = todosResult.value;
+
+          // 4. Owner 찾기
+          try {
+            final owner = members.firstWhere(
+              (m) => m.userId == dto.ownerId,
+              orElse: () {
+                throw Exception(
+                  'Owner with ID ${dto.ownerId} not found among project members.',
+                );
+              },
+            );
+
+          final allSubtasks = todos.expand((t) => t.subtasks).toList();
+          final totalSubs = allSubtasks.length;
+          final doneSubs = allSubtasks.where((s) => s.isDone).length;
+          final progress = totalSubs == 0 ? 0.0 : doneSubs / totalSubs;
+
+            // 5. DTO → Entity 매핑
+            return dto.toEntity(
+              owner: owner,
+              members: members,
+              todos: todos,
+              progress: progress,
+            );
+          } catch (e) {
+            log(
+              '⚠️ Owner 찾기 실패: ${dto.ownerId} not in members for project ${dto.id}',
+            );
+          }
+        }),
+      );
+
+      // 6. null 필터링 후 반환
+      final validProjects = projects.whereType<Project>().toList();
+      return validProjects;
+    } catch (e) {
+      log('project_repository_impl : fetchProjectsByUserId $e');
+      return [];
     }
   }
 }

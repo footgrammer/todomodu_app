@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/shared/constants/app_colors.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
 class MyProfileImage extends StatelessWidget {
@@ -16,16 +17,16 @@ class MyProfileImage extends StatelessWidget {
       children: [
         user.profileImageUrl.trim().isEmpty
             ? Container(
-              width: 100,
-              height: 100,
+              width: 64,
+              height: 64,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.grey[400],
               ),
             )
             : Container(
-              width: 100,
-              height: 100,
+              width: 64,
+              height: 64,
               decoration: BoxDecoration(shape: BoxShape.circle),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
@@ -44,8 +45,9 @@ class MyProfileImage extends StatelessWidget {
                   userRepo.uploadProfileImage(user.userId);
                 },
                 child: Container(
-                  width: 36,
-                  height: 36,
+                  width: 28,
+                  height: 28,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: Border.all(width: 2, color: Color(0XFFF7F7F8)),
                     shape: BoxShape.circle,
@@ -53,8 +55,8 @@ class MyProfileImage extends StatelessWidget {
                   ),
                   child: CustomIcon(
                     name: 'camera',
-                    size: 18,
-                    color: Color(0XFF1C1B1F),
+                    size: 16,
+                    color: AppColors.grey500,
                   ),
                 ),
               );

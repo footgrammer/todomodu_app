@@ -33,8 +33,9 @@ class ProjectChip extends ConsumerWidget {
                 : AppColors.grey600),
       ),
       selected: isSelected,
-      selectedColor: brightPastelFromSeed(project.id),
+      selectedColor: project.color,
       backgroundColor: AppColors.grey200,
+      showCheckmark: false,
       shape: StadiumBorder(
         side: BorderSide.none,
       ),

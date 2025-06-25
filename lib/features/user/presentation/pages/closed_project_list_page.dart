@@ -13,6 +13,7 @@ class ClosedProjectListPage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
+      body: Center(child: Text('개발중인 기능입니다.')),
     );
   }
 }
