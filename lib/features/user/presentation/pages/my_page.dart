@@ -7,6 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/todo_list_viewmodel_provider.dart';
 import 'package:todomodu_app/features/user/data/datasources/auth_data_source.dart';
 import 'package:todomodu_app/features/user/presentation/pages/closed_project_list_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
@@ -149,7 +151,7 @@ class MyPage extends ConsumerWidget {
                                   onConfirmed: () async {
                                     final authRepo = ref.read(authProvider);
                                     await authRepo.signOut();
-                                    ref.invalidate(userViewModelProvider); // userViewModel dispose
+                                    invalidateAllProviders(ref);
                                     Navigator.of(context)
                                       ..pop()
                                       ..pushReplacement(
@@ -172,7 +174,7 @@ class MyPage extends ConsumerWidget {
                                   title: '탈퇴',
                                   subTitle: '정말 탈퇴하시겠습니까?',
                                   onConfirmed: () async {
-                                    withdraw(context, ref);
+                                    await withdraw(context, ref);
                                   },
                                 ),
                           );
@@ -249,10 +251,19 @@ Future<void> withdraw(BuildContext context, WidgetRef ref) async {
     await prefs.clear(); // 분기 초기화
     log('분기 초기화');
 
-    ref.invalidate(userViewModelProvider); // userViewModel dispose
+    invalidateAllProviders(ref);
 
     replaceAllWithPage(context, SplashPage()); // 스플래시화면, 로그인화면 고민중
   } catch (e) {
     log('회원탈퇴 실패: $e');
   }
+}
+
+void invalidateAllProviders(WidgetRef ref) {
+  ref.invalidate(userProvider);
+  ref.invalidate(userViewModelProvider);
+  ref.invalidate(projectListViewModelProvider);
+  ref.invalidate(todoListViewModelProvider);
+  ref.invalidate(fetchProjectsByUserUsecaseProvider);
+  //ref.invalidataAll(); 이걸로 한번에 초기화 하고 싶은데 안 써짐 나중에 튜터님께 질문
 }
