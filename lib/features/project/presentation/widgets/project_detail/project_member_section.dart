@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
-import 'package:todomodu_app/shared/widgets/user_circle_avatar.dart';
+import 'package:todomodu_app/shared/widgets/user_circle_avatar/user_avatar_group';
 
 class ProjectMemberSection extends StatelessWidget {
   final List<UserEntity> members;
@@ -10,18 +10,26 @@ class ProjectMemberSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double avatarRadius = 24;
+    const double overlapOffset = 32;
+    const int maxVisibleCount = 5;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('팀원', style: AppTextStyles.subtitle1.copyWith(color: AppColors.grey800)),
+        Text(
+          '팀원',
+          style: AppTextStyles.subtitle1.copyWith(color: AppColors.grey800),
+        ),
         const SizedBox(height: 8),
         Row(
           children: [
-            for (var member in members)
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: UserCircleAvatar(user: member, radius: 24),
-              ),
+            UserAvatarGroup(
+              users: members,
+              radius: avatarRadius,
+              overlapOffset: overlapOffset,
+              maxVisibleCount: maxVisibleCount,
+            ),
             const Spacer(),
             OutlinedButton.icon(
               onPressed: () {
