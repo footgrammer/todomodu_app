@@ -1,3 +1,5 @@
+// 단일 유저 아바타 사용 위젯
+
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
