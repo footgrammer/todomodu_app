@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
-import 'package:todomodu_app/shared/widgets/user_circle_avatar.dart';
+import 'package:todomodu_app/shared/widgets/user_circle_avatar/user_circle_avatar.dart';
 
 class UserAvatarGroup extends StatelessWidget {
   final List<UserEntity> users;

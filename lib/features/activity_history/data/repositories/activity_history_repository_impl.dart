@@ -5,10 +5,10 @@ import 'package:todomodu_app/features/activity_history/domain/entities/activity_
 import 'package:todomodu_app/features/activity_history/domain/repositories/activity_history_repository.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
-class ActivityRepositoryImpl implements ActivityHistoryRepository {
+class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository {
   final ActivityHistoryDatasource _dataSource;
 
-  ActivityRepositoryImpl({required ActivityHistoryDatasource dataSource}) : _dataSource = dataSource;
+  ActivityHistoryRepositoryImpl({required ActivityHistoryDatasource dataSource}) : _dataSource = dataSource;
 
   @override
   Future<Result<void>> record(ActivityHistory activity) {

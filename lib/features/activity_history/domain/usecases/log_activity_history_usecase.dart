@@ -2,10 +2,10 @@ import 'package:todomodu_app/features/activity_history/domain/entities/activity_
 import 'package:todomodu_app/features/activity_history/domain/repositories/activity_history_repository.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
-class LogActivityUsecase {
+class LogActivityHistoryUsecase {
   final ActivityHistoryRepository _activityHistoryRepository;
 
-  LogActivityUsecase({
+  LogActivityHistoryUsecase({
     required ActivityHistoryRepository activityHistoryRepository,
   }) : _activityHistoryRepository = activityHistoryRepository;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
-import 'package:todomodu_app/shared/widgets/user_circle_avatar/user_avatar_group';
+import 'package:todomodu_app/shared/widgets/user_circle_avatar/user_avatar_group.dart';
 
 class ProjectMemberSection extends StatelessWidget {
   final List<UserEntity> members;
