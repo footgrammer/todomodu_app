@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
@@ -162,5 +163,14 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
 
   List<Notice> getNoticesByProject(String projectId) {
     return state.notices.where((n) => n.projectId == projectId).toList();
+  }
+
+  Notice? getNoticeById(String id) {
+    return state.notices.firstWhereOrNull((n) => n.id == id);
+  }
+
+  bool isUnread(Notice notice, UserEntity user) {
+    final latest = getNoticeById(notice.id);
+    return latest?.isUnread(user.userId) ?? false;
   }
 }

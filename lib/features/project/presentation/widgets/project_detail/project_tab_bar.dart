@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
-import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/red_dot.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/notice_list_section.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/positioned_reddot_for_tab.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/todo_list_section.dart';
-import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectTabBar extends StatelessWidget {
