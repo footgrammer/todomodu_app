@@ -2,8 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/domain/usecases/create_project_usecase.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
-import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
-import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 
 class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   Map<String, Set<String>>? _initialSubtaskSnapshot;
@@ -49,7 +47,7 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   }
 
   void cacheInitialSubtasks(Map<String, Set<String>> snapshot) {
-    _initialSubtaskSnapshot ??= {
+    _initialSubtaskSnapshot = {
       for (final entry in snapshot.entries) entry.key: {...entry.value},
     };
   }
@@ -66,13 +64,11 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
     for (final todo in todos) {
       final String todoTitle = todo.todoTitle;
       final List<dynamic> subtasks = todo.subtasks;
-
       if (state.selectedTodos.contains(todoTitle)) {
         newSelectedSubtasks[todoTitle] =
             subtasks.map((e) => e.toString()).toSet();
       }
     }
-
     // 기존 selectedSubtasks와 병합 (기존 값 유지하려면 merge 방식도 가능)
     state = state.copyWith(
       selectedSubtasks: {...state.selectedSubtasks, ...newSelectedSubtasks},

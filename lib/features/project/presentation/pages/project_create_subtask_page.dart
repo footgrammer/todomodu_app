@@ -127,7 +127,7 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
     final invitationCode = (random.nextInt(900000) + 100000).toString();
     List<Todo> finalTodos =
         state.selectedTodos.map((todoTitle) {
-          // 서브테스트 형성
+          // 서브테스크 형성
           final subtasks =
               state.selectedSubtasks[todoTitle]!.map((subtaskTitle) {
                 return Subtask(

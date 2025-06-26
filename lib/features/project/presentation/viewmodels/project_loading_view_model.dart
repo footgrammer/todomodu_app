@@ -73,6 +73,7 @@ class ProgressController extends Notifier<ProjectProgressState> {
   }
 
   void reset() {
+    _isDisposed = false;
     state = ProjectProgressState.initial();
   }
 }

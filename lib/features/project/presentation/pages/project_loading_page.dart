@@ -6,8 +6,6 @@ import 'package:todomodu_app/features/project/presentation/widgets/project_creat
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_loading_text.dart';
 
 class ProjectLoadingPage extends ConsumerWidget {
-  // final Future<Map<String, dynamic>> Function(String) requestChatGPTApi;
-
   const ProjectLoadingPage({super.key});
 
   @override

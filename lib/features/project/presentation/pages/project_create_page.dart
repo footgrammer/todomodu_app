@@ -182,6 +182,7 @@ class ProjectCreatePage extends ConsumerWidget {
       final response = await ref.read(
         openaiResponseProvider(openaiParams).future,
       );
+      final progressViewModel = ref.read(projectProgressProvider.notifier);
       if (response != null) {
         final controller = ref.read(projectProgressProvider.notifier);
         await controller.completeRequest();
@@ -191,7 +192,9 @@ class ProjectCreatePage extends ConsumerWidget {
             builder: (_) => ProjectCreateTodoPage(response: response),
           ),
         );
+        progressViewModel.reset();
       } else {
+        progressViewModel.reset();
         Navigator.of(context).pop();
         DialogUtils.showErrorDialog(
           context,

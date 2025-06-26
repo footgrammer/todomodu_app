@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/ai/domain/models/openai_response.dart';
-import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_subtask_page.dart';
 import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
@@ -9,6 +10,7 @@ import 'package:todomodu_app/features/project/presentation/viewmodels/project_lo
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_todo_list.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/log_if_debug.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
@@ -22,6 +24,7 @@ class ProjectCreateTodoPage extends ConsumerWidget {
     // 로딩 관련 상태 초기화하기
     ref.invalidate(projectProgressProvider);
     final todos = response.todos;
+    logIfDebug('todos : ${todos[0].subtasks.length}');
     final state = ref.watch(projectCreateViewModelProvider);
     final selectedTodos = state.selectedTodos;
     final viewModel = ref.read(projectCreateViewModelProvider.notifier);
@@ -40,7 +43,8 @@ class ProjectCreateTodoPage extends ConsumerWidget {
         leading: GestureDetector(
           onTap: () {
             // 🔄 로딩 상태 초기화
-            ref.invalidate(projectProgressProvider);
+            // ref.invalidate(projectProgressProvider);
+            ref.read(projectProgressProvider.notifier).reset();
 
             // 🧼 생성 상태 초기화 (ViewModel의 reset 사용)
             ref.read(projectCreateViewModelProvider.notifier).reset();
@@ -85,7 +89,11 @@ class ProjectCreateTodoPage extends ConsumerWidget {
                 text: '다음',
                 buttonColor: AppColors.primary500,
                 onPressed: () {
-                  goToProjectCreateSubtaskPage(context, viewModel, todos);
+                  viewModel.selectAllSubtasks(todos); // 상태 변경
+                  log(
+                    'test : ${state.selectedSubtasks[state.selectedTodos.first]}',
+                  );
+                  goToProjectCreateSubtaskPage(context, todos);
                 },
               ),
             ),
@@ -95,14 +103,9 @@ class ProjectCreateTodoPage extends ConsumerWidget {
     );
   }
 
-  void goToProjectCreateSubtaskPage(
-    BuildContext context,
-    ProjectCreateViewModel viewModel,
-    List<dynamic> todos,
-  ) {
+  void goToProjectCreateSubtaskPage(BuildContext context, List<dynamic> todos) {
     //빌드 후에 상태를 변경할 수 있도록 함
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      viewModel.selectAllSubtasks(todos); // 상태 변경
       Navigator.push(
         context,
         MaterialPageRoute(
