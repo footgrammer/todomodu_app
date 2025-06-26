@@ -16,7 +16,7 @@ class TermsAgreementContent extends StatefulWidget {
 
 class _TermsAgreementContentState extends State<TermsAgreementContent> {
   bool allAgreed = false;
-  List<bool> agreements = [false, false, false];
+  List<bool> agreements = [false, false];
 
   void toggleAll(bool? value) {
     setState(() {
@@ -126,7 +126,7 @@ class _TermsAgreementContentState extends State<TermsAgreementContent> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '이용 약관 ${index + 1}', // 추후 수정
+                      index == 0 ? '이용약관 (필수)' : '개인정보 처리 방침 (필수)',
                       style: AppTextStyles.subtitle2.copyWith(
                         color: AppColors.grey700,
                       ),
@@ -134,7 +134,10 @@ class _TermsAgreementContentState extends State<TermsAgreementContent> {
                     Spacer(),
                     GestureDetector(
                       onTap: () {
-                        navigateToPage(context, TermsAndPrivacyPage()); // 추후 수정
+                        navigateToPage(
+                          context,
+                          TermsAndPrivacyPage(scrollToPrivacy: index == 1),
+                        );
                       },
                       child: Container(
                         color: Colors.transparent,
