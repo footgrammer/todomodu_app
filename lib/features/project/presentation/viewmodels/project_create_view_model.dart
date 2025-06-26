@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/domain/usecases/create_project_usecase.dart';
@@ -52,6 +54,10 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
     };
   }
 
+  void resetInitialSubtaskSnapshot() {
+    _initialSubtaskSnapshot = {};
+  }
+
   Map<String, Set<String>> get initialSubtasks => _initialSubtaskSnapshot ?? {};
 
   void selectAllTodos(List<dynamic> todos) {
@@ -78,7 +84,10 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   void toggleTodo(String todo) {
     final updated = Set<String>.from(state.selectedTodos);
     if (updated.contains(todo)) {
-      updated.remove(todo);
+      // 1개보다 많이 남았을 때
+      if (state.selectedTodos.length > 1) {
+        updated.remove(todo);
+      }
     } else {
       updated.add(todo);
     }
@@ -118,6 +127,12 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
   }
 
   void reset() {
-    state = ProjectCreateState(isLoading: false);
+    _initialSubtaskSnapshot = null;
+    state = ProjectCreateState(
+      isLoading: false,
+      selectedTodos: {},
+      selectedSubtasks: {},
+      expandedItems: {},
+    );
   }
 }

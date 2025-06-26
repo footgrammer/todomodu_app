@@ -33,8 +33,6 @@ class ProgressController extends Notifier<ProjectProgressState> {
 
   @override
   ProjectProgressState build() {
-    _startProgress();
-
     ref.onDispose(() {
       _timer?.cancel();
       _isDisposed = true;
@@ -43,12 +41,7 @@ class ProgressController extends Notifier<ProjectProgressState> {
     return ProjectProgressState.initial();
   }
 
-  void _startProgress() async {
-    // final durations = [
-    //   Duration(seconds: 1),
-    //   Duration(seconds: 2),
-    //   Duration(seconds: 3),
-    // ];
+  void startProgress() async {
     final steps = _steps;
 
     for (int i = 0; i < _steps.length; i++) {
@@ -75,6 +68,11 @@ class ProgressController extends Notifier<ProjectProgressState> {
   void reset() {
     _isDisposed = false;
     state = ProjectProgressState.initial();
+  }
+
+  void resetAndStart() {
+    reset();
+    startProgress();
   }
 }
 

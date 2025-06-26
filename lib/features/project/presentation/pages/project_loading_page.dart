@@ -18,6 +18,11 @@ class ProjectLoadingPage extends ConsumerWidget {
       '할 일 목록 구성 완료!',
     ];
 
+    // ✅ 상태 변경은 build 이후에 수행
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(projectProgressProvider.notifier).resetAndStart();
+    });
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(

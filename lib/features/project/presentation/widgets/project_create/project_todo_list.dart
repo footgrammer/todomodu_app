@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/dialog_utils.dart';
 
 class ProjectTodoList extends StatelessWidget {
   const ProjectTodoList({
@@ -25,7 +26,16 @@ class ProjectTodoList extends StatelessWidget {
             final isSelected = selectedTodos.contains(title);
 
             return GestureDetector(
-              onTap: () => viewModel.toggleTodo(title),
+              onTap: () {
+                if (selectedTodos.length == 1 && isSelected) {
+                  DialogUtils.showErrorDialog(
+                    context,
+                    "최소한 한 개의 할 일은 있어야 합니다.",
+                  );
+                } else {
+                  viewModel.toggleTodo(title);
+                }
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
