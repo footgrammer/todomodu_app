@@ -3,6 +3,7 @@ import 'package:todomodu_app/features/project/presentation/models/project_create
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_subtask_list.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/dialog_utils.dart';
 
 class ProjectTodoSubtaskList extends StatelessWidget {
   const ProjectTodoSubtaskList({
@@ -22,6 +23,7 @@ class ProjectTodoSubtaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedSubtasks = projectCreateState.selectedSubtasks;
     return Expanded(
       child: ListView(
         children:
@@ -76,10 +78,18 @@ class ProjectTodoSubtaskList extends StatelessWidget {
                             final isSelected = subtasks.contains(subtask);
                             final updated = {...subtasks};
                             if (isSelected) {
-                              updated.remove(subtask);
+                              if (subtasks.length == 1) {
+                                DialogUtils.showErrorDialog(
+                                  context,
+                                  "각 할 일에는 최소한 하나 이상의 세부 할 일이 있어야 합니다.",
+                                );
+                              } else {
+                                updated.remove(subtask);
+                              }
                             } else {
                               updated.add(subtask);
                             }
+
                             viewModel.updateSelectedSubtasks(todo, updated);
                           },
                         ),
