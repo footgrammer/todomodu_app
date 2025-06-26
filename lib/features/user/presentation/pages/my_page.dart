@@ -226,6 +226,8 @@ Future<void> withdraw(BuildContext context, WidgetRef ref) async {
   }
 
   try {
+    final userId = user.uid;
+
     final providerIds = user.providerData.map((e) => e.providerId).toList();
 
     if (providerIds.contains('google.com')) {
@@ -238,10 +240,7 @@ Future<void> withdraw(BuildContext context, WidgetRef ref) async {
       log('카카오 연동 유저');
       await reauthenticateWithKakao(ref);
     }
-
-    await FirebaseAuth.instance.currentUser!.delete(); // firebaseAuth 계정 삭제
-    log('firebaseAuth 계정 삭제');
-    final userId = user.uid;
+    await deleteOwnedProjects(userId); // owner가 나인 프로젝트 삭제
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -253,9 +252,29 @@ Future<void> withdraw(BuildContext context, WidgetRef ref) async {
 
     invalidateAllProviders(ref);
 
+    await FirebaseAuth.instance.currentUser!.delete(); // firebaseAuth 계정 삭제
+    log('firebaseAuth 계정 삭제');
+    
     replaceAllWithPage(context, SplashPage()); // 스플래시화면, 로그인화면 고민중
   } catch (e) {
     log('회원탈퇴 실패: $e');
+  }
+}
+
+Future<void> deleteOwnedProjects(String ownerId) async {
+  final querySnapshot =
+      await FirebaseFirestore.instance
+          .collection('projects')
+          .where('ownerId', isEqualTo: ownerId)
+          .get();
+
+  for (final doc in querySnapshot.docs) {
+    try {
+      await doc.reference.delete();
+      log('프로젝트 ${doc.id} 삭제 완료');
+    } catch (e) {
+      log('프로젝트 ${doc.id} 삭제 실패: $e');
+    }
   }
 }
 
