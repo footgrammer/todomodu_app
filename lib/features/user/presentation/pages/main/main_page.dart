@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todomodu_app/features/notice/presentation/pages/notice_create_page.dart';
 import 'package:todomodu_app/features/notice/presentation/pages/notice_list_page.dart';
-import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_list_page.dart';
-import 'package:todomodu_app/features/todo/presentation/pages/add_todo_page.dart';
-import 'package:todomodu_app/features/todo/presentation/pages/todo_detail_page.dart';
 import 'package:todomodu_app/features/todo/presentation/pages/todo_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/my_page.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
@@ -27,7 +23,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           ProjectListPage(),
           TodoPage(),
-          NoticeCreatePage(projectId: '1'),
+          NoticeListPage(),
           MyPage(),
         ],
       ),
