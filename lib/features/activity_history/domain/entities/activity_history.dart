@@ -1,27 +1,17 @@
-enum ActivityType {
-  notice,
-  enterMember,
-  exitMember,
-  addTodo,
-  editTodo,
-  removeTodo,
-  editProjectInfo,
-  assignTodoManager,
-  editAssignTodoManager,
-  projectEnd,
-}
+import 'package:todomodu_app/features/activity_history/domain/models/activity_history_payload.dart';
 
 class ActivityHistory {
-  String id;
-  String projectId;
-  String content;
-  ActivityType activityType;
-  DateTime createdAt;
+  /// Firestore 도큐먼트 ID (nullable)
+  final String? id;
+
+  final String projectId;
+  final DateTime createdAt;
+  final ActivityHistoryPayload payload;
+
   ActivityHistory({
-    required this.id,
+    this.id, // 🔧 이제 optional
     required this.projectId,
-    required this.content,
-    required this.activityType,
     required this.createdAt,
+    required this.payload,
   });
 }
