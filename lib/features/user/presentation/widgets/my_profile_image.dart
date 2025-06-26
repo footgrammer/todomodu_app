@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
 import 'package:todomodu_app/shared/widgets/custom_icon.dart';
 
@@ -39,10 +40,11 @@ class MyProfileImage extends StatelessWidget {
           child: Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) {
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   log('카메라 버튼 클릭');
                   final userRepo = ref.read(userRepositoryProvider);
-                  userRepo.uploadProfileImage(user.userId);
+                  await userRepo.uploadProfileImage(user.userId);
+                  await ref.read(userViewModelProvider.notifier).fetchUser();
                 },
                 child: Container(
                   width: 28,
