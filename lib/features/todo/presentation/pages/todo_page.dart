@@ -29,8 +29,8 @@ class TodoPage extends ConsumerWidget {
     return List.generate(lastDay.day, (i) => DateTime(reference.year, reference.month, i + 1));
   }
 
-  String _yearMonthString(DateTime date) {
-    return '${date.year}년 ${date.month.toString().padLeft(2, '0')}월';
+  String _MonthString(DateTime date) {
+    return '${date.month.toString()}월';
   }
 
   String _weekdayString(DateTime date) {
@@ -68,15 +68,17 @@ class TodoPage extends ConsumerWidget {
               appBar: AppBar(
                 title: Row(
                   children: [
-                    SvgPicture.asset('assets/images/top_app_bar_logo_img.svg', height: 20),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8,),
+                    SvgPicture.asset('assets/images/top_app_bar_logo_img.svg',),
                   ],
                 ),
                 actions: [
                   IconButton(
                     onPressed: () {},
                     icon: const CustomIcon(name: 'bell'),
-                  )
+
+                  ),
+                  SizedBox(width: 4),
                 ],
               ),
               body: Padding(
@@ -91,26 +93,31 @@ class TodoPage extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back_ios, size: 18),
-                          onPressed: () {
-                            ref.read(selectedDateProvider.notifier).state =
-                                DateTime(selectedDate.year, selectedDate.month - 1, 1);
-                          },
-                        ),
-                        Text(
-                          _yearMonthString(selectedDate),
-                          style: AppTextStyles.header1.copyWith(color: AppColors.grey800),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward_ios, size: 18),
-                          onPressed: () {
-                            ref.read(selectedDateProvider.notifier).state =
-                                DateTime(selectedDate.year, selectedDate.month + 1, 1);
-                          },
-                        ),
+                             IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            icon: const Icon(Icons.arrow_left, size: 40),
+                            onPressed: () {
+                              ref.read(selectedDateProvider.notifier).state =
+                                  DateTime(selectedDate.year, selectedDate.month - 1, 1);
+                            },
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            _MonthString(selectedDate),
+                            style: AppTextStyles.header1.copyWith(color: AppColors.grey800),
+                          ),
+                          const SizedBox(width: 6),
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            icon: const Icon(Icons.arrow_right, size: 40),
+                            onPressed: () {
+                              ref.read(selectedDateProvider.notifier).state =
+                                  DateTime(selectedDate.year, selectedDate.month + 1, 1);
+                            },
+                          ),
                       ],
                     ),
                     const SizedBox(height: 16),
