@@ -7,7 +7,17 @@ import 'package:todomodu_app/features/project/presentation/widgets/project/proje
 class ProjectCardList extends ConsumerWidget {
   List<Project>? projects;
 
-  ProjectCardList({super.key, required this.projects});
+  ProjectCardList({
+    super.key,
+    required this.projects,
+    this.titleText = '아직 등록된 프로젝트가 없습니다.',
+    this.subText = '프로젝트를 완료하고\n목록에서 확인해보세요!',
+    this.image = 'assets/images/project_list_empty_img.svg',
+  });
+
+  final String titleText;
+  final String subText;
+  final String image;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,6 +31,6 @@ class ProjectCardList extends ConsumerWidget {
             separatorBuilder: (context, index) => SizedBox(height: 12),
           ),
         )
-        : EmptyProject();
+        : EmptyProject(image: image, title: titleText, subText: subText);
   }
 }
