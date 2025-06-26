@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/widgets/member_avatar.dart';
 
 class ProjectMemberSection extends StatelessWidget {
   final List<UserEntity> members;
@@ -19,15 +20,7 @@ class ProjectMemberSection extends StatelessWidget {
             for (var member in members)
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: member.profileImageUrl.isNotEmpty
-                      ? NetworkImage(member.profileImageUrl)
-                      : null,
-                  child: member.profileImageUrl.isEmpty
-                      ? Text(member.name[0])
-                      : null,
-                ),
+                child: MemberAvatar(member: member, radius: 24),
               ),
             const Spacer(),
             OutlinedButton.icon(
