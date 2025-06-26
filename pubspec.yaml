@@ -71,6 +71,7 @@ dev_dependencies:
   freezed: ^3.0.6
   json_serializable: ^6.9.5
   flutter_launcher_icons: ^0.14.4
+  rename: ^3.1.0
 
 flutter_launcher_icons:
   android: true
