@@ -25,7 +25,7 @@ class ProjectMemberSection extends StatelessWidget {
                       ? NetworkImage(member.profileImageUrl)
                       : null,
                   child: member.profileImageUrl.isEmpty
-                      ? Text(member.name[0])
+                      ? Text(member.name)
                       : null,
                 ),
               ),
