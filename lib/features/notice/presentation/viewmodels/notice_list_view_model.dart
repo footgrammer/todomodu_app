@@ -127,12 +127,12 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     state = state.copyWith(selectedNotices: filtered);
   }
 
-  Color getColorByNotice(Notice notice){
+  Color getColorByNotice(Notice notice) {
     return state.projects.firstWhere((p) => p.id == notice.projectId).color;
   }
 
-  void onClickAllChip(){
-    if(state.selectedProjects.length != state.projects.length){
+  void onClickAllChip() {
+    if (state.selectedProjects.length != state.projects.length) {
       state = state.copyWith(selectedProjects: List.from(state.projects));
     } else {
       state = state.copyWith(selectedNotices: []);
@@ -140,13 +140,27 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     filterNoticesBySelection();
   }
 
-  bool isAllProjectsSelected(){
+  bool isAllProjectsSelected() {
     return state.selectedProjects.length != state.projects.length;
   }
 
-  bool hasUnreadNotices(Project project, UserEntity currentUser){
-    final unreadedNotices = state.notices.where((n) => n.isUnread(currentUser.userId));
+  bool hasUnreadNotices(Project project, UserEntity currentUser) {
+    final unreadedNotices = state.notices.where(
+      (n) => n.isUnread(currentUser.userId),
+    );
     final unreadedProjects = unreadedNotices.map((e) => e.projectId);
     return unreadedProjects.contains(project.id);
+  }
+
+  bool hasUnreadNoticesforDetail(String projectId, UserEntity currentUser) {
+    final unreadedNotices = state.notices.where(
+      (n) => n.isUnread(currentUser.userId),
+    );
+    final unreadedProjects = unreadedNotices.map((e) => e.projectId);
+    return unreadedProjects.contains(projectId);
+  }
+
+  List<Notice> getNoticesByProject(String projectId) {
+    return state.notices.where((n) => n.projectId == projectId).toList();
   }
 }
