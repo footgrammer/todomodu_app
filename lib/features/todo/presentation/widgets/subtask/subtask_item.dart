@@ -38,21 +38,21 @@ class _SubtaskItemState extends State<SubtaskItem> {
     widget.onChanged(widget.subtask.copyWith(title: _controller.text));
   }
 
-  Future<void> _onTapAssigneeEdit() async {
-    final selected = await showModalBottomSheet<List<UserEntity>>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => UserSearchBottomSheet(
-        members: widget.projectMembers,
-        selectedUsers: widget.subtask.assignee != null
-            ? [widget.subtask.assignee!]
-            : [],
-        onConfirm: (users) {
-          Navigator.pop(context, users);
-        },
-      ),
-    );
+Future<void> _onTapAssigneeEdit() async {
+  final selected = await showModalBottomSheet<List<UserEntity>>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (bottomSheetContext) => UserSearchBottomSheet(
+      members: widget.projectMembers,
+      selectedUsers: widget.subtask.assignee != null
+          ? [widget.subtask.assignee!]
+          : [],
+      onConfirm: (users) {
+        Navigator.pop(bottomSheetContext, users);
+      },
+    ),
+  );
 
     if (selected != null && selected.isNotEmpty) {
       widget.onChanged(widget.subtask.copyWith(assignee: selected.first));

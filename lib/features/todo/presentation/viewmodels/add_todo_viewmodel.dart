@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/subtask.dart';
 import '../../domain/entities/todo.dart';
 import '../../application/usecases/create_todo_usecase.dart';
-import '../../data/models/subtask_dto.dart';
 
 class AddTodoViewModel extends ChangeNotifier {
   final CreateTodoUseCase createTodoUseCase;
@@ -19,18 +17,20 @@ class AddTodoViewModel extends ChangeNotifier {
   DateTime endDate = DateTime.now();
   final String pendingTodoId = const Uuid().v4();
 
-  ///  제출 버튼 활성화 조건
+  List<Subtask> _subtasks = [];
+
+  List<Subtask> get subtasks => _subtasks;
+
+  /// 버튼 활성화 조건
   bool get canSubmit {
     final trimmedTitle = titleController.text.trim();
     return trimmedTitle.isNotEmpty && startDate != null && endDate != null;
   }
 
-  /// 제목 입력 감지 시 상태 갱신
   void _onTitleChanged() {
-    notifyListeners(); // 버튼 활성화 상태 갱신
+    notifyListeners();
   }
 
-  /// 🔹 날짜 선택
   Future<void> pickDate(BuildContext context, bool isStart) async {
     final DateTime initial = isStart ? startDate : endDate;
     final DateTime? picked = await showDatePicker(
@@ -46,49 +46,54 @@ class AddTodoViewModel extends ChangeNotifier {
       } else {
         endDate = picked.isBefore(startDate) ? startDate : picked;
       }
-      notifyListeners(); // 변경 감지
+      notifyListeners();
     }
   }
 
-  /// 할 일 + 세부 할 일 저장
+  /// Subtask 조작 메서드
+  void addSubtask(Subtask subtask) {
+    _subtasks = [..._subtasks, subtask];
+    notifyListeners();
+  }
+
+  void updateSubtask(Subtask updated) {
+    _subtasks = _subtasks.map((s) => s.id == updated.id ? updated : s).toList();
+    notifyListeners();
+  }
+
+  void removeSubtask(String id) {
+    _subtasks = _subtasks.where((s) => s.id != id).toList();
+    notifyListeners();
+  }
+
+  /// 제출 시 메모리에서 바로 저장
   Future<void> submitWithSubtasks() async {
     final trimmedTitle = titleController.text.trim();
     if (trimmedTitle.isEmpty) return;
 
-    final subtasksSnapshot =
-        await FirebaseFirestore.instance
-            .collection('projects')
-            .doc(projectId)
-            .collection('subtasks')
-            .where('todoId', isEqualTo: pendingTodoId)
-            .get();
+    final validSubtasks = _subtasks
+        .where((s) => s.title.trim().isNotEmpty)
+        .map((s) => s.copyWith(
+              todoId: pendingTodoId,
+              projectId: projectId,
+            ))
+        .toList();
 
-    final subtasks =
-        subtasksSnapshot.docs
-            .map(
-              (doc) => SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity(),
-            )
-            .where((subtask) => subtask.title.trim().isNotEmpty)
-            .toList();
-
-    // subtasks 비어 있으면 자동 생성
-    if (subtasks.isEmpty) {
-      subtasks.add(
-        Subtask(
-          id: const Uuid().v4(),
-          title: trimmedTitle,
-          isDone: false,
-          todoId: pendingTodoId,
-          projectId: projectId,
-        ),
-      );
+    if (validSubtasks.isEmpty) {
+      validSubtasks.add(Subtask(
+        id: const Uuid().v4(),
+        title: trimmedTitle,
+        isDone: false,
+        todoId: pendingTodoId,
+        projectId: projectId,
+      ));
     }
 
     final todo = Todo(
       id: pendingTodoId,
       projectId: projectId,
       title: trimmedTitle,
-      subtasks: subtasks,
+      subtasks: validSubtasks,
       startDate: startDate,
       endDate: endDate,
       isDone: false,

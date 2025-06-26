@@ -4,9 +4,8 @@ import 'package:todomodu_app/features/todo/presentation/widgets/subtask/subtask_
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:uuid/uuid.dart';
+import 'package:todomodu_app/features/todo/presentation/providers/add_todo_viewmodel_provider.dart';
 import '../../../domain/entities/subtask.dart';
-import '../../providers/subtask/subtask_stream_provider.dart';
-import '../../viewmodels/subtask_viewmodel.dart';
 
 class AddSubtaskList extends ConsumerWidget {
   final String projectId;
@@ -22,34 +21,19 @@ class AddSubtaskList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncSubtasks = ref.watch(subtaskStreamProvider((projectId, todoId)));
-    final subtaskViewModel = ref.read(subtaskViewModelProvider);
+    final viewModel = ref.watch(addTodoViewModelProvider(projectId).notifier);
+    final state = ref.watch(addTodoViewModelProvider(projectId));
 
     return Column(
       children: [
-        asyncSubtasks.when(
-          data: (subtasks) {
-            return Column(
-              children: subtasks.map((subtask) {
-                return SubtaskItem(
-                  key: ValueKey(subtask.id),
-                  subtask: subtask,
-                  projectMembers: projectMembers,
-                  onChanged: (updated) {
-                    subtaskViewModel.update(updated);
-                  },
-                  onDelete: () {
-                    subtaskViewModel.delete(
-                      projectId: projectId,
-                      subtaskId: subtask.id,
-                    );
-                  },
-                );
-              }).toList(),
-            );
-          },
-          loading: () => const CircularProgressIndicator(),
-          error: (e, _) => Text('에러: $e'),
+        ...state.subtasks.map(
+          (subtask) => SubtaskItem(
+            key: ValueKey(subtask.id),
+            subtask: subtask,
+            projectMembers: projectMembers,
+            onChanged: viewModel.updateSubtask,
+            onDelete: () => viewModel.removeSubtask(subtask.id),
+          ),
         ),
         const SizedBox(height: 12),
         Center(
@@ -63,7 +47,7 @@ class AddSubtaskList extends ConsumerWidget {
                 todoId: todoId,
                 projectId: projectId,
               );
-              subtaskViewModel.create(subtask);
+              viewModel.addSubtask(subtask);
             },
           ),
         ),
