@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/todo/data/models/todo_dto.dart';
+import 'package:todomodu_app/features/todo/data/models/subtask_dto.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/shared/types/result.dart';
-import '../../domain/entities/todo.dart';
-import '../../domain/entities/subtask.dart';
 
 class TodoRemoteDataSource {
   final FirebaseFirestore _firestore;
@@ -10,20 +10,23 @@ class TodoRemoteDataSource {
   TodoRemoteDataSource(this._firestore);
 
   Future<void> createTodo(Todo todo) async {
+    final todoDto = TodoDto.fromEntity(todo);
     final todoDoc = _firestore
         .collection('projects')
         .doc(todo.projectId)
         .collection('todos')
         .doc(todo.id);
 
-    await todoDoc.set(todo.toMap());
+    await todoDoc.set(todoDto.toJson());
 
     final subtasksRef = _firestore
         .collection('projects')
         .doc(todo.projectId)
         .collection('subtasks');
+
     for (final subtask in todo.subtasks) {
-      await subtasksRef.doc(subtask.id).set(subtask.toMap());
+      final subtaskDto = SubtaskDto.fromEntity(subtask);
+      await subtasksRef.doc(subtask.id).set(subtaskDto.toJson());
     }
   }
 
@@ -34,26 +37,24 @@ class TodoRemoteDataSource {
         .collection('todos')
         .snapshots()
         .map((snapshot) {
-          return snapshot.docs.map((doc) {
-            return Todo.fromMap(doc.id, doc.data());
-          }).toList();
-        });
+      return snapshot.docs.map((doc) {
+        final dto = TodoDto.fromJson(doc.data(), id: doc.id);
+        return dto.toEntity(); // subtasks는 따로 fetch 필요
+      }).toList();
+    });
   }
 
   Future<Result<List<TodoDto>>> getTodosByProjectId(String projectId) async {
     try {
-      final snapshot =
-          await _firestore
-              .collection('projects')
-              .doc(projectId)
-              .collection('todos')
-              .get();
+      final snapshot = await _firestore
+          .collection('projects')
+          .doc(projectId)
+          .collection('todos')
+          .get();
 
-      final todos =
-          snapshot.docs.map((doc) {
-            final data = doc.data();
-            return TodoDto.fromJson(data, id: doc.id);
-          }).toList();
+      final todos = snapshot.docs
+          .map((doc) => TodoDto.fromJson(doc.data(), id: doc.id))
+          .toList();
 
       return Result.ok(todos);
     } catch (e) {
@@ -88,13 +89,14 @@ class TodoRemoteDataSource {
   }
 
   Future<void> updateTodo(Todo todo) async {
+    final todoDto = TodoDto.fromEntity(todo);
     final todoDoc = _firestore
         .collection('projects')
         .doc(todo.projectId)
         .collection('todos')
         .doc(todo.id);
 
-    await todoDoc.set(todo.toMap());
+    await todoDoc.set(todoDto.toJson());
 
     final subtasksRef = _firestore
         .collection('projects')
@@ -113,12 +115,13 @@ class TodoRemoteDataSource {
     }
 
     for (final subtask in todo.subtasks) {
+      final subtaskDto = SubtaskDto.fromEntity(subtask);
       final docRef = subtasksRef.doc(subtask.id);
       final doc = await docRef.get();
       if (doc.exists) {
-        await docRef.update(subtask.toMap());
+        await docRef.update(subtaskDto.toJson());
       } else {
-        await docRef.set(subtask.toMap());
+        await docRef.set(subtaskDto.toJson());
       }
     }
   }
