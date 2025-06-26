@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> {
         index: _currentIndex,
         children: [
           ProjectListPage(),
-          NoticeListPage(),
+          TodoPage(),
           NoticeCreatePage(projectId: '1'),
           MyPage(),
         ],
