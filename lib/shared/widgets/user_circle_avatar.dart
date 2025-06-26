@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
-class MemberAvatar extends StatelessWidget {
-  final UserEntity member;
+class UserCircleAvatar extends StatelessWidget {
+  final UserEntity user;
   final double radius;
 
-  const MemberAvatar({
+  const UserCircleAvatar({
     super.key,
-    required this.member,
+    required this.user,
     this.radius = 24.0,
   });
 
@@ -16,12 +16,12 @@ class MemberAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: radius,
-      backgroundImage: member.profileImageUrl.isNotEmpty
-          ? NetworkImage(member.profileImageUrl)
+      backgroundImage: user.profileImageUrl.isNotEmpty
+          ? NetworkImage(user.profileImageUrl)
           : null,
-      child: member.profileImageUrl.isEmpty
+      child: user.profileImageUrl.isEmpty
           ? Text(
-              member.name[0],
+              user.name[0],
               style: AppTextStyles.header3.copyWith(color: AppColors.grey800),
             )
           : null,
