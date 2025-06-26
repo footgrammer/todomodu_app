@@ -173,4 +173,35 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     final latest = getNoticeById(notice.id);
     return latest?.isUnread(user.userId) ?? false;
   }
+
+  void addNotice(Notice notice) {
+    final updatedNotices = [notice, ...state.notices];
+    final updatedSelected =
+        state.selectedProjects.any((p) => p.id == notice.projectId)
+            ? [notice, ...state.selectedNotices]
+            : state.selectedNotices;
+
+    state = state.copyWith(
+      notices: updatedNotices,
+      selectedNotices: updatedSelected,
+    );
+  }
+
+  void addCreatedNotice(Notice notice) {
+    final updatedNotices = [notice, ...state.notices];
+
+    final shouldIncludeInSelected = state.selectedProjects.any(
+      (p) => p.id == notice.projectId,
+    );
+
+    final updatedSelectedNotices =
+        shouldIncludeInSelected
+            ? [notice, ...state.selectedNotices]
+            : state.selectedNotices;
+
+    state = state.copyWith(
+      notices: updatedNotices,
+      selectedNotices: updatedSelectedNotices,
+    );
+  }
 }
