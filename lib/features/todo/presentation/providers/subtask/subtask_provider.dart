@@ -10,6 +10,5 @@ final _subtaskDataSourceProvider = Provider<SubtaskDatasourceImpl>((ref) {
 final subtaskRepositoryProvider = Provider<SubtaskRepositoryImpl>((ref) {
   return SubtaskRepositoryImpl(
     dataSource: ref.watch(_subtaskDataSourceProvider),
-    firestore: FirebaseFirestore.instance,
   );
 });
