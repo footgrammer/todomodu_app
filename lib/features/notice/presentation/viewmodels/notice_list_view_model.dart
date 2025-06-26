@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
+import 'package:todomodu_app/features/notice/domain/extensions/notice_extension.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/retrieve_notices_by_projects_usecase.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/mark_notice_as_read_usecase.dart';
 import 'package:todomodu_app/features/notice/presentation/models/notice_list_model.dart';
@@ -91,13 +95,23 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     required Notice notice,
     required UserEntity user,
   }) async {
-    final result = await _markAsReadUsecase.execute(notice: notice);
+    final result = await _markAsReadUsecase.execute(notice: notice, user: user);
 
     if (result is Ok<Notice>) {
       final updated = result.value;
-      final updatedList =
+
+      final updatedNotices =
           state.notices.map((n) => n.id == updated.id ? updated : n).toList();
-      state = state.copyWith(notices: updatedList);
+
+      final updatedSelected =
+          state.selectedNotices
+              .map((n) => n.id == updated.id ? updated : n)
+              .toList();
+
+      state = state.copyWith(
+        notices: updatedNotices,
+        selectedNotices: updatedSelected, // ✅ 이것도 함께 갱신
+      );
     }
   }
 
@@ -111,5 +125,28 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
             .toList();
 
     state = state.copyWith(selectedNotices: filtered);
+  }
+
+  Color getColorByNotice(Notice notice){
+    return state.projects.firstWhere((p) => p.id == notice.projectId).color;
+  }
+
+  void onClickAllChip(){
+    if(state.selectedProjects.length != state.projects.length){
+      state = state.copyWith(selectedProjects: List.from(state.projects));
+    } else {
+      state = state.copyWith(selectedNotices: []);
+    }
+    filterNoticesBySelection();
+  }
+
+  bool isAllProjectsSelected(){
+    return state.selectedProjects.length != state.projects.length;
+  }
+
+  bool hasUnreadNotices(Project project, UserEntity currentUser){
+    final unreadedNotices = state.notices.where((n) => n.isUnread(currentUser.userId));
+    final unreadedProjects = unreadedNotices.map((e) => e.projectId);
+    return unreadedProjects.contains(project.id);
   }
 }

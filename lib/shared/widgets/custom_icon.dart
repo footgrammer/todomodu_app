@@ -17,7 +17,6 @@ class CustomIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return SvgPicture.asset(
       'assets/icons/$name.svg',
-      width: size,
       height: size,
       fit: BoxFit.scaleDown,
       colorFilter:

@@ -22,7 +22,6 @@ class ActivityHistoryDatasourceImpl implements ActivityHistoryDatasource {
 
       final json =
           dto.toJson()
-            ..remove('projectId') // 🔧 경로에 포함되므로 제거
             ..['createdAt'] = FieldValue.serverTimestamp();
 
       await activityCollection.add(json); // 🔧 자동 ID로 저장

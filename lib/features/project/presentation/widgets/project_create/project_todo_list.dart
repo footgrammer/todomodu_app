@@ -21,7 +21,7 @@ class ProjectTodoList extends StatelessWidget {
       runSpacing: 8,
       children:
           todos.map<Widget>((todo) {
-            final title = todo['todoTitle'] as String;
+            final title = todo.todoTitle;
             final isSelected = selectedTodos.contains(title);
 
             return GestureDetector(

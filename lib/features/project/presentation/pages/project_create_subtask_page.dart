@@ -1,12 +1,24 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
+import 'package:todomodu_app/features/ai/domain/models/openai_response.dart'
+    as openai;
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
+import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_todo_subtask_list.dart';
+import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
+import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
+import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
+import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 class ProjectCreateSubtaskPage extends ConsumerWidget {
-  const ProjectCreateSubtaskPage({super.key});
+  openai.OpenaiResponse response;
+  ProjectCreateSubtaskPage({super.key, required this.response});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,6 +37,19 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            // 🔄 로딩 상태 초기화
+            ref.invalidate(projectProgressProvider);
+
+            // 🧼 생성 상태 초기화 (ViewModel의 reset 사용)
+            ref.read(projectCreateViewModelProvider.notifier).reset();
+
+            // 👈 메인으로 이동
+            replaceAllWithPage(context, MainPage());
+          },
+          child: Icon(Icons.arrow_back_ios),
+        ),
         title: Row(children: [Text('프로젝트 추가하기', style: AppTextStyles.header2)]),
       ),
       body: Padding(
@@ -51,16 +76,114 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
               },
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 40, top: 10),
+              padding: EdgeInsets.only(bottom: 64, top: 10),
               child: CommonElevatedButton(
                 text: '완료',
                 buttonColor: AppColors.primary500,
-                onPressed: () {},
+                onPressed: () async {
+                  _createProject(ref, context, state);
+                },
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  List<Color> colorList = [
+    AppColors.colorList1,
+    AppColors.colorList2,
+    AppColors.colorList3,
+    AppColors.colorList4,
+    AppColors.colorList5,
+    AppColors.colorList6,
+    AppColors.colorList7,
+    AppColors.colorList8,
+    AppColors.colorList9,
+    AppColors.colorList10,
+    AppColors.colorList11,
+    AppColors.colorList12,
+    AppColors.colorList13,
+    AppColors.colorList14,
+    AppColors.colorList15,
+    AppColors.colorList16,
+  ];
+
+  Future<void> _createProject(
+    WidgetRef ref,
+    BuildContext context,
+    ProjectCreateState state,
+  ) async {
+    //현재 유저 가지고 오기
+    final userEntity =
+        await ref.read(userViewModelProvider.notifier).fetchUser();
+    if (userEntity == null) {
+      throw Exception('프로젝트 생성에 필요한 필수 정보가 누락되었습니다.');
+    }
+
+    final random = Random();
+    final color = colorList[random.nextInt(16)];
+    final invitationCode = (random.nextInt(900000) + 100000).toString();
+    List<Todo> finalTodos =
+        state.selectedTodos.map((todoTitle) {
+          // 서브테스트 형성
+          final subtasks =
+              state.selectedSubtasks[todoTitle]!.map((subtaskTitle) {
+                return Subtask(
+                  id: '',
+                  title: subtaskTitle,
+                  isDone: false,
+                  todoId: '',
+                  projectId: '',
+                );
+              }).toList();
+
+          // Chat GPT 응답으로부터 startDate, eadDate 값을 todo에 추가하기 위해 타이틀이 같은 responseTodo를 가지고 옴
+          // responseTodo 의 startDate, endDate의 타입은 String (2025-04-20)
+          final responseTodo =
+              response.todos
+                  .where((todo) => todo.todoTitle == todoTitle)
+                  .toList()
+                  .first;
+          return Todo(
+            id: '',
+            projectId: '',
+            title: todoTitle,
+            subtasks: subtasks,
+            startDate: DateTime.parse(responseTodo.todoStartDate),
+            endDate: DateTime.parse(responseTodo.todoEndDate),
+            isDone: false,
+          );
+        }).toList();
+    final project = Project(
+      id: '',
+      title: state.title,
+      description: state.description,
+      startDate: state.startDate ?? DateTime.parse(response.projectStartDate),
+      endDate: state.endDate ?? DateTime.parse(response.projectStartDate),
+      owner: userEntity,
+      members: [userEntity],
+      todos: finalTodos,
+      invitationCode: invitationCode,
+      isDone: false,
+      color: color,
+      progress: 0,
+    );
+    final createProjectUsecase = ref.read(createProjectUsecaseProvider);
+    await ref
+        .read(projectCreateViewModelProvider.notifier)
+        .createProject(project, createProjectUsecase);
+
+    ref.invalidate(hasFetchedProvider); // 새로 프로젝트를 불러올 수 있도록 상태 초기화
+
+    // 🔄 로딩 상태 초기화
+    ref.invalidate(projectProgressProvider);
+
+    // 🧼 생성 상태 초기화 (ViewModel의 reset 사용)
+    ref.read(projectCreateViewModelProvider.notifier).reset();
+
+    // 👈 메인으로 이동
+    replaceAllWithPage(context, MainPage());
   }
 }

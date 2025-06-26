@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key});
@@ -22,25 +23,61 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: false,
-        title: const Text(
-          '알림 설정',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
+        titleSpacing: 0,
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(18),
+                onTap: () => Navigator.pop(context),
+                child: const SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: Icon(Icons.arrow_back_ios_new, size: 18),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '알림 설정',
+              style: AppTextStyles.header3.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+          ],
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
           _buildSection(['새로운 공지', '팀원 입장/퇴장']),
-          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            height: 8,
+            decoration: BoxDecoration(
+              border: Border.symmetric(
+                horizontal: BorderSide(color: AppColors.grey200),
+              ),
+              color: AppColors.grey75,
+            ),
+          ),
           _buildSection(['할 일 추가/수정/삭제', '할 일 완료', '할 일 담당자 배정/변경']),
-          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            height: 8,
+            decoration: BoxDecoration(
+              border: Border.symmetric(
+                horizontal: BorderSide(color: AppColors.grey200),
+              ),
+              color: AppColors.grey75,
+            ),
+          ),
           _buildSection(['프로젝트 종료일 안내', '프로젝트 정보 수정', '프로젝트 완료']),
         ],
       ),
@@ -48,24 +85,36 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   }
 
   Widget _buildSection(List<String> items) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children:
-            items.map((title) {
-              return SwitchListTile(
-                title: Text(title),
-                value: _settings[title]!,
-
-                activeColor: Colors.white,
-                activeTrackColor: Color(0XFF5752EA),
-                onChanged: (value) {
-                  setState(() {
-                    _settings[title] = value;
-                  });
-                },
-              );
-            }).toList(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        child: Column(
+          children:
+              items.map((title) {
+                return SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    title,
+                    style: AppTextStyles.body1.copyWith(
+                      color: AppColors.grey800,
+                    ),
+                  ),
+                  value: _settings[title]!,
+                  activeColor: Colors.white,
+                  activeTrackColor: AppColors.primary500,
+                  onChanged: (value) {
+                    setState(() {
+                      _settings[title] = value;
+                    });
+                  },
+                  visualDensity: const VisualDensity(
+                    horizontal: -2.0,
+                    vertical: -2.0,
+                  ),
+                );
+              }).toList(),
+        ),
       ),
     );
   }

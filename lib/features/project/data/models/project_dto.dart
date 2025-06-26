@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
@@ -10,10 +11,9 @@ class ProjectDto {
   DateTime startDate;
   DateTime endDate;
   String ownerId;
-  // List<String> memberIds;
-  // List<String> todoIds;
   String invitationCode;
   bool isDone;
+  int color;
 
   ProjectDto({
     required this.id,
@@ -22,10 +22,9 @@ class ProjectDto {
     required this.startDate,
     required this.endDate,
     required this.ownerId,
-    // required this.memberIds,
-    // required this.todoIds,
     required this.invitationCode,
     required this.isDone,
+    required this.color,
   });
 
   factory ProjectDto.fromJson(Map<String, dynamic> json) {
@@ -37,8 +36,7 @@ class ProjectDto {
       startDate: (json['startDate'] as Timestamp).toDate(),
       endDate: (json['endDate'] as Timestamp).toDate(),
       ownerId: json['ownerId'] as String,
-      // memberIds: List<String>.from(json['memberIds'] ?? []),
-      // todoIds:   List<String>.from(json['todoIds']   ?? []),
+      color: json['color'] as int,
       invitationCode: json['invitationCode'] as String,
       isDone: json['isDone'] as bool,
     );
@@ -49,13 +47,11 @@ class ProjectDto {
       'id': id,
       'title': title,
       'description': description,
-      // DateTime → Timestamp
+      'color': color,
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),
       'ownerId': ownerId,
-      // 'memberIds': memberIds,
-      // 'todoIds':   todoIds,
-      'inviteCode': invitationCode,
+      'invitationCode': invitationCode,
       'isDone': isDone,
     };
   }
@@ -68,10 +64,9 @@ class ProjectDto {
       startDate: entity.startDate,
       endDate: entity.endDate,
       ownerId: entity.owner.userId,
-      // memberIds: entity.members.map((e) => e.id).toList(),
-      // todoIds:   entity.todos.map((e) => e.id).toList(),
       invitationCode: entity.invitationCode,
       isDone: entity.isDone,
+      color: entity.color.value,
     );
   }
 
@@ -79,6 +74,7 @@ class ProjectDto {
     required UserEntity owner,
     required List<UserEntity> members,
     required List<Todo> todos,
+    required double progress, // progress 추가
   }) {
     return Project(
       id: id,
@@ -91,6 +87,9 @@ class ProjectDto {
       todos: todos,
       invitationCode: invitationCode,
       isDone: isDone,
+      progress: progress, // progress 할당
+      color: Color(color),
+
     );
   }
 }

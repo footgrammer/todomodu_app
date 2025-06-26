@@ -1,14 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:http/http.dart' as http;
+import 'package:todomodu_app/features/ai/domain/models/openai_params.dart';
+import 'package:todomodu_app/features/ai/presentation/providers/openai_providers.dart';
+import 'package:todomodu_app/features/project/presentation/pages/project_create_todo_page.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_loading_page.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/utils/project_validator.dart';
+import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_form_field.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/dialog_utils.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
-
-TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 
 // 상태 관리용 Provider
 final titleControllerProvider = Provider.autoDispose<TextEditingController>(
@@ -35,6 +39,7 @@ final endDateProvider = StateProvider.autoDispose<DateTime?>((ref) => null);
 
 class ProjectCreatePage extends ConsumerWidget {
   const ProjectCreatePage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 텍스트 컨트롤러
@@ -51,7 +56,9 @@ class ProjectCreatePage extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Row(children: [Text('프로젝트 추가하기', style: header2)]),
+          title: Row(
+            children: [Text('프로젝트 추가하기', style: AppTextStyles.header2)],
+          ),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +111,7 @@ class ProjectCreatePage extends ConsumerWidget {
     TextEditingController descriptionController,
     AutoDisposeProvider<FocusNode> titleFocusNodeProvider,
     AutoDisposeProvider<FocusNode> descriptionFocusNodeProvider,
-  ) {
+  ) async {
     final title = titleController.text.trim();
     final description = descriptionController.text.trim();
     final startDate = ref.read(startDateProvider);
@@ -150,82 +157,49 @@ class ProjectCreatePage extends ConsumerWidget {
       return;
     }
 
-    // chat GPT API 함수
-    Future<Map<String, dynamic>> requestChatGPTApi(String prompt) async {
-      await Future.delayed(Duration(seconds: 6));
-      // final response = await http.post(
-      //   Uri.parse("https://api.openai.com/v1/chat/completions"),
-      //   headers: {
-      //     "Authorization": "Bearer YOUR_API_KEY",
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: jsonEncode({
-      //     "model": "gpt-4",
-      //     "messages": [
-      //       {"role": "user", "content": prompt},
-      //     ],
-      //   }),
-      // );
+    //상태값 저장해 놓기
+    ref
+        .read(projectCreateViewModelProvider.notifier)
+        .updateProjectInfo(
+          title: title,
+          description: description,
+          startDate: startDate!,
+          endDate: endDate!,
+        );
 
-      final data = {
-        "projectTitle": "프로젝트 이름",
-        "projectDescription": "프로젝트 설명",
-        "projectStart_date": "2025-06-01",
-        "projectEnd_date": "2025-06-30",
-        "todos": [
-          {
-            "todoTitle": "여행 일정 계획 세우기",
-            "todoStartDate": "2025-06-01",
-            "todoEndDate": "2025-06-02",
-            "subtasks": ["출발일 확정", "도시별 일정 조정"],
-          },
-          {
-            "todoTitle": "항공권 예약하기",
-            "todoStartDate": "2025-06-02",
-            "todoEndDate": "2025-06-03",
-            "subtasks": ["왕복 항공권 검색", "예약 완료 및 결제"],
-          },
-          {
-            "todoTitle": "환전 준비하기",
-            "todoStartDate": "2025-06-03",
-            "todoEndDate": "2025-06-04",
-            "subtasks": ["필요 금액 계산", "은행 또는 환전소 방문"],
-          },
-          {
-            "todoTitle": "로밍 및 인터넷 준비하기",
-            "todoStartDate": "2025-06-04",
-            "todoEndDate": "2025-06-05",
-            "subtasks": ["데이터 로밍 신청", "포켓 와이파이 또는 심카드 예약"],
-          },
-          {
-            "todoTitle": "맛집/관광지 리스트 만들기",
-            "todoStartDate": "2025-06-05",
-            "todoEndDate": "2025-06-06",
-            "subtasks": ["지역별 맛집 조사", "관광지 우선순위 정하기"],
-          },
-          {
-            "todoTitle": "숙소 정하기",
-            "todoStartDate": "2025-06-06",
-            "todoEndDate": "2025-06-07",
-            "subtasks": ["위치 비교", "예약 사이트 확인 및 결제"],
-          },
-          {
-            "todoTitle": "집 꾸리기",
-            "todoStartDate": "2025-06-07",
-            "todoEndDate": "2025-06-08",
-            "subtasks": ["청소하기", "반려식물 돌보기", "창문 닫기"],
-          },
-        ],
-      };
-      return data;
-    }
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const ProjectLoadingPage()));
 
-    // 모든 검증 통과 시 수행할 로직 추가
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder:
-            (_) => ProjectLoadingPage(requestChatGPTApi: requestChatGPTApi),
-      ),
+    final openaiParams = OpenaiParams(
+      projectTitle: title,
+      projectStartDate: startDate,
+      projectEndDate: endDate,
+      prompt: description,
     );
+
+    try {
+      final response = await ref.read(
+        openaiResponseProvider(openaiParams).future,
+      );
+      if (response != null) {
+        final controller = ref.read(projectProgressProvider.notifier);
+        await controller.completeRequest();
+        Navigator.of(context).pop();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ProjectCreateTodoPage(response: response),
+          ),
+        );
+      } else {
+        Navigator.of(context).pop();
+        DialogUtils.showErrorDialog(
+          context,
+          'AI 응답이 비어있습니다.\n조금 더 구체적으로 프로젝트를 설명해 주세요!',
+        );
+      }
+    } catch (error) {
+      log('error : ${error}');
+    }
   }
 }

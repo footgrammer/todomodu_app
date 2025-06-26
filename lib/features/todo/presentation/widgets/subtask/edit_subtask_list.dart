@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/todo/presentation/widgets/subtask/subtask_item.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+import 'package:todomodu_app/shared/constants/app_colors.dart';
+import 'package:uuid/uuid.dart';
 import '../../../domain/entities/subtask.dart';
 import '../../providers/subtask/subtask_stream_provider.dart';
 import 'package:todomodu_app/features/todo/presentation/viewmodels/subtask_viewmodel.dart';
 
-
-class EditTodoSubtaskList extends ConsumerWidget {
+class EditSubtaskList extends ConsumerWidget {
   final String projectId;
   final String todoId;
+  final List<UserEntity> projectMembers;
 
-  const EditTodoSubtaskList({
+  const EditSubtaskList({
     super.key,
     required this.projectId,
     required this.todoId,
+    required this.projectMembers,
   });
 
   @override
@@ -23,64 +28,40 @@ class EditTodoSubtaskList extends ConsumerWidget {
     return asyncSubtasks.when(
       data: (subtasks) {
         return Column(
-          children: subtasks.map((subtask) {
-            final controller = TextEditingController(text: subtask.title);
-
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 60, bottom: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TextField(
-                            controller: controller,
-                            maxLength: 50,
-                            onChanged: (value) {
-                              final updated = subtask.copyWith(title: value);
-                              viewModel.update(updated);
-                            },
-                            decoration: const InputDecoration(
-                              hintText: '세부 할 일',
-                              border: InputBorder.none,
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                              counterText: '',
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 16,
-                          bottom: 8,
-                          child: Text(
-                            '${controller.text.length}/50',
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    onPressed: () {
-                      viewModel.delete(
-                        projectId: projectId,
-                        subtaskId: subtask.id,
-                      );
-                    },
-                    icon: const Icon(Icons.remove_circle_outline),
-                  ),
-                ],
+          children: [
+            ...subtasks.map(
+              (subtask) => SubtaskItem(
+                key: ValueKey(subtask.id),
+                subtask: subtask,
+                projectMembers: projectMembers,
+                onChanged: (updated) => viewModel.update(updated),
+                onDelete: () => viewModel.delete(
+                  projectId: projectId,
+                  subtaskId: subtask.id,
+                ),
               ),
-            );
-          }).toList(),
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: IconButton(
+                icon: const Icon(
+                  Icons.add_circle,
+                  size: 48,
+                  color: AppColors.primary200,
+                ),
+                onPressed: () {
+                  final subtask = Subtask(
+                    id: const Uuid().v4(),
+                    title: '',
+                    isDone: false,
+                    todoId: todoId,
+                    projectId: projectId,
+                  );
+                  viewModel.create(subtask);
+                },
+              ),
+            ),
+          ],
         );
       },
       loading: () => const CircularProgressIndicator(),
