@@ -44,11 +44,14 @@ class _TermsAgreementContentState extends State<TermsAgreementContent> {
           children: [
             Align(
               alignment: Alignment.centerRight,
-              child: Container(
-                color: Colors.transparent,
-                width: 24,
-                height: 24,
-                child: CustomIcon(name: 'close-md'),
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  color: Colors.transparent,
+                  width: 24,
+                  height: 24,
+                  child: CustomIcon(name: 'close-md'),
+                ),
               ),
             ),
             Align(
