@@ -87,6 +87,17 @@ class ProjectDataSourceImpl implements ProjectDataSource {
   }
 
   @override
+  Future<ProjectDto?> getProjectDtoById(String projectId) async {
+    try {
+      final doc = await _firestore.collection('projects').doc(projectId).get();
+      if (!doc.exists) return null;
+      return ProjectDto.fromJson(doc.data()!..['id'] = doc.id);
+    } catch (e) {
+      rethrow;
+    }
+  } //추가
+
+  @override
   Future<Result<List<String>>> getMemberIdsByProjectId(String projectId) async {
     try {
       final snapshot =
