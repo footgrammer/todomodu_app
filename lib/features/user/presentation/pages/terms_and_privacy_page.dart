@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class TermsAndPrivacyPage extends StatefulWidget {
-  const TermsAndPrivacyPage({super.key});
+  final bool scrollToPrivacy; // true면 개인정보 처리방침으로 이동
+
+  const TermsAndPrivacyPage({super.key, this.scrollToPrivacy = false});
 
   @override
   State<TermsAndPrivacyPage> createState() => _TermsAndPrivacyPageState();
@@ -11,6 +13,9 @@ class TermsAndPrivacyPage extends StatefulWidget {
 
 class _TermsAndPrivacyPageState extends State<TermsAndPrivacyPage> {
   String termsText = '';
+  final ScrollController _scrollController = ScrollController();
+
+  final _privacyKey = GlobalKey();
 
   @override
   void initState() {
@@ -23,6 +28,24 @@ class _TermsAndPrivacyPageState extends State<TermsAndPrivacyPage> {
     setState(() {
       termsText = loadedText;
     });
+
+    // 약간의 delay 후 스크롤 이동
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.scrollToPrivacy) {
+        _scrollToPrivacy();
+      }
+    });
+  }
+
+  void _scrollToPrivacy() {
+    final ctx = _privacyKey.currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
@@ -58,21 +81,44 @@ class _TermsAndPrivacyPageState extends State<TermsAndPrivacyPage> {
           ],
         ),
       ),
-      body:
-          termsText.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
-                ),
-                child: Text(
-                  termsText,
-                  style: AppTextStyles.body2.copyWith(
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-              ),
+      body: termsText.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              controller: _scrollController,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: _buildTextWithKey(theme),
+            ),
+    );
+  }
+
+  /// 개인정보 처리방침 위치에 key를 삽입
+  Widget _buildTextWithKey(ThemeData theme) {
+    // 문자열 분리
+    final splitParts = termsText.split('■ 개인정보 처리방침');
+
+    if (splitParts.length < 2) {
+      return Text(
+        termsText,
+        style: AppTextStyles.body2.copyWith(color: theme.colorScheme.onSurface),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          splitParts[0],
+          style: AppTextStyles.body2.copyWith(color: theme.colorScheme.onSurface),
+        ),
+        const SizedBox(height: 24),
+        Container(
+          key: _privacyKey,
+          child: Text(
+            '■ 개인정보 처리방침\n${splitParts[1]}',
+            style: AppTextStyles.body2.copyWith(color: theme.colorScheme.onSurface),
+          ),
+        ),
+      ],
     );
   }
 }
