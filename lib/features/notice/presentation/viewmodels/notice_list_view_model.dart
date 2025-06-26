@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
+import 'package:todomodu_app/features/notice/domain/extensions/notice_extension.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/retrieve_notices_by_projects_usecase.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/mark_notice_as_read_usecase.dart';
 import 'package:todomodu_app/features/notice/presentation/models/notice_list_model.dart';
@@ -141,5 +142,11 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
 
   bool isAllProjectsSelected(){
     return state.selectedProjects.length != state.projects.length;
+  }
+
+  bool hasUnreadNotices(Project project, UserEntity currentUser){
+    final unreadedNotices = state.notices.where((n) => n.isUnread(currentUser.userId));
+    final unreadedProjects = unreadedNotices.map((e) => e.projectId);
+    return unreadedProjects.contains(project.id);
   }
 }
