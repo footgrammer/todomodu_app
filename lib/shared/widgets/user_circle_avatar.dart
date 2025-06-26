@@ -20,9 +20,10 @@ class UserCircleAvatar extends StatelessWidget {
           ? NetworkImage(user.profileImageUrl)
           : null,
       child: user.profileImageUrl.isEmpty
-          ? Text(
-              user.name[0],
-              style: AppTextStyles.header3.copyWith(color: AppColors.grey800),
+          ? Icon(
+              Icons.person,
+              size: radius,
+              color: AppColors.grey400,
             )
           : null,
     );
