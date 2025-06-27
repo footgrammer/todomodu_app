@@ -7,7 +7,7 @@ class SubtaskDto {
   final String todoId;
   final String title;
   final bool isDone;
-  final String? assigneeId;
+  final List<String>? assigneeId;
 
   const SubtaskDto({
     required this.id,
@@ -26,7 +26,9 @@ class SubtaskDto {
       todoId: json['todoId'] as String,
       title: json['title'] as String,
       isDone: json['isDone'] as bool,
-      assigneeId: json['assigneeId'] as String?,
+      assigneeId: (json['assigneeId'] is List)
+        ? (json['assigneeId'] as List).map((e) => e.toString()).toList()
+        : null,
     );
   }
 
@@ -37,7 +39,7 @@ class SubtaskDto {
       'todoId': todoId,
       'title': title,
       'isDone': isDone,
-      'assigneeId': assigneeId ?? '',
+      'assigneeId': assigneeId ?? [],
     };
   }
 
@@ -49,12 +51,12 @@ class SubtaskDto {
       todoId: entity.todoId,
       title: entity.title,
       isDone: entity.isDone,
-      assigneeId: entity.assignee?.userId,
+      assigneeId: entity.assignee?.map((e) => e.userId).toList(),
     );
   }
 
   /// Dto → Entity (nullable assignee 주입 필요)
-  Subtask toEntity({UserEntity? assignee}) {
+  Subtask toEntity({List<UserEntity>? assignee}) {
     return Subtask(
       id: id,
       title: title,
@@ -72,7 +74,7 @@ class SubtaskDto {
     String? todoId,
     String? title,
     bool? isDone,
-    String? assigneeId,
+    List<String>? assigneeId,
   }) {
     return SubtaskDto(
       id: id ?? this.id,

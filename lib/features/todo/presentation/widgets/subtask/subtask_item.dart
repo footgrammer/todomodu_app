@@ -47,14 +47,14 @@ Future<void> _onTapAssigneeEdit() async {
     builder: (bottomSheetContext) => UserSearchBottomSheet(
       members: widget.projectMembers,
       selectedUsers: widget.subtask.assignee != null
-          ? [widget.subtask.assignee!]
+          ? widget.subtask.assignee!
           : [],
       onConfirm: (List<UserEntity> _) {},
     ),
   );
 
     if (selected != null && selected.isNotEmpty) {
-      widget.onChanged(widget.subtask.copyWith(assignee: selected.first));
+      widget.onChanged(widget.subtask.copyWith(assignee: selected));
     }
   }
 
@@ -115,7 +115,7 @@ Future<void> _onTapAssigneeEdit() async {
                     onTap: _onTapAssigneeEdit,
                     child: assignee == null
                         ? const Icon(Icons.person_add_alt, size: 20, color: AppColors.grey400)
-                        : UserAvatarGroup(users: [assignee], radius: 10, maxVisibleCount: 3, overlapOffset: 1,)
+                        : UserAvatarGroup(users: assignee, radius: 10, maxVisibleCount: 3, overlapOffset: 1,)
                   ),
                 ),
               ],
