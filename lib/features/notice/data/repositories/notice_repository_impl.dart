@@ -8,6 +8,7 @@ import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/domain/repositories/user_repository.dart';
 import 'package:todomodu_app/shared/types/result.dart';
+import 'package:todomodu_app/shared/types/result_extension.dart';
 
 class NoticeRepositoryImpl implements NoticeRepository {
   final NoticeDatasource _datasource;
@@ -22,10 +23,20 @@ class NoticeRepositoryImpl implements NoticeRepository {
   @override
   Future<Result<Notice>> createNotice(Notice notice) async {
     final result = await _datasource.createNotice(NoticeDto.fromEntity(notice));
-    return switch (result) {
-      Ok(value: final dto) => Result.ok(dto.toEntity(fullCheckedUsers: [])),
-      Error(:final error) => Result.error(error),
-    };
+
+    return await result.when(
+      ok: (dto) async {
+        final userResult = await _userRepository.getUsersByIds(
+          dto.checkedUsers,
+        );
+
+        return userResult.when(
+          ok: (users) => Result.ok(dto.toEntity(fullCheckedUsers: users)),
+          error: (e) => Result.error(e),
+        );
+      },
+      error: (e) => Result.error(e),
+    );
   }
 
   @override
@@ -37,10 +48,20 @@ class NoticeRepositoryImpl implements NoticeRepository {
       projectId: projectId,
       noticeId: noticeId,
     );
-    return switch (result) {
-      Ok(value: final dto) => Result.ok(dto.toEntity(fullCheckedUsers: [])),
-      Error(:final error) => Result.error(error),
-    };
+
+    return await result.when(
+      ok: (dto) async {
+        final usersResult = await _userRepository.getUsersByIds(
+          dto.checkedUsers,
+        );
+
+        return usersResult.when(
+          ok: (users) => Result.ok(dto.toEntity(fullCheckedUsers: users)),
+          error: (e) => Result.error(e),
+        );
+      },
+      error: (e) => Result.error(e),
+    );
   }
 
   @override
