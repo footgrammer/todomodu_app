@@ -1,5 +1,6 @@
 //add_subtask_list.dart, edit_subtask_list.dart에서 반복되는 블록
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/activity_history/domain/models/activity_history_payload.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
@@ -53,10 +54,8 @@ Future<void> _onTapAssigneeEdit() async {
     ),
   );
 
-    if (selected != null && selected.isNotEmpty) {
       widget.onChanged(widget.subtask.copyWith(assignee: selected));
-    }
-  }
+}
 
   @override
   void dispose() {
@@ -113,7 +112,7 @@ Future<void> _onTapAssigneeEdit() async {
                   top: 8,
                   child: GestureDetector(
                     onTap: _onTapAssigneeEdit,
-                    child: assignee == null
+                    child: assignee == null || assignee.isEmpty
                         ? const Icon(Icons.person_add_alt, size: 20, color: AppColors.grey400)
                         : UserAvatarGroup(users: assignee, radius: 10, maxVisibleCount: 3, overlapOffset: 1,)
                   ),
