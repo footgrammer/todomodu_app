@@ -40,7 +40,7 @@ class ProjectCard extends ConsumerWidget {
             ProjectProgressBar(textColor: AppColors.grey900, project: project),
             SizedBox(height: 16),
             // 멤버 아이콘들
-            ProjectMemberIcons(),
+            ProjectMemberIcons(members: project.members),
           ],
         ),
       ),

@@ -77,6 +77,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
                   ),
                 ),
                 child: PopupMenuButton<String>(
+                  icon: Icon(Icons.more_vert),
                   onSelected: (value) {
                     if (value == 'leave') {
                       _showLeaveProjectDialog(context, project.id);
@@ -89,7 +90,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
-                              '프로젝트 나가기',
+                              '프로젝트 삭제하기',
                               style: AppTextStyles.body2.copyWith(
                                 color: AppColors.grey800,
                               ),
@@ -145,7 +146,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
   void _showLeaveProjectDialog(BuildContext context, String projectId) {
     DialogUtils.showConfirmDialog(
       context,
-      '프로젝트에서 정말 나가시겠습니까?',
+      '프로젝트를 정말 삭제하시겠습니까?',
       onYes: () async {
         await ref
             .read(deleteProjectUsecaseProvider)
