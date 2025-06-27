@@ -6,8 +6,6 @@ import 'package:todomodu_app/features/project/presentation/widgets/project_creat
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_loading_text.dart';
 
 class ProjectLoadingPage extends ConsumerWidget {
-  // final Future<Map<String, dynamic>> Function(String) requestChatGPTApi;
-
   const ProjectLoadingPage({super.key});
 
   @override
@@ -19,6 +17,16 @@ class ProjectLoadingPage extends ConsumerWidget {
       '할 일을 하나씩 정리 중이에요...',
       '할 일 목록 구성 완료!',
     ];
+
+    // ✅ 상태 변경은 build 이후에 수행
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final controller = ref.read(projectProgressProvider.notifier);
+      final progress = ref.read(projectProgressProvider);
+
+      if (progress.percent == 0.0) {
+        controller.resetAndStart();
+      }
+    });
 
     return Scaffold(
       body: Container(

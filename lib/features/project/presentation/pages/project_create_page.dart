@@ -177,21 +177,33 @@ class ProjectCreatePage extends ConsumerWidget {
       projectEndDate: endDate,
       prompt: description,
     );
-
     try {
       final response = await ref.read(
         openaiResponseProvider(openaiParams).future,
       );
+      response?.todos.map((todo) {}).toList();
+      final progressViewModel = ref.read(projectProgressProvider.notifier);
       if (response != null) {
         final controller = ref.read(projectProgressProvider.notifier);
         await controller.completeRequest();
         Navigator.of(context).pop();
+
+        final viewModel = ref.read(projectCreateViewModelProvider.notifier);
+
+        viewModel.selectAllTodos(response.todos);
+        viewModel.selectAllSubtasks(response.todos);
+
+        final state = ref.read(projectCreateViewModelProvider);
+        viewModel.cacheInitialSubtasks(state.selectedSubtasks);
+
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ProjectCreateTodoPage(response: response),
           ),
         );
+        progressViewModel.reset();
       } else {
+        progressViewModel.reset();
         Navigator.of(context).pop();
         DialogUtils.showErrorDialog(
           context,

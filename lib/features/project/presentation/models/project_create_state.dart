@@ -9,6 +9,7 @@ class ProjectCreateState {
   final Map<String, Set<String>> selectedSubtasks;
   final Set<String>? expandedItems;
   final bool isLoading;
+  final bool isDataSet;
   final String? errorMessage;
 
   ProjectCreateState({
@@ -21,6 +22,7 @@ class ProjectCreateState {
     this.expandedItems,
     this.isLoading = false,
     this.errorMessage,
+    this.isDataSet = false,
   });
 
   ProjectCreateState copyWith({
@@ -33,6 +35,7 @@ class ProjectCreateState {
     Set<String>? expandedItems,
     bool? isLoading,
     String? errorMessage,
+    bool? isDataSet,
   }) {
     return ProjectCreateState(
       title: title ?? this.title,
@@ -44,6 +47,7 @@ class ProjectCreateState {
       expandedItems: expandedItems ?? this.expandedItems,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage ?? this.errorMessage,
+      isDataSet: isDataSet ?? this.isDataSet,
     );
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectSubtaskList extends StatelessWidget {
@@ -38,15 +37,20 @@ class ProjectSubtaskList extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        subtask,
-                        style: AppTextStyles.subtitle2.copyWith(
-                          color:
-                              isSelected
-                                  ? AppColors.grey800
-                                  : AppColors.grey300,
+                      Expanded(
+                        child: Text(
+                          subtask,
+                          style: AppTextStyles.subtitle2.copyWith(
+                            color:
+                                isSelected
+                                    ? AppColors.grey800
+                                    : AppColors.grey300,
+                          ),
+                          softWrap: true,
+                          overflow: TextOverflow.visible,
                         ),
                       ),
+                      SizedBox(width: 8),
                       Icon(
                         isSelected ? Icons.remove : Icons.add,
                         color:

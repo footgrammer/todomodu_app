@@ -16,30 +16,33 @@ Widget buildPopupMenu() {
             // TODO: 프로젝트 나가기 로직
           }
         },
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            value: 'edit',
-            padding: EdgeInsets.zero,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '프로젝트 정보 수정하기',
-                style: AppTextStyles.body2.copyWith(color: AppColors.grey800),
+        itemBuilder:
+            (context) => [
+              // PopupMenuItem(
+              //   value: 'edit',
+              //   padding: EdgeInsets.zero,
+              //   child: Align(
+              //     alignment: Alignment.centerLeft,
+              //     child: Text(
+              //       '프로젝트 정보 수정하기',
+              //       style: AppTextStyles.body2.copyWith(color: AppColors.grey800),
+              //     ),
+              //   ),
+              // ),
+              PopupMenuItem(
+                value: 'leave',
+                padding: EdgeInsets.zero,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '프로젝트 나가기',
+                    style: AppTextStyles.body2.copyWith(
+                      color: AppColors.grey800,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-          PopupMenuItem(
-            value: 'leave',
-            padding: EdgeInsets.zero,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '프로젝트 나가기',
-                style: AppTextStyles.body2.copyWith(color: AppColors.grey800),
-              ),
-            ),
-          ),
-        ],
+            ],
       ),
       const SizedBox(width: 14),
     ],

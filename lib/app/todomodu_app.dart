@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
-import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
-import 'package:todomodu_app/features/todo/presentation/pages/add_todo_page.dart';
-import 'package:todomodu_app/features/todo/presentation/pages/edit_todo_page.dart';
-import 'package:todomodu_app/features/todo/presentation/pages/todo_detail_page.dart';
-import 'package:todomodu_app/features/user/presentation/pages/login_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/splash/splash_page.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
@@ -16,7 +10,7 @@ class TodomoduApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Todomodu App',
-
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
 
       home: SplashPage(),

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,6 +44,7 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
             ref.invalidate(projectProgressProvider);
 
             // 🧼 생성 상태 초기화 (ViewModel의 reset 사용)
+            ref.invalidate(projectCreateViewModelProvider);
             ref.read(projectCreateViewModelProvider.notifier).reset();
 
             // 👈 메인으로 이동
@@ -127,7 +129,7 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
     final invitationCode = (random.nextInt(900000) + 100000).toString();
     List<Todo> finalTodos =
         state.selectedTodos.map((todoTitle) {
-          // 서브테스트 형성
+          // 서브테스크 형성
           final subtasks =
               state.selectedSubtasks[todoTitle]!.map((subtaskTitle) {
                 return Subtask(
@@ -178,12 +180,15 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
     ref.invalidate(hasFetchedProvider); // 새로 프로젝트를 불러올 수 있도록 상태 초기화
 
     // 🔄 로딩 상태 초기화
-    ref.invalidate(projectProgressProvider);
+    ref.read(projectProgressProvider.notifier).reset();
 
     // 🧼 생성 상태 초기화 (ViewModel의 reset 사용)
     ref.read(projectCreateViewModelProvider.notifier).reset();
+    ref.invalidate(projectCreateViewModelProvider);
 
     // 👈 메인으로 이동
-    replaceAllWithPage(context, MainPage());
+    Future.microtask(() {
+      replaceAllWithPage(context, MainPage());
+    });
   }
 }

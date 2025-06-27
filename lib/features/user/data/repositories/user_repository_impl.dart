@@ -44,6 +44,12 @@ class UserRepositoryImpl implements UserRepository {
     });
   }
 
+  Future<UserEntity?> getFutureUserByUserId(String userId) async {
+    final userDto = await _userDataSource.getFutureUserByUserId(userId);
+    if (userDto == null) return null;
+    return userDto.toEntity();
+  }
+
   @override
   Future<void> changeUserNickname(String userId, String nickname) async {
     await userRef.doc(userId).update({'name': nickname});

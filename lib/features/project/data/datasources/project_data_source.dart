@@ -8,4 +8,10 @@ abstract interface class ProjectDataSource {
   Future<ProjectDto?> getProjectDtoById(String projectId); //추가
   Future<List<ProjectDto>> fetchProjectsByUserId(String userId);
   Future<void> createProject(ProjectDto projectDto, List<Todo> todoDto);
+  Future<ProjectDto?> getProjectByInvitationCode(String code);
+  Future<void> addMemberToProject({
+    required String projectId,
+    required String userId,
+  });
+  Future<void> deleteProject(String projectId);
 }

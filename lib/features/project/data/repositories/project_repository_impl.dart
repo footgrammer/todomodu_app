@@ -18,14 +18,15 @@ class ProjectRepositoryImpl implements ProjectRepository {
     required ProjectDataSource dataSource,
     required UserRepository userRepository,
     required TodoRepository todoRepository,
-  })  : _dataSource = dataSource,
-        _userRepository = userRepository,
-        _todoRepository = todoRepository;
+  }) : _dataSource = dataSource,
+       _userRepository = userRepository,
+       _todoRepository = todoRepository;
 
   /// 기존: 유저별 프로젝트 리스트 조회
   @override
   Future<Result<List<Project>>> fetchProjectsByUser(UserEntity user) async {
     final dtoResult = await _dataSource.getProjectsByUserId(user.userId);
+
     return switch (dtoResult) {
       Ok(value: final dtos) => await _mapDtosToEntities(dtos),
       Error(:final error) => Result.error(error),
@@ -43,8 +44,9 @@ class ProjectRepositoryImpl implements ProjectRepository {
       }
 
       // 2. 멤버 ID -> 정보 가져오기
-      final memberIdsResult =
-          await _dataSource.getMemberIdsByProjectId(projectId);
+      final memberIdsResult = await _dataSource.getMemberIdsByProjectId(
+        projectId,
+      );
       if (memberIdsResult is! Ok<List<String>>) {
         return Result.error(Exception('Failed to get member IDs'));
       }
@@ -57,8 +59,9 @@ class ProjectRepositoryImpl implements ProjectRepository {
       final members = membersResult.value;
 
       // 3. 투두 목록 가져오기
-      final todosResult =
-          await _todoRepository.getTodosWithSubtasksByProjectId(projectId);
+      final todosResult = await _todoRepository.getTodosWithSubtasksByProjectId(
+        projectId,
+      );
       final todos =
           todosResult is Ok<List<Todo>> ? todosResult.value : <Todo>[];
 
@@ -75,33 +78,39 @@ class ProjectRepositoryImpl implements ProjectRepository {
       );
 
       // 5. DTO → Entity 매핑 후 반환
-      return Result.ok(dto.toEntity(
-        owner: owner,
-        members: members,
-        todos: todos,
-        progress: progress, //  수정된 부분: progress 전달
-      ));
+      return Result.ok(
+        dto.toEntity(
+          owner: owner,
+          members: members,
+          todos: todos,
+          progress: progress, //  수정된 부분: progress 전달
+        ),
+      );
     } catch (e) {
       return Result.error(Exception('fetchProjectById error: $e'));
     }
   }
 
   /// 기존 리스트 -> Entity 맵핑 보조 메서드 (변경 없음, 단 progress 계산 추가됨)
-  Future<Result<List<Project>>> _mapDtosToEntities(List<ProjectDto> dtos) async {
+  Future<Result<List<Project>>> _mapDtosToEntities(
+    List<ProjectDto> dtos,
+  ) async {
     try {
       final projects = await Future.wait(
         dtos.map((dto) async {
-          final memberIdsResult =
-              await _dataSource.getMemberIdsByProjectId(dto.id);
+          // 1. 멤버 ID 가져오기
+          final memberIdsResult = await _dataSource.getMemberIdsByProjectId(
+            dto.id,
+          );
           if (memberIdsResult is! Ok<List<String>>) return null;
 
-          final membersResult =
-              await _userRepository.getUsersByIds(memberIdsResult.value);
+          final membersResult = await _userRepository.getUsersByIds(
+            memberIdsResult.value,
+          );
           if (membersResult is! Ok<List<UserEntity>>) return null;
 
-
-          final todosResult =
-              await _todoRepository.getTodosWithSubtasksByProjectId(dto.id);
+          final todosResult = await _todoRepository
+              .getTodosWithSubtasksByProjectId(dto.id);
 
           // 3. 프로젝트별 투두, 서브태스크 정보 가져오기
           if (todosResult is! Ok<List<Todo>>) return null;
@@ -140,8 +149,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
     await _dataSource.createProject(projectDto, project.todos);
   }
 
-
-//어쩌다보니 기능이 같은 코드를 중복해서 만든 것 같습니다.
   @override
   Future<List<Project>> fetchProjectsByUserId(String userId) async {
     final projectDtos = await _dataSource.fetchProjectsByUserId(userId);
@@ -183,10 +190,10 @@ class ProjectRepositoryImpl implements ProjectRepository {
               },
             );
 
-          final allSubtasks = todos.expand((t) => t.subtasks).toList();
-          final totalSubs = allSubtasks.length;
-          final doneSubs = allSubtasks.where((s) => s.isDone).length;
-          final progress = totalSubs == 0 ? 0.0 : doneSubs / totalSubs;
+            final allSubtasks = todos.expand((t) => t.subtasks).toList();
+            final totalSubs = allSubtasks.length;
+            final doneSubs = allSubtasks.where((s) => s.isDone).length;
+            final progress = totalSubs == 0 ? 0.0 : doneSubs / totalSubs;
 
             // 5. DTO → Entity 매핑
             return dto.toEntity(
@@ -210,5 +217,61 @@ class ProjectRepositoryImpl implements ProjectRepository {
       log('project_repository_impl : fetchProjectsByUserId $e');
       return [];
     }
+  }
+
+  @override
+  Future<Project?> getProjectByInvitationCode(String code) async {
+    final projectDto = await _dataSource.getProjectByInvitationCode(code);
+    if (projectDto == null) return null;
+
+    // 1. 멤버 ID 가져오기
+    final memberIdsResult = await _dataSource.getMemberIdsByProjectId(
+      projectDto.id,
+    );
+    if (memberIdsResult is! Ok<List<String>>) return null;
+    final memberIds = memberIdsResult.value;
+
+    // 2. 멤버 정보 가져오기
+    final membersResult = await _userRepository.getUsersByIds(memberIds);
+    if (membersResult is! Ok<List<UserEntity>>) return null;
+    final members = membersResult.value;
+
+    // 3. 투두 정보 가져오기 (현재 생략)
+    final todosResult = await _todoRepository.getTodosWithSubtasksByProjectId(
+      projectDto.id,
+    );
+    if (todosResult is! Ok<List<Todo>>) return null;
+    final todos = todosResult.value;
+
+    // 4. Owner 찾기
+    final owner = members.firstWhere(
+      (m) => m.userId == projectDto.ownerId,
+      orElse: () {
+        throw Exception(
+          'Owner with ID ${projectDto.ownerId} not found among project members.',
+        );
+      },
+    );
+
+    // 멤버/투두 불러오기
+    return projectDto.toEntity(
+      owner: owner,
+      members: members,
+      todos: todos,
+      progress: 10.0,
+    );
+  }
+
+  @override
+  Future<void> addMemberToProject({
+    required String projectId,
+    required String userId,
+  }) async {
+    await _dataSource.addMemberToProject(projectId: projectId, userId: userId);
+  }
+
+  @override
+  Future<void> deleteProject(String projectId) {
+    return _dataSource.deleteProject(projectId);
   }
 }

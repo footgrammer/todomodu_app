@@ -25,7 +25,7 @@ class ProjectProgressBar extends ConsumerWidget {
               style: AppTextStyles.subtitle3.copyWith(color: AppColors.grey900),
             ),
             Text(
-              '74%',
+              '${project.progress.toInt()}%',
               style: AppTextStyles.subtitle1.copyWith(color: AppColors.grey900),
             ),
           ],
@@ -34,7 +34,7 @@ class ProjectProgressBar extends ConsumerWidget {
         SizedBox(
           width: double.infinity,
           child: LinearProgressIndicator(
-            value: 0.74,
+            value: project.progress,
             minHeight: 10,
             color: AppColors.grey700,
             backgroundColor: Color(0x40403F4B),

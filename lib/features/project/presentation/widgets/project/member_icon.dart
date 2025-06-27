@@ -11,7 +11,7 @@ class MemberIcon extends ConsumerWidget {
     final bool hasImage = imageUrl != null && imageUrl!.isNotEmpty;
     return CircleAvatar(
       radius: 16, // 지름 32
-      backgroundColor: hasImage ? Colors.transparent : Colors.grey.shade300,
+      backgroundColor: hasImage ? Colors.transparent : AppColors.primary300,
       backgroundImage:
           hasImage ? NetworkImage(imageUrl!) : null, // 이미지가 있을 때만 사용
       child:
