@@ -1,6 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/todo/data/models/subtask_dto.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
+import 'package:todomodu_app/features/user/domain/usecases/get_user_by_user_id_usecase.dart';
+import 'package:todomodu_app/features/user/domain/usecases/get_user_by_user_id_usecase_impl.dart';
 import 'package:uuid/uuid.dart';
 import '../../application/usecases/update_todo_usecase.dart';
 import '../../domain/entities/subtask.dart';
@@ -11,6 +15,7 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
   final UpdateTodoUseCase updateTodoUseCase;
   final String todoId;
   final String projectId;
+  final GetUserByUserIdUsecase getUserById;
 
   bool get canSubmit {
     return state.title.trim().isNotEmpty &&
@@ -18,7 +23,7 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
         state.endDate != null;
   }
 
-  EditTodoViewModel({required Todo todo, required this.updateTodoUseCase})
+  EditTodoViewModel({required Todo todo, required this.updateTodoUseCase, required this.getUserById})
     : todoId = todo.id,
       projectId = todo.projectId,
       super(
@@ -29,24 +34,49 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
           startDate: todo.startDate,
           endDate: todo.endDate,
           subtasks: const [],
+          isLoading: true,
         )) {
           _loadSubtasks();
         }
 
-    Future<void> _loadSubtasks() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('projects')
-        .doc(projectId)
-        .collection('subtasks')
-        .where('todoId', isEqualTo: todoId)
-        .get();
+Future<void> _loadSubtasks() async {
+  state = state.copyWith(isLoading: true);
 
-    final loadedSubtasks = snapshot.docs
-        .map((doc) => SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity())
-        .toList();
+  final snapshot = await FirebaseFirestore.instance
+      .collection('projects')
+      .doc(projectId)
+      .collection('subtasks')
+      .where('todoId', isEqualTo: todoId)
+      .get();
 
-    state = state.copyWith(subtasks: loadedSubtasks);
-  }
+  final loadedSubtasks = await Future.wait(snapshot.docs.map((doc) async {
+    final dto = SubtaskDto.fromJson(doc.data(), id: doc.id);
+
+    List<UserEntity>? assignee;
+    if (dto.assigneeId != null && dto.assigneeId!.isNotEmpty) {
+      final users = await Future.wait(
+        dto.assigneeId!.map((id) async {
+          try {
+            return await getUserById.execute(id).first;
+          } catch (_) {
+            return null;
+          }
+        }),
+      );
+      assignee = users.whereType<UserEntity>().toList();
+    }
+
+    return dto.toEntity(assignee: assignee);
+  }));
+
+  state = state.copyWith(
+    subtasks: loadedSubtasks,
+    isLoading: false,
+  );
+
+  state = state.copyWith(subtasks: loadedSubtasks);
+}
+
 
   void changeTitle(String title) {
     state = state.copyWith(title: title);

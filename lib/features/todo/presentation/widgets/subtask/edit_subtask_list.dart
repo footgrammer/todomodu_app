@@ -20,45 +20,45 @@ class EditSubtaskList extends ConsumerWidget {
     required this.projectMembers,
   });
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(editTodoViewModelProvider(todo).notifier);
-    final state = ref.watch(editTodoViewModelProvider(todo));
-    final subtasks = state.subtasks;
+@override
+Widget build(BuildContext context, WidgetRef ref) {
+  final viewModel = ref.watch(editTodoViewModelProvider(todo).notifier);
+  final state = ref.watch(editTodoViewModelProvider(todo));
 
-    return Column(
-      children: [
-        ...subtasks.map(
-          (subtask) => SubtaskItem(
-            key: ValueKey(subtask.id),
-            subtask: subtask,
-            projectMembers: projectMembers,
-            onChanged: viewModel.updateSubtask,
-            onDelete: () => viewModel.removeSubtask(subtask.id),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Center(
-          child: IconButton(
-            icon: const Icon(
-              Icons.add_circle,
-              size: 48,
-              color: AppColors.primary200,
-            ),
-            onPressed: () {
-              final subtask = Subtask(
-                id: const Uuid().v4(),
-                title: '',
-                isDone: false,
-                todoId: todo.id,
-                projectId: todo.projectId,
-                assignee: null,
-              );
-              viewModel.addSubtask(subtask);
-            },
-          ),
-        ),
-      ],
-    );
+  if (state.isLoading) {
+    return const Center(child: CircularProgressIndicator());
   }
+
+  return Column(
+    children: [
+      ...state.subtasks.map(
+        (subtask) => SubtaskItem(
+          key: ValueKey(subtask.id),
+          subtask: subtask,
+          projectMembers: projectMembers,
+          onChanged: viewModel.updateSubtask,
+          onDelete: () => viewModel.removeSubtask(subtask.id),
+        ),
+      ),
+      const SizedBox(height: 16),
+      Center(
+        child: IconButton(
+          icon: const Icon(Icons.add_circle, size: 48, color: AppColors.primary200),
+          onPressed: () {
+            final subtask = Subtask(
+              id: const Uuid().v4(),
+              title: '',
+              isDone: false,
+              todoId: todo.id,
+              projectId: todo.projectId,
+              assignee: null,
+            );
+            viewModel.addSubtask(subtask);
+          },
+        ),
+      ),
+    ],
+  );
+}
+
 }
