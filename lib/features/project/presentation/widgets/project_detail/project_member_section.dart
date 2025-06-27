@@ -31,22 +31,22 @@ class ProjectMemberSection extends StatelessWidget {
               maxVisibleCount: maxVisibleCount,
             ),
             const Spacer(),
-            OutlinedButton.icon(
-              onPressed: () {
-                // 팀원 초대 동작 구현 필요
-              },
-              icon: Icon(Icons.add, color: AppColors.primary600),
-              label: Text(
-                '팀원 초대',
-                style: AppTextStyles.subtitle3.copyWith(color: AppColors.primary600),
-              ),
-              style: OutlinedButton.styleFrom(
-                backgroundColor: AppColors.primary50,
-                side: BorderSide(color: AppColors.primary600),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                padding: const EdgeInsets.all(10),
-              ),
-            ),
+            // OutlinedButton.icon(
+            //   onPressed: () {
+            //     // 팀원 초대 동작 구현 필요
+            //   },
+            //   icon: Icon(Icons.add, color: AppColors.primary600),
+            //   label: Text(
+            //     '팀원 초대',
+            //     style: AppTextStyles.subtitle3.copyWith(color: AppColors.primary600),
+            //   ),
+            //   style: OutlinedButton.styleFrom(
+            //     backgroundColor: AppColors.primary50,
+            //     side: BorderSide(color: AppColors.primary600),
+            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+            //     padding: const EdgeInsets.all(10),
+            //   ),
+            // ),
           ],
         ),
       ],
