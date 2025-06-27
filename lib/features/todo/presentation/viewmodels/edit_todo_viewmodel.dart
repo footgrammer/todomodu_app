@@ -85,6 +85,27 @@ Future<void> submit() async {
     ));
   }
 
+  final snapshot = await FirebaseFirestore.instance
+      .collection('projects')
+      .doc(projectId)
+      .collection('subtasks')
+      .where('todoId', isEqualTo: todoId)
+      .get();
+
+  final existingIds = snapshot.docs.map((doc) => doc.id).toSet();
+  final currentIds = validSubtasks.map((s) => s.id).toSet();
+
+  final deletedIds = existingIds.difference(currentIds);
+
+    for (final id in deletedIds) {
+    await FirebaseFirestore.instance
+        .collection('projects')
+        .doc(projectId)
+        .collection('subtasks')
+        .doc(id)
+        .delete();
+  }
+
   final todo = Todo(
     id: todoId,
     projectId: projectId,
