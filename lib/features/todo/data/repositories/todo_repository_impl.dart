@@ -81,6 +81,9 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<void> deleteTodo(String projectId, String todoId) async {
     await _remoteDataSource.deleteTodo(projectId, todoId);
+
+    // 연결된 subtasks 삭제
+    await _subtaskRepository.deleteSubtasksByTodoId(projectId, todoId);
   }
 
   @override
