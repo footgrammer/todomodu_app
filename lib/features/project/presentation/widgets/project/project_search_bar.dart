@@ -34,6 +34,7 @@ class ProjectSearchBar extends ConsumerWidget {
                   projectListViewModelProvider.notifier,
                 );
                 if (code.trim() == '') {
+                  viewModel.setFetchType('myProjects');
                   viewModel.fetchProjectsByUserId();
                 } else {
                   viewModel.setFetchType('invitationCode');
