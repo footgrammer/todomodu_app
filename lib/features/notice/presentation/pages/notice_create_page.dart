@@ -55,37 +55,45 @@ class _NoticeCreatePageState extends ConsumerState<NoticeCreatePage> {
                     onTitleChanged: viewmodel.setTitle,
                     onContentChanged: viewmodel.setContent,
                   ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final result = await viewmodel.submit(currentUser);
-
-                      result.when(
-                        ok: (notice) {
-                          Navigator.pop(context, notice);
-                        },
-                        error: (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('공지 생성 실패: $e')),
-                          );
-                        },
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary500,
-                      minimumSize: const Size(double.infinity, 56),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      '완료',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleMedium?.copyWith(color: Colors.white),
-                    ),
-                  ),
+                  const SizedBox(height: 80), // 키보드와 겹치지 않게 하단 공간 확보
                 ],
+              ),
+            ),
+          ),
+          bottomNavigationBar: SafeArea(
+            minimum: EdgeInsets.fromLTRB(
+              20,
+              12,
+              20,
+              20 + MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: ElevatedButton(
+              onPressed: () async {
+                final result = await viewmodel.submit(currentUser);
+
+                result.when(
+                  ok: (notice) {
+                    Navigator.pop(context, notice);
+                  },
+                  error: (e) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('공지 생성 실패: $e')));
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary500,
+                minimumSize: const Size(double.infinity, 56),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                '완료',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(color: Colors.white),
               ),
             ),
           ),
