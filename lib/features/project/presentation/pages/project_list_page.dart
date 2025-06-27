@@ -43,17 +43,17 @@ class ProjectListPage extends ConsumerWidget {
             padding: const EdgeInsets.only(left: 8),
             child: SvgPicture.asset('assets/images/top_app_bar_logo_img.svg'),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: IconButton(
-                onPressed: () {
-                  log('알림 버튼 클릭');
-                },
-                icon: CustomIcon(name: 'bell'),
-              ),
-            ),
-          ],
+          // actions: [
+          //   Padding(
+          //     padding: const EdgeInsets.only(right: 4),
+          //     child: IconButton(
+          //       onPressed: () {
+          //         log('알림 버튼 클릭');
+          //       },
+          //       icon: CustomIcon(name: 'bell'),
+          //     ),
+          //   ),
+          // ],
         ),
         body: Padding(
           padding: EdgeInsets.all(20),

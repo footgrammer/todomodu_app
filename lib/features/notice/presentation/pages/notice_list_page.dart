@@ -41,20 +41,20 @@ class _NoticeListPageState extends ConsumerState<NoticeListPage> {
             padding: const EdgeInsets.only(left: 8),
             child: const Text('공지', style: AppTextStyles.header3),
           ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                log('알림 버튼 클릭');
-              },
-              child: Container(
-                width: 36,
-                height: 36,
-                color: Colors.transparent,
-                child: CustomIcon(name: 'bell'),
-              ),
-            ),
-            SizedBox(width: 14),
-          ],
+          // actions: [
+          //   GestureDetector(
+          //     onTap: () {
+          //       log('알림 버튼 클릭');
+          //     },
+          //     child: Container(
+          //       width: 36,
+          //       height: 36,
+          //       color: Colors.transparent,
+          //       child: CustomIcon(name: 'bell'),
+          //     ),
+          //   ),
+          //   SizedBox(width: 14),
+          // ],
         ),
         body: userAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
