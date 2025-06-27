@@ -8,26 +8,37 @@ class UserCircleAvatar extends StatelessWidget {
   final UserEntity user;
   final double radius;
 
-  const UserCircleAvatar({
-    super.key,
-    required this.user,
-    this.radius = 24.0,
-  });
+  const UserCircleAvatar({super.key, required this.user, this.radius = 24.0});
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundImage: user.profileImageUrl.isNotEmpty
-          ? NetworkImage(user.profileImageUrl)
-          : null,
-      child: user.profileImageUrl.isEmpty
-          ? Icon(
-              Icons.person,
-              size: radius,
-              color: AppColors.grey400,
-            )
-          : null,
+    final borderColor = Theme.of(context).scaffoldBackgroundColor;
+
+    return Container(
+      width: radius * 2,
+      height: radius * 2,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: borderColor, width: 2),
+      ),
+      child: ClipOval(
+        child: Container(
+          color:
+              user.profileImageUrl.isEmpty
+                  ? AppColors.grey100
+                  : null, // fallback bg
+          child:
+              user.profileImageUrl.isNotEmpty
+                  ? Image.network(user.profileImageUrl, fit: BoxFit.cover)
+                  : Center(
+                    child: Icon(
+                      Icons.person,
+                      size: radius,
+                      color: AppColors.grey400,
+                    ),
+                  ),
+        ),
+      ),
     );
   }
 }
