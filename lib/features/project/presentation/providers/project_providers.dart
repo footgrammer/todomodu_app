@@ -6,6 +6,7 @@ import 'package:todomodu_app/features/project/data/repositories/project_reposito
 import 'package:todomodu_app/features/project/domain/repositories/project_repository.dart';
 import 'package:todomodu_app/features/project/domain/usecases/add_member_to_project_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/create_project_usecase.dart';
+import 'package:todomodu_app/features/project/domain/usecases/delete_project_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_id_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/fetch_project_by_id_usecase.dart';
@@ -96,4 +97,8 @@ final addMemberToProjectUsecaseProvider = Provider<AddMemberToProjectUsecase>((
   ref,
 ) {
   return AddMemberToProjectUsecase(ref.read(projectRepositoryProvider));
+});
+
+final deleteProjectUsecaseProvider = Provider<DeleteProjectUsecase>((ref) {
+  return DeleteProjectUsecase(ref.read(projectRepositoryProvider));
 });

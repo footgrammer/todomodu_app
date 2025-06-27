@@ -282,4 +282,9 @@ class ProjectRepositoryImpl implements ProjectRepository {
   }) async {
     await _dataSource.addMemberToProject(projectId: projectId, userId: userId);
   }
+
+  @override
+  Future<void> deleteProject(String projectId) {
+    return _dataSource.deleteProject(projectId);
+  }
 }

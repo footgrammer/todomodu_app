@@ -56,4 +56,10 @@ class ProjectListViewModel extends Notifier<ProjectListState> {
     final usecase = ref.read(addMemberToProjectUsecaseProvider);
     final project = await usecase.execute(projectId: projectId, userId: userId);
   }
+
+  Future<void> deleteProject({required String projectId}) async {
+    //usecase 가져오기
+    final usecase = ref.read(deleteProjectUsecaseProvider);
+    await usecase.execute(projectId: projectId);
+  }
 }

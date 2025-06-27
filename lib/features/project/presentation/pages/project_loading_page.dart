@@ -20,7 +20,12 @@ class ProjectLoadingPage extends ConsumerWidget {
 
     // ✅ 상태 변경은 build 이후에 수행
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(projectProgressProvider.notifier).resetAndStart();
+      final controller = ref.read(projectProgressProvider.notifier);
+      final progress = ref.read(projectProgressProvider);
+
+      if (progress.percent == 0.0) {
+        controller.resetAndStart();
+      }
     });
 
     return Scaffold(

@@ -130,9 +130,14 @@ class ProjectCreateViewModel extends Notifier<ProjectCreateState> {
     _initialSubtaskSnapshot = null;
     state = ProjectCreateState(
       isLoading: false,
+      isDataSet: false,
       selectedTodos: {},
       selectedSubtasks: {},
       expandedItems: {},
     );
+  }
+
+  void setData(bool isDataSet) {
+    state = state.copyWith(isDataSet: isDataSet);
   }
 }

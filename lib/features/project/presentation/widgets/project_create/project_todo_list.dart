@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
@@ -24,7 +26,7 @@ class ProjectTodoList extends StatelessWidget {
           todos.map<Widget>((todo) {
             final title = todo.todoTitle;
             final isSelected = selectedTodos.contains(title);
-
+            log('title : $title');
             return GestureDetector(
               onTap: () {
                 if (selectedTodos.length == 1 && isSelected) {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/ai/domain/models/openai_response.dart';
@@ -20,20 +18,11 @@ class ProjectCreateTodoPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = response.todos;
+    todos.map((todo) {}).toList();
+
     final state = ref.watch(projectCreateViewModelProvider);
-    final selectedTodos = state.selectedTodos;
     final viewModel = ref.read(projectCreateViewModelProvider.notifier);
-
-    // ✅ 상태 변경은 build 이후에 수행
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (viewModel.initialSubtasks.isEmpty) {
-        viewModel.cacheInitialSubtasks(state.selectedSubtasks);
-      }
-
-      if (state.selectedTodos.isEmpty) {
-        viewModel.selectAllTodos(todos);
-      }
-    });
+    final selectedTodos = state.selectedTodos;
 
     return Scaffold(
       appBar: AppBar(

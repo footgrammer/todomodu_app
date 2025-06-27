@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/project/data/models/project_dto.dart';
 import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_detail_page.dart';
@@ -62,7 +59,7 @@ class ProjectCard extends ConsumerWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        Icon(Icons.notifications_none, size: 20),
+        // Icon(Icons.notifications_none, size: 20),
         SizedBox(width: 8),
       ],
     );

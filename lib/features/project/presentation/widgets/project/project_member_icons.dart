@@ -46,7 +46,7 @@ class ProjectMemberIcons extends ConsumerWidget {
             ),
           ),
         ),
-        SizedBox(width: 36, height: 36, child: Icon(Icons.more_vert, size: 24)),
+        // SizedBox(width: 36, height: 36, child: Icon(Icons.more_vert, size: 24)),
       ],
     );
   }
