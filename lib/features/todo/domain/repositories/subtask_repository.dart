@@ -13,6 +13,7 @@ abstract interface class SubtaskRepository {
     required String projectId,
     required String subtaskId,
   });
+  Future<void> deleteSubtasksByTodoId(String projectId, String todoId);
   Future<void> createSubtask(Subtask subtask);
 
   Future<Result<List<Subtask>>> getSubtasksByProjectId(String projectId);

@@ -1,10 +1,8 @@
 import 'dart:developer';
-
 import 'package:todomodu_app/features/todo/data/models/todo_dto.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/features/todo/domain/repositories/subtask_repository.dart';
 import 'package:todomodu_app/shared/types/result.dart';
-
 import '../../domain/repositories/todo_repository.dart';
 import '../../domain/entities/todo.dart';
 import '../datasources/todo_remote_datasource.dart';
@@ -81,6 +79,9 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<void> deleteTodo(String projectId, String todoId) async {
     await _remoteDataSource.deleteTodo(projectId, todoId);
+
+    // 연결된 subtasks 삭제
+    await _subtaskRepository.deleteSubtasksByTodoId(projectId, todoId);
   }
 
   @override
