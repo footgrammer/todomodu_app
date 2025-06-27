@@ -43,6 +43,23 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
     state = state.copyWith(endDate: endDate);
   }
 
+  void addSubtask(Subtask subtask) {
+    state = state.copyWith(subtasks: [...state.subtasks, subtask]);
+  }
+
+  void updateSubtask(Subtask updated) {
+    state = state.copyWith(
+      subtasks:
+          state.subtasks.map((s) => s.id == updated.id ? updated : s).toList(),
+    );
+  }
+
+  void removeSubtask(String id) {
+    state = state.copyWith(
+      subtasks: state.subtasks.where((s) => s.id != id).toList(),
+    );
+  }
+
   Future<void> submit() async {
     final trimmedTitle = state.title.trim();
     if (trimmedTitle.isEmpty) return;
