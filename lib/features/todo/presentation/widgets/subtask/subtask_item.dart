@@ -48,9 +48,7 @@ Future<void> _onTapAssigneeEdit() async {
       selectedUsers: widget.subtask.assignee != null
           ? [widget.subtask.assignee!]
           : [],
-      onConfirm: (users) {
-        Navigator.pop(bottomSheetContext, users);
-      },
+      onConfirm: (List<UserEntity> _) {},
     ),
   );
 

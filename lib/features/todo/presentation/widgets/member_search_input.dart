@@ -50,7 +50,7 @@ class MemberSearchInput extends StatelessWidget {
                           const SizedBox(width: 4),
                           GestureDetector(
                             onTap: () => onMemberRemove(name),
-                            child: const Icon(Icons.close, size: 14, color: Colors.grey),
+                            child: const Icon(Icons.close, size: 10, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -60,10 +60,10 @@ class MemberSearchInput extends StatelessWidget {
               ),
         hintText: '닉네임을 입력하세요',
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(21),
           borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       ),
     );
   }

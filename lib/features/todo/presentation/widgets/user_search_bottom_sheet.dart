@@ -162,12 +162,7 @@ class _UserSearchBottomSheetState extends ConsumerState<UserSearchBottomSheet> {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                                onPressed: () {
-                                  widget.onConfirm(_selected);
-                                  Navigator.of(
-                                    bottomSheetContext,
-                                  ).pop(); // 바텀시트만 닫힘
-                                },
+                                onPressed: () {Navigator.of(bottomSheetContext).pop(_selected);},
                                 child: Text(
                                   '확인',
                                   style: AppTextStyles.subtitle1.copyWith(
