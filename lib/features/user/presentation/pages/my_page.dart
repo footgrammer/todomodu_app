@@ -45,20 +45,20 @@ class MyPage extends ConsumerWidget {
                   padding: const EdgeInsets.only(left: 8),
                   child: const Text('마이', style: AppTextStyles.header3),
                 ),
-                actions: [
-                  GestureDetector(
-                    onTap: () {
-                      log('알림 버튼 클릭');
-                    },
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      color: Colors.transparent,
-                      child: CustomIcon(name: 'bell'),
-                    ),
-                  ),
-                  SizedBox(width: 14),
-                ],
+                // actions: [
+                //   GestureDetector(
+                //     onTap: () {
+                //       log('알림 버튼 클릭');
+                //     },
+                //     child: Container(
+                //       width: 36,
+                //       height: 36,
+                //       color: Colors.transparent,
+                //       child: CustomIcon(name: 'bell'),
+                //     ),
+                //   ),
+                //   SizedBox(width: 14),
+                // ],
               ),
               body: Padding(
                 padding: const EdgeInsets.fromLTRB(24, 0, 8, 12),
@@ -112,12 +112,12 @@ class MyPage extends ConsumerWidget {
                           navigateToPage(context, ClosedProjectListPage());
                         },
                       ),
-                      CustomMenuBar(
-                        text: '알림 설정',
-                        onPressed: () {
-                          navigateToPage(context, NotificationSettingsPage());
-                        },
-                      ),
+                      // CustomMenuBar(
+                      //   text: '알림 설정',
+                      //   onPressed: () {
+                      //     navigateToPage(context, NotificationSettingsPage());
+                      //   },
+                      // ),
                       const SizedBox(height: 18),
                       CustomMenuBar(
                         text: '이용약관 및 개인정보 처리방침',

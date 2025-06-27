@@ -72,14 +72,14 @@ class TodoPage extends ConsumerWidget {
                     SvgPicture.asset('assets/images/top_app_bar_logo_img.svg',),
                   ],
                 ),
-                actions: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const CustomIcon(name: 'bell'),
+                // actions: [
+                //   IconButton(
+                //     onPressed: () {},
+                //     icon: const CustomIcon(name: 'bell'),
 
-                  ),
-                  SizedBox(width: 4),
-                ],
+                //   ),
+                //   SizedBox(width: 4),
+                // ],
               ),
               body: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),

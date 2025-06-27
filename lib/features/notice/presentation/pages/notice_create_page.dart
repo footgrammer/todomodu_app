@@ -38,63 +38,61 @@ class _NoticeCreatePageState extends ConsumerState<NoticeCreatePage> {
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          appBar: AppBar(title: const Text('공지 작성하기')),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  NoticeCreateForm(
-                    onTitleChanged: viewmodel.setTitle,
-                    onContentChanged: viewmodel.setContent,
-                  ),
-                  const SizedBox(height: 80), // 키보드와 겹치지 않게 하단 공간 확보
-                ],
-              ),
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(title: const Text('공지 작성하기')),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                NoticeCreateForm(
+                  onTitleChanged: viewmodel.setTitle,
+                  onContentChanged: viewmodel.setContent,
+                ),
+                const SizedBox(height: 80), // 키보드와 겹치지 않게 하단 공간 확보
+              ],
             ),
           ),
-          bottomNavigationBar: SafeArea(
-            minimum: EdgeInsets.fromLTRB(
-              20,
-              12,
-              20,
-              20 + MediaQuery.of(context).viewInsets.bottom,
+        ),
+        bottomNavigationBar: SafeArea(
+          minimum: EdgeInsets.fromLTRB(
+            20,
+            12,
+            20,
+            20 + MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: ElevatedButton(
+            onPressed: () async {
+              final result = await viewmodel.submit(currentUser);
+      
+              result.when(
+                ok: (notice) {
+                  Navigator.pop(context, notice);
+                },
+                error: (e) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('공지 생성 실패: $e')));
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary500,
+              minimumSize: const Size(double.infinity, 56),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-            child: ElevatedButton(
-              onPressed: () async {
-                final result = await viewmodel.submit(currentUser);
-
-                result.when(
-                  ok: (notice) {
-                    Navigator.pop(context, notice);
-                  },
-                  error: (e) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text('공지 생성 실패: $e')));
-                  },
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary500,
-                minimumSize: const Size(double.infinity, 56),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: Text(
-                '완료',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(color: Colors.white),
-              ),
+            child: Text(
+              '완료',
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: Colors.white),
             ),
           ),
         ),
