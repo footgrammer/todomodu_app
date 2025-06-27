@@ -29,8 +29,24 @@ class EditTodoViewModel extends StateNotifier<EditTodoState> {
           startDate: todo.startDate,
           endDate: todo.endDate,
           subtasks: const [],
-        ),
-      );
+        )) {
+          _loadSubtasks();
+        }
+
+    Future<void> _loadSubtasks() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('projects')
+        .doc(projectId)
+        .collection('subtasks')
+        .where('todoId', isEqualTo: todoId)
+        .get();
+
+    final loadedSubtasks = snapshot.docs
+        .map((doc) => SubtaskDto.fromJson(doc.data(), id: doc.id).toEntity())
+        .toList();
+
+    state = state.copyWith(subtasks: loadedSubtasks);
+  }
 
   void changeTitle(String title) {
     state = state.copyWith(title: title);

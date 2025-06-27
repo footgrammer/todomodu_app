@@ -37,7 +37,7 @@ class SubtaskDto {
       'todoId': todoId,
       'title': title,
       'isDone': isDone,
-      if (assigneeId != null) 'assigneeId': assigneeId,
+      'assigneeId': assigneeId ?? '',
     };
   }
 

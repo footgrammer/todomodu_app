@@ -52,6 +52,7 @@ class EditSubtaskList extends ConsumerWidget {
                 isDone: false,
                 todoId: todo.id,
                 projectId: todo.projectId,
+                assignee: null,
               );
               viewModel.addSubtask(subtask);
             },
