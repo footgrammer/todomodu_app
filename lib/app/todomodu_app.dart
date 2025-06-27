@@ -16,7 +16,7 @@ class TodomoduApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Todomodu App',
-
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
 
       home: SplashPage(),
