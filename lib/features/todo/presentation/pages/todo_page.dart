@@ -70,11 +70,6 @@ class TodoPage extends ConsumerWidget {
                   children: [
                     SizedBox(width: 8,),
                     SvgPicture.asset('assets/images/top_app_bar_logo_img.svg',),
-                                              Text(
-            '프로젝트에 참여하거나\n할 일을 할당받아 보세요!',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.body2.copyWith(color: AppColors.grey500),
-          ),
                   ],
                 ),
                 actions: [
