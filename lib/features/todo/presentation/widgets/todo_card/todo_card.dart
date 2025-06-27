@@ -39,7 +39,7 @@ class TodoCard extends ConsumerWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => TodoDetailPage(todo: todo)),
+          MaterialPageRoute(builder: (_) => TodoDetailPage(projectId: todo.projectId, todoId: todo.id)),
         );
       },
       child: Container(

@@ -1,9 +1,11 @@
 //add_subtask_list.dart, edit_subtask_list.dart에서 반복되는 블록
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/activity_history/domain/models/activity_history_payload.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/user_search_bottom_sheet.dart';
+import 'package:todomodu_app/shared/widgets/user_circle_avatar/user_avatar_group.dart';
 
 
 class SubtaskItem extends StatefulWidget {
@@ -46,16 +48,14 @@ Future<void> _onTapAssigneeEdit() async {
     builder: (bottomSheetContext) => UserSearchBottomSheet(
       members: widget.projectMembers,
       selectedUsers: widget.subtask.assignee != null
-          ? [widget.subtask.assignee!]
+          ? widget.subtask.assignee!
           : [],
       onConfirm: (List<UserEntity> _) {},
     ),
   );
 
-    if (selected != null && selected.isNotEmpty) {
-      widget.onChanged(widget.subtask.copyWith(assignee: selected.first));
-    }
-  }
+      widget.onChanged(widget.subtask.copyWith(assignee: selected));
+}
 
   @override
   void dispose() {
@@ -112,21 +112,9 @@ Future<void> _onTapAssigneeEdit() async {
                   top: 8,
                   child: GestureDetector(
                     onTap: _onTapAssigneeEdit,
-                    child: assignee == null
+                    child: assignee == null || assignee.isEmpty
                         ? const Icon(Icons.person_add_alt, size: 20, color: AppColors.grey400)
-                        : CircleAvatar(
-                            radius: 10,
-                            backgroundColor: Colors.grey[300],
-                            backgroundImage: assignee.profileImageUrl.isNotEmpty
-                                ? NetworkImage(assignee.profileImageUrl)
-                                : null,
-                            child: assignee.profileImageUrl.isEmpty
-                                ? Text(
-                                    assignee.name.characters.first,
-                                    style: const TextStyle(fontSize: 10, color: Colors.white),
-                                  )
-                                : null,
-                          ),
+                        : UserAvatarGroup(users: assignee, radius: 10, maxVisibleCount: 3, overlapOffset: 1,)
                   ),
                 ),
               ],

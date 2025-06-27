@@ -40,7 +40,7 @@ class TodoListSection extends ConsumerWidget {
             final subtasks = await ref
                 .read(subtaskStreamProvider((project.id, todo.id)).future);
 
-            final hasMe = subtasks.any((s) => s.assignee?.userId == uid);
+            final hasMe = subtasks.any((s) => s.assignee?.any((user) => user.userId == uid) ?? false);
             if (hasMe) todos.add(todo);
           }
         }

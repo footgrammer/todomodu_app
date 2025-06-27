@@ -64,7 +64,7 @@ class _UserSearchBottomSheetState extends ConsumerState<UserSearchBottomSheet> {
     return FractionallySizedBox(
       heightFactor: 0.6,
       child: Builder(
-        // 🔹 bottomSheetContext 생성
+        //  bottomSheetContext 생성
         builder:
             (bottomSheetContext) => Padding(
               padding: EdgeInsets.only(

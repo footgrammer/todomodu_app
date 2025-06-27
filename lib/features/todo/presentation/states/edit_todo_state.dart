@@ -7,6 +7,7 @@ class EditTodoState {
   final DateTime startDate;
   final DateTime endDate;
   final List<Subtask> subtasks;
+  final bool isLoading;
 
   EditTodoState({
     required this.id,
@@ -15,6 +16,7 @@ class EditTodoState {
     required this.startDate,
     required this.endDate,
     required this.subtasks,
+    this.isLoading = false,
   });
 
   EditTodoState copyWith({
@@ -22,6 +24,7 @@ class EditTodoState {
     DateTime? startDate,
     DateTime? endDate,
     List<Subtask>? subtasks,
+    bool? isLoading,
   }) {
     return EditTodoState(
       id: id,
@@ -30,6 +33,7 @@ class EditTodoState {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       subtasks: subtasks ?? this.subtasks,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }
