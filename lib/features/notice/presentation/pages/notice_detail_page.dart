@@ -43,26 +43,24 @@ class _NoticeDetailPageState extends ConsumerState<NoticeDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(title: const Text('공지 확인하기')),
-        body: Align(
-          alignment: Alignment.topLeft,
-          child: IntrinsicWidth(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  NoticeForm(notice: widget.notice),
-                  const SizedBox(height: 50),
-                  NoticeCheckButton(
-                    isChecked: isChecked,
-                    onClickButton: handleCheck,
-                  ),
-                ],
-              ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('공지 확인하기')),
+      body: Align(
+        alignment: Alignment.topLeft,
+        child: IntrinsicWidth(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                NoticeForm(notice: widget.notice),
+                const SizedBox(height: 50),
+                NoticeCheckButton(
+                  isChecked: isChecked,
+                  onClickButton: handleCheck,
+                ),
+              ],
             ),
           ),
         ),
