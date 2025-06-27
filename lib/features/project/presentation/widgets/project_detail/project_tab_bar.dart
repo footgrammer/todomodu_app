@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
-import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/red_dot.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/notice_list_section.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/positioned_reddot_for_tab.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/todo_list_section.dart';
-import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectTabBar extends StatelessWidget {
   final String projectId;
+  final TabController tabController; // ✅ 추가
 
-  const ProjectTabBar({super.key, required this.projectId});
+  const ProjectTabBar({
+    super.key,
+    required this.projectId,
+    required this.tabController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +21,19 @@ class ProjectTabBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: TabBar(
+            controller: tabController, // ✅ 연결
             labelColor: AppColors.primary600,
             labelStyle: AppTextStyles.subtitle1,
             unselectedLabelColor: AppColors.grey400,
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorColor: AppColors.primary600,
             tabs: [
-              Tab(text: '할 일'),
+              const Tab(text: '할 일'),
               Tab(
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Text('공지'), // const 제거
+                    const Text('공지'),
                     Positioned(
                       top: -5,
                       right: -10,
@@ -40,12 +42,13 @@ class ProjectTabBar extends StatelessWidget {
                   ],
                 ),
               ),
-              Tab(text: '타임라인'),
+              const Tab(text: '타임라인'),
             ],
           ),
         ),
         Expanded(
           child: TabBarView(
+            controller: tabController, // ✅ 연결
             children: [
               TodoListSection(projectId: projectId),
               NoticeListSection(projectId: projectId),

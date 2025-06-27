@@ -49,6 +49,7 @@ class SubtaskRepositoryImpl implements SubtaskRepository {
         .update(dto.toJson());
   }
 
+  // 단일 subtask 삭제
   @override
   Future<void> deleteSubtask({
     required String projectId,
@@ -61,6 +62,22 @@ class SubtaskRepositoryImpl implements SubtaskRepository {
         .doc(subtaskId)
         .delete();
   }
+
+  // 특정 todo 관련 subtasks 일괄 삭제
+  @override
+  Future<void> deleteSubtasksByTodoId(String projectId, String todoId) async {
+    final collection = _firestore
+    .collection('projects')
+    .doc(projectId)
+    .collection('subtasks');
+
+    final querySnapshot = await collection.where('todoId', isEqualTo: todoId).get();
+
+    for (final doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+  }
+
 
   @override
   Future<void> toggleDone({
