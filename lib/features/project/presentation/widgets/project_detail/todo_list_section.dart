@@ -31,20 +31,39 @@ class TodoListSection extends ConsumerWidget {
           if (todos.isEmpty) {
             return Center(
               child: Column(
-              children: [
-                SvgPicture.asset('project_detail_todo_empty.svg', width: 101, height: 71,),
-                Text('아직 등록된 할 일이 없습니다.',
-                style: AppTextStyles.body2.copyWith(color: AppColors.grey800)),
-                          Text(
-            '할 일을 추가하여\n프로젝트를 완성해보세요!',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.caption1.copyWith(color: AppColors.grey500),
-          ),
-              ],
-            ));
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/project_detail_todo_empty.svg',
+                    width: 101,
+                    height: 71,
+                  ),
+                  SizedBox(height: 15),
+                  Text(
+                    '아직 등록된 할 일이 없습니다.',
+                    style: AppTextStyles.body2.copyWith(
+                      color: AppColors.grey800,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    '할 일을 추가하여\n프로젝트를 완성해보세요!',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.caption1.copyWith(
+                      color: AppColors.grey500,
+                    ),
+                  ),
+                ],
+              ),
+            );
           }
           return ListView.separated(
-            padding: const EdgeInsets.only(top: 16, right: 24, left: 24, bottom: 34),
+            padding: const EdgeInsets.only(
+              top: 16,
+              right: 24,
+              left: 24,
+              bottom: 34,
+            ),
             itemCount: todos.length,
             itemBuilder: (context, index) {
               final todo = todos[index];
@@ -52,7 +71,9 @@ class TodoListSection extends ConsumerWidget {
                 todo: todo,
                 showProjectTitle: false,
                 showDateRange: true,
-                todoTitleTextStyle: AppTextStyles.body1.copyWith(color: AppColors.grey800),
+                todoTitleTextStyle: AppTextStyles.body1.copyWith(
+                  color: AppColors.grey800,
+                ),
               );
             },
             separatorBuilder: (context, index) => const SizedBox(height: 8),
