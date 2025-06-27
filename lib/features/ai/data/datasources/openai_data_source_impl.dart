@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,9 +17,30 @@ class OpenaiDataSourceImpl implements OpenaiDataSource {
     OpenaiParams openaiParams,
   ) async {
     try {
-      final systemPrompt = await rootBundle.loadString(
-        'assets/prompts/prompt.txt',
-      );
+      final configDoc =
+          await FirebaseFirestore.instance
+              .collection('openai_config')
+              .doc('default')
+              .get();
+
+      final config = configDoc.data();
+      if (config == null) throw Exception('OpenAI config not found');
+
+      final model = config['model'] ?? 'gpt-4';
+      final maxTokens = config['maxTokens'] ?? 3000;
+      final rawPrompt = config['systemPrompt'];
+      final String systemPrompt;
+
+      if (rawPrompt != null &&
+          rawPrompt is String &&
+          rawPrompt.trim().isNotEmpty) {
+        systemPrompt = rawPrompt.trim();
+      } else {
+        systemPrompt = await rootBundle.loadString('assets/prompts/prompt.txt');
+      }
+      log('model: $model');
+      log('maxTokens: $maxTokens');
+      log('systemPrompt: $systemPrompt');
 
       final response = await _dio.post(
         'https://api.openai.com/v1/chat/completions',
@@ -29,7 +51,7 @@ class OpenaiDataSourceImpl implements OpenaiDataSource {
           },
         ),
         data: {
-          'model': 'gpt-4.1',
+          'model': model,
           'messages': [
             {'role': 'system', 'content': systemPrompt},
             {
@@ -38,7 +60,7 @@ class OpenaiDataSourceImpl implements OpenaiDataSource {
                   'project_title: ${openaiParams.projectTitle}, project_start_date: ${openaiParams.projectStartDate}, project_end_date: ${openaiParams.projectEndDate}, prompt: ${openaiParams.prompt}',
             },
           ],
-          'max_tokens': 3000,
+          'max_tokens': maxTokens,
         },
       );
       log('${response.statusCode}');
