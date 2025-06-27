@@ -60,9 +60,9 @@ class MyPage extends ConsumerWidget {
                   SizedBox(width: 14),
                 ],
               ),
-              body: Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 12, 8, 12),
+              body: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 8, 12),
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
                       SizedBox(
