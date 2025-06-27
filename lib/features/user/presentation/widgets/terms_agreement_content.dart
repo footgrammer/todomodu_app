@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/features/user/presentation/pages/terms_and_privacy_page.dart';
 import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
@@ -165,6 +166,9 @@ class _TermsAgreementContentState extends State<TermsAgreementContent> {
                             ref
                                 .read(userViewModelProvider.notifier)
                                 .fetchUser();
+                            ref
+                                .read(projectListViewModelProvider.notifier)
+                                .fetchProjectsByUserId();
                             replaceAllWithPage(context, MainPage());
                           }
                           : null,
