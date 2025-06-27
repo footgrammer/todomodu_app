@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_create_form.dart';
+import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/types/result_extension.dart';
 
@@ -16,10 +17,6 @@ class NoticeCreatePage extends ConsumerStatefulWidget {
 class _NoticeCreatePageState extends ConsumerState<NoticeCreatePage> {
   final _scrollController = ScrollController();
 
-  void _dismissKeyboard(BuildContext context) {
-    FocusScope.of(context).unfocus();
-  }
-
   @override
   void dispose() {
     _scrollController.dispose();
@@ -31,7 +28,13 @@ class _NoticeCreatePageState extends ConsumerState<NoticeCreatePage> {
     final viewmodel = ref.watch(
       noticeCreateViewModelProvider(widget.projectId).notifier,
     );
-    final noticeListVm = ref.read(noticeListViewModelProvider.notifier);
+    final userAsync = ref.watch(userProvider);
+
+    if (userAsync is! AsyncData || userAsync.value == null) {
+      return const SizedBox(); // 유저 정보 없으면 아무것도 안 보여줌
+    }
+
+    final currentUser = userAsync.value!;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -55,7 +58,7 @@ class _NoticeCreatePageState extends ConsumerState<NoticeCreatePage> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () async {
-                      final result = await viewmodel.submit();
+                      final result = await viewmodel.submit(currentUser);
 
                       result.when(
                         ok: (notice) {
