@@ -32,7 +32,7 @@ class TodoListSection extends ConsumerWidget {
             return Center(
               child: Column(
               children: [
-                SvgPicture.asset('project_detail_todo_empty.svg',),
+                SvgPicture.asset('project_detail_todo_empty.svg', width: 101, height: 71,),
                 Text('아직 등록된 할 일이 없습니다.',
                 style: AppTextStyles.body2.copyWith(color: AppColors.grey800)),
                           Text(
