@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/entities/project_extensions.dart'; // ✅ 추가
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectInfoHeader extends StatelessWidget {
@@ -12,7 +13,7 @@ class ProjectInfoHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final startDate = DateFormat('yyyy.MM.dd').format(project.startDate);
     final endDate = DateFormat('yyyy.MM.dd').format(project.endDate);
-    final progress = project.progress;
+    final progress = project.progress; // ✅ 계산된 getter 사용
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
