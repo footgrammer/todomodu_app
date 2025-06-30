@@ -214,6 +214,7 @@ class TodoDetailPage extends ConsumerWidget {
                                 projectId: subtask.projectId,
                                 isDone: !subtask.isDone,
                               );
+                              ref.invalidate(projectProvider(subtask.projectId));
                             },
                           );
                         },

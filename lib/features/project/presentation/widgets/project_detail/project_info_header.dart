@@ -13,7 +13,7 @@ class ProjectInfoHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final startDate = DateFormat('yyyy.MM.dd').format(project.startDate);
     final endDate = DateFormat('yyyy.MM.dd').format(project.endDate);
-    final progress = project.progress; // ✅ 계산된 getter 사용
+    final progress = project.progress;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
