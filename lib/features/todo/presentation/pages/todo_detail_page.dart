@@ -182,7 +182,7 @@ class TodoDetailPage extends ConsumerWidget {
                         children: [
                           _buildInfo('시작일', formatDate(todo.startDate)),
                           _buildInfo('종료일', formatDate(todo.endDate)),
-                          _buildInfo('만든 이', '김영우'),
+                          // _buildInfo('만든 이', '김영우'),
                         ],
                       ),
                       const SizedBox(height: 24),
