@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/entities/project_extensions.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectProgressBar extends ConsumerWidget {
-  Color textColor;
-  Project project;
+  final Color textColor;
+  final Project project;
 
-  ProjectProgressBar({
+  const ProjectProgressBar({
     super.key,
     required this.textColor,
     required this.project,
@@ -25,12 +26,11 @@ class ProjectProgressBar extends ConsumerWidget {
               style: AppTextStyles.subtitle3.copyWith(color: AppColors.grey900),
             ),
             Text(
-              '${project.progress.toInt()}%',
+              '${project.progressPercent}%',
               style: AppTextStyles.subtitle1.copyWith(color: AppColors.grey900),
             ),
           ],
         ),
-
         SizedBox(
           width: double.infinity,
           child: LinearProgressIndicator(

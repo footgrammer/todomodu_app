@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/todo/presentation/widgets/todo_card/project_title_chip.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import '../../../domain/entities/todo.dart';
@@ -39,7 +40,7 @@ class TodoCard extends ConsumerWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => TodoDetailPage(todo: todo)),
+          MaterialPageRoute(builder: (_) => TodoDetailPage(projectId: todo.projectId, todoId: todo.id)),
         );
       },
       child: Container(
@@ -79,6 +80,8 @@ class TodoCard extends ConsumerWidget {
                                 projectId: s.projectId,
                                 isDone: !s.isDone,
                               );
+
+                              ref.invalidate(projectProvider(s.projectId));
                             },
                             child: Row(
                               children: [

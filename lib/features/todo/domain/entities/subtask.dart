@@ -6,7 +6,7 @@ class Subtask {
   final bool isDone;
   final String todoId;
   final String projectId;
-  final UserEntity? assignee;
+  final List<UserEntity>? assignee;
 
   const Subtask({
     required this.id,
@@ -23,7 +23,7 @@ class Subtask {
     bool? isDone,
     String? todoId,
     String? projectId,
-    UserEntity? assignee,
+    List<UserEntity>? assignee,
   }) {
     return Subtask(
       id: id ?? this.id,
