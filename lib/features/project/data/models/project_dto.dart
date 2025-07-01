@@ -74,7 +74,6 @@ class ProjectDto {
     required UserEntity owner,
     required List<UserEntity> members,
     required List<Todo> todos,
-    required double progress, // progress 추가
   }) {
     return Project(
       id: id,
@@ -87,9 +86,7 @@ class ProjectDto {
       todos: todos,
       invitationCode: invitationCode,
       isDone: isDone,
-      progress: progress, // progress 할당
       color: Color(color),
-
     );
   }
 }

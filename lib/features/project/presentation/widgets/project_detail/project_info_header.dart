@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/entities/project_extensions.dart'; // ✅ 추가
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectInfoHeader extends StatelessWidget {

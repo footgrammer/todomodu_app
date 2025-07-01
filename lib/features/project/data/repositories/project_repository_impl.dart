@@ -83,7 +83,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
           owner: owner,
           members: members,
           todos: todos,
-          progress: progress, //  수정된 부분: progress 전달
         ),
       );
     } catch (e) {
@@ -131,7 +130,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
             owner: owner,
             members: membersResult.value,
             todos: todos,
-            progress: progress, // 수정된 부분: progress 전달
           );
         }),
       );
@@ -200,7 +198,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
               owner: owner,
               members: members,
               todos: todos,
-              progress: progress,
             );
           } catch (e) {
             log(
@@ -258,7 +255,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
       owner: owner,
       members: members,
       todos: todos,
-      progress: 10.0,
     );
   }
 

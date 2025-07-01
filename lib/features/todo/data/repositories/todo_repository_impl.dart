@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/todo/data/models/todo_dto.dart';
 import 'package:todomodu_app/features/todo/domain/entities/subtask.dart';
 import 'package:todomodu_app/features/todo/domain/repositories/subtask_repository.dart';
@@ -10,6 +11,7 @@ import '../datasources/todo_remote_datasource.dart';
 class TodoRepositoryImpl implements TodoRepository {
   final TodoRemoteDataSource _remoteDataSource;
   final SubtaskRepository _subtaskRepository;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   TodoRepositoryImpl({
     required TodoRemoteDataSource remoteDataSource,
@@ -99,6 +101,23 @@ class TodoRepositoryImpl implements TodoRepository {
     );
   }
 
+    @override
+  Stream<Todo> streamTodoById(String projectId, String todoId) {
+    return _firestore
+        .collection('projects')
+        .doc(projectId)
+        .collection('todos')
+        .doc(todoId)
+        .snapshots()
+        .map((doc) {
+          final data = doc.data();
+          if (data == null) {
+            throw Exception('Todo not found');
+          }
+          return TodoDto.fromJson(data, id: doc.id).toEntity();
+        });
+  }
+  
   @override
   Future<void> updateTodo(Todo todo) async {
     await _remoteDataSource.updateTodo(todo);

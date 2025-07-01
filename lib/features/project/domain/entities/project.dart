@@ -14,7 +14,6 @@ class Project {
   String invitationCode;
   bool isDone;
   Color color;
-  double progress; // 진척도 추가
 
   Project({
     required this.id,
@@ -28,6 +27,5 @@ class Project {
     required this.invitationCode,
     required this.isDone,
     required this.color,
-    required this.progress, //추가
   });
 }
