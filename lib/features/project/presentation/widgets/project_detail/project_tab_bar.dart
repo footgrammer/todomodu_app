@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/notice_list_section.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/positioned_reddot_for_tab.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/time_line_section.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/todo_list_section.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
@@ -52,7 +53,7 @@ class ProjectTabBar extends StatelessWidget {
             children: [
               TodoListSection(projectId: projectId),
               NoticeListSection(projectId: projectId),
-              const Center(child: Text('타임라인 탭')),
+              TimeLineSection(projectId: projectId),
             ],
           ),
         ),
