@@ -28,22 +28,22 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
        super(NoticeListModel.initial());
 
   /// 앱 초기화 시 사용자 기준 프로젝트 + 공지 불러오기
-  Future<void> initialize(UserEntity user) async {
+  /// 내부에서 실제 초기화를 처리하는 공통 함수
+  Future<void> _initializeInternal(UserEntity user) async {
     state = state.copyWith(isLoading: true, error: null);
 
     final projectResult = await _fetchProjectsUsecase.execute(user);
 
-    if (projectResult is Ok<List<Project>>) {
-      final projects = projectResult.value;
-      state = state.copyWith(
-        projects: projects,
-        selectedProjects: List.from(projects),
-      );
+    if (projectResult case Ok<List<Project>>(:final value)) {
+      final projects = value;
+
       final noticeResult = await _retrieveUsecase.execute(projects);
 
       state = switch (noticeResult) {
         Ok(value: final notices) => state.copyWith(
           currentUser: user,
+          projects: projects,
+          selectedProjects: List.from(projects),
           notices: notices,
           selectedNotices: List.from(notices),
           isLoading: false,
@@ -53,12 +53,24 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
           error: error.toString(),
         ),
       };
-    } else if (projectResult is Error) {
-      state = state.copyWith(
-        isLoading: false,
-        error: (projectResult as Error).error.toString(),
-      );
+    } else if (projectResult case Error(:final error)) {
+      state = state.copyWith(isLoading: false, error: error.toString());
     }
+  }
+
+  /// 외부에서 유저를 전달받는 초기화
+  Future<void> initialize(UserEntity user) async {
+    await _initializeInternal(user);
+  }
+
+  /// 내부에 저장된 유저 정보를 바탕으로 초기화
+  Future<void> initializeWithoutUserParam() async {
+    final currentUser = state.currentUser;
+    if (currentUser == null) {
+      state = state.copyWith(error: '사용자 정보가 없습니다.');
+      return;
+    }
+    await _initializeInternal(currentUser);
   }
 
   void addProject(Project project) {
@@ -97,7 +109,10 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     required Notice notice,
     // required UserEntity user,
   }) async {
-    final result = await _markAsReadUsecase.execute(notice: notice, user: state.currentUser!);
+    final result = await _markAsReadUsecase.execute(
+      notice: notice,
+      user: state.currentUser!,
+    );
 
     if (result is Ok<Notice>) {
       final updated = result.value;
@@ -154,7 +169,7 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     return unreadedProjects.contains(project.id);
   }
 
-  bool hasUnreadNoticesforDetail(String projectId,) {
+  bool hasUnreadNoticesforDetail(String projectId) {
     final unreadedNotices = state.notices.where(
       (n) => n.isUnread(state.currentUser!.userId),
     );
@@ -206,7 +221,7 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     );
   }
 
-  void updateUser(UserEntity currentUser){
+  void updateUser(UserEntity currentUser) {
     state = state.copyWith(currentUser: currentUser);
   }
 }
