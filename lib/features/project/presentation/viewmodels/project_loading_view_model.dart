@@ -6,15 +6,35 @@ class ProjectProgressState {
   final double percent;
   final int stepIndex;
   final String message;
+  final bool isCompleted;
 
   ProjectProgressState({
     required this.percent,
     required this.stepIndex,
     required this.message,
+    this.isCompleted = false,
   });
 
-  factory ProjectProgressState.initial() =>
-      ProjectProgressState(percent: 0.0, stepIndex: -1, message: '');
+  factory ProjectProgressState.initial() => ProjectProgressState(
+    percent: 0.0,
+    stepIndex: -1,
+    message: '',
+    isCompleted: false,
+  );
+
+  ProjectProgressState copyWith({
+    double? percent,
+    int? stepIndex,
+    String? message,
+    bool? isCompleted,
+  }) {
+    return ProjectProgressState(
+      percent: percent ?? this.percent,
+      stepIndex: stepIndex ?? this.stepIndex,
+      message: message ?? this.message,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
 }
 
 final projectProgressProvider =

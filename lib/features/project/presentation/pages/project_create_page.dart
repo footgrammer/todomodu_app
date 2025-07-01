@@ -10,8 +10,10 @@ import 'package:todomodu_app/features/project/presentation/providers/project_pro
 import 'package:todomodu_app/features/project/presentation/utils/project_validator.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_create/project_form_field.dart';
+import 'package:todomodu_app/features/user/presentation/pages/main/main_page.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/dialog_utils.dart';
+import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 import 'package:todomodu_app/shared/widgets/common_elevated_button.dart';
 
 // 상태 관리용 Provider
@@ -209,9 +211,11 @@ class ProjectCreatePage extends ConsumerWidget {
           context,
           'AI 응답이 비어있습니다.\n조금 더 구체적으로 프로젝트를 설명해 주세요!',
         );
+        navigateToPage(context, MainPage());
       }
     } catch (error) {
-      log('error : ${error}');
+      log('Project_Create_page error : ${error}');
+      navigateToPage(context, MainPage());
     }
   }
 }
