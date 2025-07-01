@@ -124,7 +124,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
                 ),
                 Expanded(
                   child: ProjectTabBar(
-                    projectId: widget.project.id,
+                    project: widget.project,
                     tabController: _tabController,
                   ),
                 ),

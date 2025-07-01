@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/activity_history/presentation/providers/activity_history_providers.dart';
+import 'package:todomodu_app/features/activity_history/presentation/widgets/activity_history_list_widget.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
 
-class TimeLineSection extends StatelessWidget {
-  const TimeLineSection({required this.projectId, super.key});
-
-  final String projectId;
+class TimeLineSection extends ConsumerWidget {
+  const TimeLineSection({required this.project, super.key});
+  final Project project;
 
   @override
-  Widget build(BuildContext context) {
-    return Container();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncHistories = ref.watch(activityHistoryListViewModelProvider(project.id));
+
+    return asyncHistories.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text('오류 발생: $e')),
+      data: (histories) => ActivityHistoryListWidget(histories: histories, project: project,),
+    );
   }
 }

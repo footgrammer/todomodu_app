@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/notice_list_section.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/positioned_reddot_for_tab.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project_detail/time_line_section.dart';
@@ -6,12 +7,12 @@ import 'package:todomodu_app/features/project/presentation/widgets/project_detai
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 
 class ProjectTabBar extends StatelessWidget {
-  final String projectId;
+  final Project project;
   final TabController tabController; // ✅ 추가
 
   const ProjectTabBar({
     super.key,
-    required this.projectId,
+    required this.project,
     required this.tabController,
   });
 
@@ -38,7 +39,7 @@ class ProjectTabBar extends StatelessWidget {
                     Positioned(
                       top: -5,
                       right: -10,
-                      child: PositionedReddotForTab(projectId: projectId),
+                      child: PositionedReddotForTab(projectId: project.id),
                     ),
                   ],
                 ),
@@ -51,9 +52,9 @@ class ProjectTabBar extends StatelessWidget {
           child: TabBarView(
             controller: tabController, // ✅ 연결
             children: [
-              TodoListSection(projectId: projectId),
-              NoticeListSection(projectId: projectId),
-              TimeLineSection(projectId: projectId),
+              TodoListSection(projectId: project.id),
+              NoticeListSection(projectId: project.id),
+              TimeLineSection(project: project),
             ],
           ),
         ),
