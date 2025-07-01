@@ -8,4 +8,6 @@ abstract interface class UserRepository {
   Future<UserEntity?> getFutureUserByUserId(String userId);
   Future<void> changeUserNickname(String userId, String nickname);
   Future<void> uploadProfileImage(String userId);
+  Future<Result<UserEntity>> getUserFutureById(String userId);
+  Future<Result<UserEntity>> getCurrentUserFuture();
 }
