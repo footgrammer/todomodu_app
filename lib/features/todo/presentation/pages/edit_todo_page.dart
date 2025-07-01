@@ -75,8 +75,7 @@ class EditTodoPage extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               EditSubtaskList(
-                projectId: todo.projectId,
-                todoId: todo.id,
+                todo: todo,
                 projectMembers: projectMembers,
               ),
             ],
