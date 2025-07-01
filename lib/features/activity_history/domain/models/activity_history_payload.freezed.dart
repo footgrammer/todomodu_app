@@ -404,11 +404,10 @@ as String,
 @JsonSerializable()
 
 class TodoUpdatedPayload extends ActivityHistoryPayload {
-  const TodoUpdatedPayload({required this.todoId, required this.updaterId, required final  Map<String, dynamic> changes, final  String? $type}): _changes = changes,$type = $type ?? 'todoUpdated',super._();
+  const TodoUpdatedPayload({required this.todoId, required final  Map<String, dynamic> changes, final  String? $type}): _changes = changes,$type = $type ?? 'todoUpdated',super._();
   factory TodoUpdatedPayload.fromJson(Map<String, dynamic> json) => _$TodoUpdatedPayloadFromJson(json);
 
  final  String todoId;
- final  String updaterId;
  final  Map<String, dynamic> _changes;
  Map<String, dynamic> get changes {
   if (_changes is EqualUnmodifiableMapView) return _changes;
@@ -434,16 +433,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoUpdatedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId)&&(identical(other.updaterId, updaterId) || other.updaterId == updaterId)&&const DeepCollectionEquality().equals(other._changes, _changes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoUpdatedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId)&&const DeepCollectionEquality().equals(other._changes, _changes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,todoId,updaterId,const DeepCollectionEquality().hash(_changes));
+int get hashCode => Object.hash(runtimeType,todoId,const DeepCollectionEquality().hash(_changes));
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.todoUpdated(todoId: $todoId, updaterId: $updaterId, changes: $changes)';
+  return 'ActivityHistoryPayload.todoUpdated(todoId: $todoId, changes: $changes)';
 }
 
 
@@ -454,7 +453,7 @@ abstract mixin class $TodoUpdatedPayloadCopyWith<$Res> implements $ActivityHisto
   factory $TodoUpdatedPayloadCopyWith(TodoUpdatedPayload value, $Res Function(TodoUpdatedPayload) _then) = _$TodoUpdatedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String todoId, String updaterId, Map<String, dynamic> changes
+ String todoId, Map<String, dynamic> changes
 });
 
 
@@ -471,10 +470,9 @@ class _$TodoUpdatedPayloadCopyWithImpl<$Res>
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? todoId = null,Object? updaterId = null,Object? changes = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? todoId = null,Object? changes = null,}) {
   return _then(TodoUpdatedPayload(
 todoId: null == todoId ? _self.todoId : todoId // ignore: cast_nullable_to_non_nullable
-as String,updaterId: null == updaterId ? _self.updaterId : updaterId // ignore: cast_nullable_to_non_nullable
 as String,changes: null == changes ? _self._changes : changes // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>,
   ));
@@ -562,11 +560,10 @@ as String,
 @JsonSerializable()
 
 class TodoDeletedPayload extends ActivityHistoryPayload {
-  const TodoDeletedPayload({required this.todoId, required this.deletedById, final  String? $type}): $type = $type ?? 'todoDeleted',super._();
+  const TodoDeletedPayload({required this.todoId, final  String? $type}): $type = $type ?? 'todoDeleted',super._();
   factory TodoDeletedPayload.fromJson(Map<String, dynamic> json) => _$TodoDeletedPayloadFromJson(json);
 
  final  String todoId;
- final  String deletedById;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -585,16 +582,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoDeletedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId)&&(identical(other.deletedById, deletedById) || other.deletedById == deletedById));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoDeletedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,todoId,deletedById);
+int get hashCode => Object.hash(runtimeType,todoId);
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.todoDeleted(todoId: $todoId, deletedById: $deletedById)';
+  return 'ActivityHistoryPayload.todoDeleted(todoId: $todoId)';
 }
 
 
@@ -605,7 +602,7 @@ abstract mixin class $TodoDeletedPayloadCopyWith<$Res> implements $ActivityHisto
   factory $TodoDeletedPayloadCopyWith(TodoDeletedPayload value, $Res Function(TodoDeletedPayload) _then) = _$TodoDeletedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String todoId, String deletedById
+ String todoId
 });
 
 
@@ -622,10 +619,9 @@ class _$TodoDeletedPayloadCopyWithImpl<$Res>
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? todoId = null,Object? deletedById = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? todoId = null,}) {
   return _then(TodoDeletedPayload(
 todoId: null == todoId ? _self.todoId : todoId // ignore: cast_nullable_to_non_nullable
-as String,deletedById: null == deletedById ? _self.deletedById : deletedById // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

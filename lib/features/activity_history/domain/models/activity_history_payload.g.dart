@@ -63,7 +63,6 @@ Map<String, dynamic> _$TodoAddedPayloadToJson(TodoAddedPayload instance) =>
 TodoUpdatedPayload _$TodoUpdatedPayloadFromJson(Map<String, dynamic> json) =>
     TodoUpdatedPayload(
       todoId: json['todoId'] as String,
-      updaterId: json['updaterId'] as String,
       changes: json['changes'] as Map<String, dynamic>,
       $type: json['runtimeType'] as String?,
     );
@@ -71,7 +70,6 @@ TodoUpdatedPayload _$TodoUpdatedPayloadFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$TodoUpdatedPayloadToJson(TodoUpdatedPayload instance) =>
     <String, dynamic>{
       'todoId': instance.todoId,
-      'updaterId': instance.updaterId,
       'changes': instance.changes,
       'runtimeType': instance.$type,
     };
@@ -95,16 +93,11 @@ Map<String, dynamic> _$TodoCompletedPayloadToJson(
 TodoDeletedPayload _$TodoDeletedPayloadFromJson(Map<String, dynamic> json) =>
     TodoDeletedPayload(
       todoId: json['todoId'] as String,
-      deletedById: json['deletedById'] as String,
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$TodoDeletedPayloadToJson(TodoDeletedPayload instance) =>
-    <String, dynamic>{
-      'todoId': instance.todoId,
-      'deletedById': instance.deletedById,
-      'runtimeType': instance.$type,
-    };
+    <String, dynamic>{'todoId': instance.todoId, 'runtimeType': instance.$type};
 
 ProjectUpdatedPayload _$ProjectUpdatedPayloadFromJson(
   Map<String, dynamic> json,

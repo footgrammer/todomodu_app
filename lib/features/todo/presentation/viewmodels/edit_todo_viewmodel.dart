@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/todo/data/models/subtask_dto.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/domain/usecases/get_user_by_user_id_usecase.dart';
-import 'package:todomodu_app/features/user/domain/usecases/get_user_by_user_id_usecase_impl.dart';
 import 'package:uuid/uuid.dart';
 import '../../application/usecases/update_todo_usecase.dart';
 import '../../domain/entities/subtask.dart';

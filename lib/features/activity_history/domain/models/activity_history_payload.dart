@@ -27,7 +27,6 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
 
   const factory ActivityHistoryPayload.todoUpdated({
     required String todoId,
-    required String updaterId,
     required Map<String, dynamic> changes,
   }) = TodoUpdatedPayload;
 
@@ -38,7 +37,6 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
 
   const factory ActivityHistoryPayload.todoDeleted({
     required String todoId,
-    required String deletedById,
   }) = TodoDeletedPayload;
 
   const factory ActivityHistoryPayload.projectUpdated({
