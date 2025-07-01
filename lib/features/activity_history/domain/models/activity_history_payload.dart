@@ -27,11 +27,13 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
 
   const factory ActivityHistoryPayload.todoUpdated({
     required String todoId,
+    required String title,
     required Map<String, dynamic> changes,
   }) = TodoUpdatedPayload;
 
   const factory ActivityHistoryPayload.todoCompleted({
     required String todoId,
+    required String title,
     required String completedById,
   }) = TodoCompletedPayload;
 
@@ -41,17 +43,20 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
 
   const factory ActivityHistoryPayload.projectUpdated({
     required String updaterId,
+    required String title,
     required Map<String, dynamic> changes,
   }) = ProjectUpdatedPayload;
 
   const factory ActivityHistoryPayload.assigneeAssigned({
     required String todoId,
+    required String title,
     required String assigneeId,
     required String assignedById,
   }) = AssigneeAssignedPayload;
 
   const factory ActivityHistoryPayload.assigneeChanged({
     required String todoId,
+    required String title,
     required String oldAssigneeId,
     required String newAssigneeId,
     required String changedById,
@@ -59,6 +64,7 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
 
   const factory ActivityHistoryPayload.projectCompleted({
     required String completedById,
+    required String title,
   }) = ProjectCompletedPayload;
 
   factory ActivityHistoryPayload.fromJson(Map<String, dynamic> json) =>

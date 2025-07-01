@@ -24,6 +24,7 @@ class UpdateTodoUseCase {
       projectId: todo.projectId,
       createdAt: DateTime.now(),
       payload: ActivityHistoryPayload.todoUpdated(
+        title: todo.title,
         todoId: todo.id,
         changes: {}, // 변경된 내용 비교해서 넣고 싶다면 별도 처리 필요
       ),
