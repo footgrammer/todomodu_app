@@ -188,7 +188,8 @@ class ProjectCreatePage extends ConsumerWidget {
       if (response != null) {
         final controller = ref.read(projectProgressProvider.notifier);
         await controller.completeRequest();
-        Navigator.of(context).pop();
+        await Future.delayed(Duration(seconds: 1));
+        if (context.mounted) Navigator.of(context).pop();
 
         final viewModel = ref.read(projectCreateViewModelProvider.notifier);
 
@@ -198,24 +199,30 @@ class ProjectCreatePage extends ConsumerWidget {
         final state = ref.read(projectCreateViewModelProvider);
         viewModel.cacheInitialSubtasks(state.selectedSubtasks);
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => ProjectCreateTodoPage(response: response),
-          ),
-        );
+        if (context.mounted) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ProjectCreateTodoPage(response: response),
+            ),
+          );
+        }
+
         progressViewModel.reset();
       } else {
         progressViewModel.reset();
-        Navigator.of(context).pop();
-        DialogUtils.showErrorDialog(
-          context,
-          'AI 응답이 비어있습니다.\n조금 더 구체적으로 프로젝트를 설명해 주세요!',
-        );
-        navigateToPage(context, MainPage());
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          DialogUtils.showErrorDialog(
+            context,
+            'AI 응답이 비어있습니다.\n조금 더 구체적으로 프로젝트를 설명해 주세요!',
+          );
+          navigateToPage(context, MainPage());
+        }
       }
     } catch (error) {
       log('Project_Create_page error : ${error}');
-      navigateToPage(context, MainPage());
+
+      if (context.mounted) navigateToPage(context, MainPage());
     }
   }
 }

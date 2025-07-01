@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -65,7 +66,11 @@ class ProgressController extends Notifier<ProjectProgressState> {
     final steps = _steps;
 
     for (int i = 0; i < _steps.length; i++) {
-      await Future.delayed(Duration(seconds: 1));
+      if (state.isCompleted == true) {
+        _timer?.cancel();
+        return;
+      }
+      await Future.delayed(Duration(seconds: 2));
       if (_isDisposed) return;
       state = ProjectProgressState(
         percent: steps[i].percent,
@@ -80,6 +85,7 @@ class ProgressController extends Notifier<ProjectProgressState> {
       percent: 1.0,
       stepIndex: _steps.length,
       message: '완료되었습니다.',
+      isCompleted: true,
     );
 
     await Future.delayed(Duration(seconds: 1));
