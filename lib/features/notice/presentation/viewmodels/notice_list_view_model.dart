@@ -43,6 +43,7 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
 
       state = switch (noticeResult) {
         Ok(value: final notices) => state.copyWith(
+          currentUser: user,
           notices: notices,
           selectedNotices: List.from(notices),
           isLoading: false,
@@ -94,9 +95,9 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
 
   Future<void> markAsRead({
     required Notice notice,
-    required UserEntity user,
+    // required UserEntity user,
   }) async {
-    final result = await _markAsReadUsecase.execute(notice: notice, user: user);
+    final result = await _markAsReadUsecase.execute(notice: notice, user: state.currentUser!);
 
     if (result is Ok<Notice>) {
       final updated = result.value;
@@ -145,17 +146,17 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     return state.selectedProjects.length != state.projects.length;
   }
 
-  bool hasUnreadNotices(Project project, UserEntity currentUser) {
+  bool hasUnreadNotices(Project project) {
     final unreadedNotices = state.notices.where(
-      (n) => n.isUnread(currentUser.userId),
+      (n) => n.isUnread(state.currentUser!.userId),
     );
     final unreadedProjects = unreadedNotices.map((e) => e.projectId);
     return unreadedProjects.contains(project.id);
   }
 
-  bool hasUnreadNoticesforDetail(String projectId, UserEntity currentUser) {
+  bool hasUnreadNoticesforDetail(String projectId,) {
     final unreadedNotices = state.notices.where(
-      (n) => n.isUnread(currentUser.userId),
+      (n) => n.isUnread(state.currentUser!.userId),
     );
     final unreadedProjects = unreadedNotices.map((e) => e.projectId);
     return unreadedProjects.contains(projectId);
@@ -169,9 +170,9 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
     return state.notices.firstWhereOrNull((n) => n.id == id);
   }
 
-  bool isUnread(Notice notice, UserEntity user) {
+  bool isUnread(Notice notice) {
     final latest = getNoticeById(notice.id);
-    return latest?.isUnread(user.userId) ?? false;
+    return latest?.isUnread(state.currentUser!.userId) ?? false;
   }
 
   void addNotice(Notice notice) {
@@ -203,5 +204,9 @@ class NoticeListViewModel extends StateNotifier<NoticeListModel> {
       notices: updatedNotices,
       selectedNotices: updatedSelectedNotices,
     );
+  }
+
+  void updateUser(UserEntity currentUser){
+    state = state.copyWith(currentUser: currentUser);
   }
 }
