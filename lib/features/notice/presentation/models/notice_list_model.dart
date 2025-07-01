@@ -1,5 +1,6 @@
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class NoticeListModel {
   final List<Project> projects;
@@ -8,12 +9,14 @@ class NoticeListModel {
   final List<Notice> selectedNotices;
   final bool isLoading;
   final String? error;
+  final UserEntity? currentUser;
 
   NoticeListModel({
     required this.projects,
     required this.notices,
     List<Project>? selectedProjects,
     List<Notice>? selectedNotices,
+    required this.currentUser,
     required this.isLoading,
     this.error,
   }) :
@@ -25,6 +28,7 @@ class NoticeListModel {
     List<Project>? selectedProjects,
     List<Notice>? notices,
     List<Notice>? selectedNotices,
+    UserEntity? currentUser,
     bool? isLoading,
     String? error,
   }) {
@@ -36,6 +40,7 @@ class NoticeListModel {
       notices: newNotices,
       selectedNotices: selectedNotices ?? this.selectedNotices,
       isLoading: isLoading ?? this.isLoading,
+      currentUser: currentUser ?? this.currentUser,
       error: error ?? this.error,
     );
   }
@@ -47,6 +52,7 @@ class NoticeListModel {
       notices: [],
       selectedNotices: [],
       isLoading: false,
+      currentUser: null,
       error: null,
     );
   }
