@@ -14,8 +14,8 @@ extension ActivityHistoryMessage on ActivityHistory {
         return '공지 "$title"이(가) 등록되었습니다.';
       case TodoAddedPayload(:final title):
         return '할 일 "$title"이(가) 프로젝트 $projectName에 추가되었습니다.';
-      case TodoUpdatedPayload(:final todoId):
-        return '할 일 $todoId이(가) 수정되었습니다.';
+      case TodoUpdatedPayload(:final title):
+        return '할 일 $title이(가) 수정되었습니다.';
       case TodoCompletedPayload(:final todoId):
         return '할 일 $todoId이(가) 완료되었습니다.';
       case TodoDeletedPayload(:final todoId):

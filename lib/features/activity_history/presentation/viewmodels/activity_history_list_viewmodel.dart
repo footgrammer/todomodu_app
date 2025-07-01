@@ -5,7 +5,7 @@ import 'package:todomodu_app/features/activity_history/presentation/providers/ac
 import 'package:todomodu_app/shared/types/result_extension.dart';
 
 class ActivityHistoryListViewModel
-    extends FamilyAsyncNotifier<List<ActivityHistory>, String> {
+    extends AutoDisposeFamilyAsyncNotifier<List<ActivityHistory>, String> {
   late final FetchActivityHistoryUsecase _usecase;
 
   @override

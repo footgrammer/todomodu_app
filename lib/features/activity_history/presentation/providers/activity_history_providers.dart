@@ -35,9 +35,11 @@ final fetchActivityHistoryUsecaseProvider = Provider((ref) {
 });
 
 final activityHistoryListViewModelProvider =
-    AsyncNotifierProvider.family<ActivityHistoryListViewModel, List<ActivityHistory>, String>(
+    AsyncNotifierProvider.autoDispose.family<ActivityHistoryListViewModel, List<ActivityHistory>, String>(
   ActivityHistoryListViewModel.new,
 );
+
+
 
 
 
