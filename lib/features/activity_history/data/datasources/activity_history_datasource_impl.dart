@@ -20,9 +20,7 @@ class ActivityHistoryDatasourceImpl implements ActivityHistoryDatasource {
           .doc(activity.projectId);
       final activityCollection = projectRef.collection('activity_histories');
 
-      final json =
-          dto.toJson()
-            ..['createdAt'] = FieldValue.serverTimestamp();
+      final json = dto.toJson()..['createdAt'] = FieldValue.serverTimestamp();
 
       await activityCollection.add(json); // 🔧 자동 ID로 저장
 
@@ -55,5 +53,24 @@ class ActivityHistoryDatasourceImpl implements ActivityHistoryDatasource {
     } catch (e, st) {
       return Error(Exception('Failed to fetch activities: $e\n$st'));
     }
+  }
+
+  @override
+  Stream<List<ActivityHistory>> subscribe(String projectId) {
+    return _firestore
+        .collection('projects')
+        .doc(projectId)
+        .collection('activityHistories')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) {
+                return ActivityHistoryDto.fromJson(
+                  doc.data(),
+                  doc.id,
+                ).toEntity();
+              }).toList(),
+        );
   }
 }
