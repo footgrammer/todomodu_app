@@ -28,6 +28,7 @@ class NoticeDto {
       'content': content,
       'checkedUsers': checkedUsers,
       'createdAt': createdAt.toIso8601String(),
+      'authorId' : authorId,
     };
   }
 
