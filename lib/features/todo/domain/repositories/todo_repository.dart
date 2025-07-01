@@ -7,6 +7,10 @@ abstract class TodoRepository {
   Future<Result<List<Todo>>> getTodosWithSubtasksByProjectId(String projectId);
 
   Stream<List<Todo>> streamTodos(String projectId);
+
+  //단일 todo 조회
+  Stream<Todo> streamTodoById(String projectId, String todoId);
+
   Future<void> deleteTodo(String projectId, String todoId);
 
   Future<void> toggleSubtaskDone({
