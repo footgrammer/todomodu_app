@@ -170,7 +170,6 @@ class ProjectCreateSubtaskPage extends ConsumerWidget {
       invitationCode: invitationCode,
       isDone: false,
       color: color,
-      progress: 0,
     );
     final createProjectUsecase = ref.read(createProjectUsecaseProvider);
     await ref
