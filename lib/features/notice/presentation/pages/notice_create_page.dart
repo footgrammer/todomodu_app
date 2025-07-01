@@ -34,8 +34,6 @@ class _NoticeCreatePageState extends ConsumerState<NoticeCreatePage> {
       return const SizedBox(); // 유저 정보 없으면 아무것도 안 보여줌
     }
 
-    final currentUser = userAsync.value!;
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -68,7 +66,7 @@ class _NoticeCreatePageState extends ConsumerState<NoticeCreatePage> {
           ),
           child: ElevatedButton(
             onPressed: () async {
-              final result = await viewmodel.submit(currentUser);
+              final result = await viewmodel.submit();
       
               result.when(
                 ok: (notice) {

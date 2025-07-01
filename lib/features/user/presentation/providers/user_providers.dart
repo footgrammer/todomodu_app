@@ -6,6 +6,8 @@ import 'package:todomodu_app/features/user/data/datasources/user_data_source_imp
 import 'package:todomodu_app/features/user/data/repositories/user_repository_impl.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/features/user/domain/repositories/user_repository.dart';
+import 'package:todomodu_app/features/user/domain/usecases/get_current_user_future_usecase.dart';
+import 'package:todomodu_app/features/user/domain/usecases/get_current_user_future_usecase_impl.dart';
 import 'package:todomodu_app/features/user/domain/usecases/get_current_user_usecase_impl.dart';
 import 'package:todomodu_app/features/user/domain/usecases/get_user_by_user_id_usecase.dart';
 import 'package:todomodu_app/features/user/domain/usecases/get_user_by_user_id_usecase_impl.dart';
@@ -45,3 +47,9 @@ final userProvider = StreamProvider<UserEntity?>((ref) {
   final usecase = ref.read(getCurrentUserUsecaseProvider);
   return usecase.execute();
 });
+
+final getCurrentUserFutureUsecaseProvider = Provider<GetCurrentUserFutureUsecase>((ref) {
+  final userRepository = ref.watch(userRepositoryProvider);
+  return GetCurrentUserFutureUsecaseImpl(userRepository: userRepository);
+});
+

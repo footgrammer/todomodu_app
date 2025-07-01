@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/activity_history/presentation/providers/activity_history_providers.dart';
 import 'package:todomodu_app/features/notice/data/datasources/notice_data_source_impl.dart';
 import 'package:todomodu_app/features/notice/data/repositories/notice_repository_impl.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/create_notice_usecase.dart';
@@ -26,6 +27,7 @@ final noticeRepositoryProvider = Provider<NoticeRepositoryImpl>((ref) {
 final createNoticeUsecaseProvider = Provider<CreateNoticeUsecase>((ref) {
   return CreateNoticeUsecase(
     noticeRepository: ref.watch(noticeRepositoryProvider),
+    logActivityHistoryUsecase: ref.watch(logActivityHistoryUsecaseProvider),
   );
 });
 
@@ -43,16 +45,11 @@ final markNoticeAsReadUsecase = Provider<MarkNoticeAsReadUsecase>((ref) {
   );
 });
 
-final noticeCreateViewModelProvider = StateNotifierProvider.family<
+final noticeCreateViewModelProvider = AsyncNotifierProvider.family<
   NoticeCreateViewModel,
   NoticeCreateModel,
   String
->((ref, projectId) {
-  return NoticeCreateViewModel(
-    createNoticeUsecase: ref.watch(createNoticeUsecaseProvider),
-    projectId: projectId,
-  );
-});
+>(NoticeCreateViewModel.new);
 
 final noticeListViewModelProvider =
     StateNotifierProvider<NoticeListViewModel, NoticeListModel>((ref) {

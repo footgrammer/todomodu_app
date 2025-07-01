@@ -84,4 +84,41 @@ class UserDataSourceImpl implements UserDataSource {
       return null;
     }
   }
+
+  @override
+  Future<Result<UserDto>> getFutureUserResultByUserId(String userId) async {
+    try {
+      final doc = await _firestore.collection('users').doc(userId).get();
+      if (!doc.exists) {
+        return Result.error(Exception('User not found: $userId'));
+      }
+      return Result.ok(UserDto.fromJson(doc.data()!..['userId'] = doc.id));
+    } catch (e) {
+      log('getFutureUserResultByUserId error: $e');
+      return Result.error(Exception('Failed to fetch user: $e'));
+    }
+  }
+
+  @override
+  Future<Result<UserDto>> getCurrentUserFuture() async {
+    try {
+      final firebaseUser = _firebaseAuth.currentUser;
+      if (firebaseUser == null) {
+        return Result.error(Exception('로그인된 사용자가 없습니다.'));
+      }
+
+      final doc =
+          await _firestore.collection('users').doc(firebaseUser.uid).get();
+
+      if (!doc.exists) {
+        return Result.error(Exception('사용자 문서를 찾을 수 없습니다.'));
+      }
+
+      final data = doc.data()!..['userId'] = doc.id;
+      return Result.ok(UserDto.fromJson(data));
+    } catch (e) {
+      log('getCurrentUserFuture error: $e');
+      return Result.error(Exception('현재 사용자 정보를 가져오는 데 실패했습니다: $e'));
+    }
+  }
 }

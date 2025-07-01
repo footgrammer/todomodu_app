@@ -20,27 +20,24 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
     required String title,
   }) = NoticePostedPayload;
 
-  const factory ActivityHistoryPayload.taskAdded({
-    required String taskId,
+  const factory ActivityHistoryPayload.todoAdded({
+    required String todoId,
     required String title,
-    required String creatorId,
-  }) = TaskAddedPayload;
+  }) = TodoAddedPayload;
 
-  const factory ActivityHistoryPayload.taskUpdated({
-    required String taskId,
-    required String updaterId,
+  const factory ActivityHistoryPayload.todoUpdated({
+    required String todoId,
     required Map<String, dynamic> changes,
-  }) = TaskUpdatedPayload;
+  }) = TodoUpdatedPayload;
 
-  const factory ActivityHistoryPayload.taskCompleted({
-    required String taskId,
+  const factory ActivityHistoryPayload.todoCompleted({
+    required String todoId,
     required String completedById,
-  }) = TaskCompletedPayload;
+  }) = TodoCompletedPayload;
 
-  const factory ActivityHistoryPayload.taskDeleted({
-    required String taskId,
-    required String deletedById,
-  }) = TaskDeletedPayload;
+  const factory ActivityHistoryPayload.todoDeleted({
+    required String todoId,
+  }) = TodoDeletedPayload;
 
   const factory ActivityHistoryPayload.projectUpdated({
     required String updaterId,
@@ -48,13 +45,13 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
   }) = ProjectUpdatedPayload;
 
   const factory ActivityHistoryPayload.assigneeAssigned({
-    required String taskId,
+    required String todoId,
     required String assigneeId,
     required String assignedById,
   }) = AssigneeAssignedPayload;
 
   const factory ActivityHistoryPayload.assigneeChanged({
-    required String taskId,
+    required String todoId,
     required String oldAssigneeId,
     required String newAssigneeId,
     required String changedById,
@@ -67,23 +64,22 @@ class ActivityHistoryPayload with _$ActivityHistoryPayload {
   factory ActivityHistoryPayload.fromJson(Map<String, dynamic> json) =>
       _$ActivityHistoryPayloadFromJson(json);
 
-  /// ✅ Freezed 3.x macro에서는 직접 위임해야 함
   @override
   Map<String, dynamic> toJson() {
     return switch (this) {
       MemberJoinedPayload() => (this as MemberJoinedPayload).toJson(),
       MemberLeftPayload() => (this as MemberLeftPayload).toJson(),
       NoticePostedPayload() => (this as NoticePostedPayload).toJson(),
-      TaskAddedPayload() => (this as TaskAddedPayload).toJson(),
-      TaskUpdatedPayload() => (this as TaskUpdatedPayload).toJson(),
-      TaskCompletedPayload() => (this as TaskCompletedPayload).toJson(),
-      TaskDeletedPayload() => (this as TaskDeletedPayload).toJson(),
+      TodoAddedPayload() => (this as TodoAddedPayload).toJson(),
+      TodoUpdatedPayload() => (this as TodoUpdatedPayload).toJson(),
+      TodoCompletedPayload() => (this as TodoCompletedPayload).toJson(),
+      TodoDeletedPayload() => (this as TodoDeletedPayload).toJson(),
       ProjectUpdatedPayload() => (this as ProjectUpdatedPayload).toJson(),
       AssigneeAssignedPayload() => (this as AssigneeAssignedPayload).toJson(),
       AssigneeChangedPayload() => (this as AssigneeChangedPayload).toJson(),
       ProjectCompletedPayload() => (this as ProjectCompletedPayload).toJson(),
 
-    _ => throw Exception('Unhandled ActivityHistoryPayload type: $this'),
+      _ => throw Exception('Unhandled ActivityHistoryPayload type: $this'),
     };
   }
 }

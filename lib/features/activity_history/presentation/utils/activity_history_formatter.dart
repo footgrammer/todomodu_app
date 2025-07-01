@@ -12,24 +12,24 @@ extension ActivityHistoryMessage on ActivityHistory {
         return '팀원 $memberId이(가) 프로젝트 $projectName에서 나갔습니다.';
       case NoticePostedPayload(:final title):
         return '공지 "$title"이(가) 등록되었습니다.';
-      case TaskAddedPayload(:final title):
+      case TodoAddedPayload(:final title):
         return '할 일 "$title"이(가) 프로젝트 $projectName에 추가되었습니다.';
-      case TaskUpdatedPayload(:final taskId):
-        return '할 일 $taskId이(가) 수정되었습니다.';
-      case TaskCompletedPayload(:final taskId):
-        return '할 일 $taskId이(가) 완료되었습니다.';
-      case TaskDeletedPayload(:final taskId):
-        return '할 일 $taskId이(가) 삭제되었습니다.';
+      case TodoUpdatedPayload(:final todoId):
+        return '할 일 $todoId이(가) 수정되었습니다.';
+      case TodoCompletedPayload(:final todoId):
+        return '할 일 $todoId이(가) 완료되었습니다.';
+      case TodoDeletedPayload(:final todoId):
+        return '할 일 $todoId이(가) 삭제되었습니다.';
       case ProjectUpdatedPayload():
         return '프로젝트 $projectName 설정이 수정되었습니다.';
-      case AssigneeAssignedPayload(:final taskId, :final assigneeId):
-        return '할 일 $taskId의 담당자가 $assigneeId으로 지정되었습니다.';
+      case AssigneeAssignedPayload(:final todoId, :final assigneeId):
+        return '할 일 $todoId의 담당자가 $assigneeId으로 지정되었습니다.';
       case AssigneeChangedPayload(
-        :final taskId,
+        :final todoId,
         :final oldAssigneeId,
         :final newAssigneeId,
       ):
-        return '할 일 $taskId의 담당자가 $oldAssigneeId → $newAssigneeId로 변경되었습니다.';
+        return '할 일 $todoId의 담당자가 $oldAssigneeId → $newAssigneeId로 변경되었습니다.';
       case ProjectCompletedPayload():
         return '프로젝트 $projectName이 완료되었습니다.';
       default:
