@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/notice_list_widget.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/empty_notice.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 
 class NoticeListSection extends ConsumerWidget {
@@ -24,7 +25,7 @@ class NoticeListSection extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 34),
       child: notices.isEmpty
-          ? const Center(child: Text('등록된 공지가 없습니다.'))
+          ? EmptyNotice()
           : NoticeListWidget(
               notices: notices,
               currentUser: currentUser,
