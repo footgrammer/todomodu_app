@@ -21,6 +21,7 @@ final noticeRepositoryProvider = Provider<NoticeRepositoryImpl>((ref) {
   return NoticeRepositoryImpl(
     datasource: ref.watch(_noticeDataSourceProvider),
     userRepository: ref.watch(userRepositoryProvider),
+    projectRepository : ref.watch(projectRepositoryProvider),
   );
 });
 

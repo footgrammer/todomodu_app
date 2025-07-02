@@ -141,4 +141,42 @@ class NoticeDataSourceImpl implements NoticeDatasource {
       return Result.error(Exception('Failed to mark notice as read: $e'));
     }
   }
+
+  @override
+  Stream<Result<List<NoticeDto>>> watchNoticesByProjectIds(
+    List<String> projectIds,
+  ) {
+    if (projectIds.isEmpty) {
+      return Stream.value(Result.ok([]));
+    }
+
+    // Firestore의 whereIn 제한
+    if (projectIds.length > 10) {
+      return Stream.error(Exception('Firestore whereIn은 최대 10개까지 지원됩니다.'));
+    }
+
+    final query = _firestore
+        .collectionGroup('notices')
+        .where('projectId', whereIn: projectIds);
+
+    return query
+        .snapshots()
+        .map<Result<List<NoticeDto>>>((snapshot) {
+          try {
+            final dtos =
+                snapshot.docs.map((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  return NoticeDto.fromJson({...data, 'id': doc.id});
+                }).toList();
+
+            return Result.ok(dtos);
+          } catch (e) {
+            return Result.error(Exception('NoticeDto 변환 중 오류: $e'));
+          }
+        })
+        .handleError((e) {
+          // 스트림 외부 오류 처리
+          return Result.error(Exception('Firestore 스트림 오류: $e'));
+        });
+  }
 }

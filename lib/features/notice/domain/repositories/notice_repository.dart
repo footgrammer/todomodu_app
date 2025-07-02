@@ -6,9 +6,7 @@ import 'package:todomodu_app/shared/types/result.dart';
 abstract interface class NoticeRepository {
   Future<Result<Notice>> createNotice(Notice notice);
 
-  Future<Result<List<Notice>>> fetchNoticesbyProjects(
-    List<Project> projects,
-  );
+  Future<Result<List<Notice>>> fetchNoticesbyProjects(List<Project> projects);
 
   Future<Result<Notice>> fetchNoticebyId({
     required String projectId,
@@ -17,7 +15,10 @@ abstract interface class NoticeRepository {
 
   Future<Result<Notice>> updateNotice(Notice notice);
 
-  Future<Result<Notice>> markNoticeAsRead({required Notice notice, required UserEntity user});
+  Future<Result<Notice>> markNoticeAsRead({
+    required Notice notice,
+    required UserEntity user,
+  });
 
-  
+  Stream<Result<List<Notice>>> watchNoticesForUser({required UserEntity user});
 }
