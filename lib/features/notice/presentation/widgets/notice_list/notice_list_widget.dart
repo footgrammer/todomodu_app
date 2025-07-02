@@ -5,10 +5,11 @@ import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/no
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class NoticeListWidget extends StatelessWidget {
-  const NoticeListWidget({required this.notices,required this.currentUser, super.key});
+  const NoticeListWidget({required this.notices,required this.currentUser, this.isDetail = false, super.key});
 
   final List<Notice> notices;
   final UserEntity currentUser;
+  final isDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class NoticeListWidget extends StatelessWidget {
               );
             },
             child: NoticeListWidgetElement(
+              isDetail: isDetail,
               notice: notices[index],
               currentUser: currentUser,
               key: ValueKey(notices[index].id),

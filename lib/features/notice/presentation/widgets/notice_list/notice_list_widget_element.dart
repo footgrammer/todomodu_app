@@ -15,10 +15,12 @@ class NoticeListWidgetElement extends ConsumerWidget {
     required this.notice,
     required this.currentUser,
     super.key,
+    this.isDetail = false,
   });
 
   final Notice notice;
   final UserEntity currentUser;
+  final isDetail;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +33,8 @@ class NoticeListWidgetElement extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
-        color: vm.getColorByNotice(notice),
+        color: isDetail ? Colors.white :  vm.getColorByNotice(notice),
+        border: Border.all(color: AppColors.grey300),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/activity_history/domain/entities/activity_history.dart';
 import 'package:todomodu_app/features/activity_history/presentation/widgets/activity_history_list_element.dart';
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project_detail/empty_timeline.dart';
 
 class ActivityHistoryListWidget extends StatelessWidget {
   const ActivityHistoryListWidget({
@@ -16,7 +17,7 @@ class ActivityHistoryListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (histories.isEmpty) {
-      return const Center(child: Text('활동 기록이 없습니다.'));
+      return EmptyTimeline();
     }
 
     return ListView.separated(
