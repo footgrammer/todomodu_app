@@ -47,7 +47,7 @@
 			<string>com.todomodu.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>todomodu://</string>
+				<string>todomodu</string>
 			</array>
 		</dict>
 	</array>
