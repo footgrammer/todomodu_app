@@ -3,7 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:todomodu_app/features/project/presentation/widgets/project/project_card.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
@@ -12,10 +13,13 @@ import 'package:todomodu_app/features/project/presentation/widgets/project/proje
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
+// 테스트 코드
+// xcrun simctl openurl booted "todomodu:///invite?code=12345"
+
 final projectCodeControllerProvider =
     Provider.autoDispose<TextEditingController>(
-  (ref) => TextEditingController(),
-);
+      (ref) => TextEditingController(),
+    );
 
 final inviteCodeProvider = StateProvider<String?>((ref) => null);
 
@@ -32,41 +36,73 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
   @override
   void initState() {
     super.initState();
-    _handleInitialLink();
-    _sub = uriLinkStream.listen((Uri? uri) {
-      if (uri != null) {
-        _processUri(uri);
-      }
-    }, onError: (error) {
-      log('딥링크 처리 중 오류 발생: $error');
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handleInitialLink();
     });
+
+    // 실행 중인 앱에 들어오는 URI 처리
+    _sub = uriLinkStream.listen(
+      (Uri? uri) {
+        if (uri != null) {
+          log('uriLinkStream 수신: $uri');
+          _processUri(uri);
+        }
+      },
+      onError: (error) {
+        log('딥링크 처리 중 오류 발생: $error');
+      },
+    );
   }
 
   Future<void> _handleInitialLink() async {
     try {
       final initialUri = await getInitialUri();
+      log('getInitialUri 결과: $initialUri');
+      if (!mounted) return;
       if (initialUri != null) {
         _processUri(initialUri);
       }
-    } on Exception catch (e) {
+    } catch (e) {
       log('초기 딥링크 처리 실패: $e');
     }
   }
 
   void _processUri(Uri uri) {
+    log('URI 처리 시작: $uri');
+    log('pathSegments: ${uri.pathSegments}');
+    log('queryParameters: ${uri.queryParameters}');
+
     if (uri.pathSegments.contains('invite')) {
       final code = uri.queryParameters['code'];
       if (code != null) {
         log('초대코드 수신: $code');
         ref.read(inviteCodeProvider.notifier).state = code;
         _runInviteLogic(code);
+      } else {
+        log('쿼리 파라미터에 code 없음');
       }
+    } else {
+      log('invite 경로가 아님');
     }
   }
 
-  void _runInviteLogic(String code) {
-    // TODO: 서버 호출, UI 업데이트 등 원하는 로직 구현
+  void _runInviteLogic(String code) async {
     log('초대코드 로직 실행: $code');
+    final viewModel = ref.read(projectListViewModelProvider.notifier);
+
+    await viewModel.getProjectByInvitationCode(code.trim());
+
+    final projects = ref.read(projectListViewModelProvider).projects;
+    if (projects!.isNotEmpty) {
+      final project = projects.first;
+      final projectId = project.id;
+      log('프로젝트 ID: $projectId');
+      final card = ProjectCard(index: 0, project: project);
+      card.handleJoinProject(ref, context, project);
+    } else {
+      log('프로젝트가 없습니다.');
+    }
   }
 
   @override
@@ -79,18 +115,13 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(projectListViewModelProvider);
     final viewModel = ref.read(projectListViewModelProvider.notifier);
-    final inviteCode = ref.watch(inviteCodeProvider);
-
+    // final inviteCode = ref.watch(inviteCodeProvider);
     final hasFetched = ref.watch(hasFetchedProvider);
+
     if (!hasFetched) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(hasFetchedProvider.notifier).state = true;
         viewModel.fetchProjectsByUserId();
-
-        if (inviteCode != null) {
-          log('초대코드 활용 시점: $inviteCode');
-          // 필요시 초대코드로 프로젝트 참가 요청 등 추가 로직 작성
-        }
       });
     }
 
@@ -114,15 +145,6 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
             },
             child: Column(
               children: [
-                if (inviteCode != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      '초대코드 받음: $inviteCode',
-                      style: const TextStyle(
-                          color: Colors.green, fontWeight: FontWeight.bold),
-                    ),
-                  ),
                 ProjectSearchBar(controller: controller),
                 const SizedBox(height: 16),
                 ProjectCardList(projects: state.projects),

@@ -27,7 +27,7 @@ class ProjectCard extends ConsumerWidget {
 
     return asyncProject.when(
       data: (liveProject) => GestureDetector(
-        onTap: () => _handleJoinProject(ref, context, liveProject),
+        onTap: () => handleJoinProject(ref, context, liveProject),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -77,7 +77,7 @@ class ProjectCard extends ConsumerWidget {
     );
   }
 
-  void _handleJoinProject(WidgetRef ref, BuildContext context, Project project) async {
+  void handleJoinProject(WidgetRef ref, BuildContext context, Project project) async {
     final user = await ref.read(userViewModelProvider.notifier).fetchUser();
     if (user == null) return;
 
