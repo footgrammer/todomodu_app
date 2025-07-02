@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,15 +7,35 @@ class ProjectProgressState {
   final double percent;
   final int stepIndex;
   final String message;
+  final bool isCompleted;
 
   ProjectProgressState({
     required this.percent,
     required this.stepIndex,
     required this.message,
+    this.isCompleted = false,
   });
 
-  factory ProjectProgressState.initial() =>
-      ProjectProgressState(percent: 0.0, stepIndex: -1, message: '');
+  factory ProjectProgressState.initial() => ProjectProgressState(
+    percent: 0.0,
+    stepIndex: -1,
+    message: '',
+    isCompleted: false,
+  );
+
+  ProjectProgressState copyWith({
+    double? percent,
+    int? stepIndex,
+    String? message,
+    bool? isCompleted,
+  }) {
+    return ProjectProgressState(
+      percent: percent ?? this.percent,
+      stepIndex: stepIndex ?? this.stepIndex,
+      message: message ?? this.message,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
 }
 
 final projectProgressProvider =
@@ -45,7 +66,11 @@ class ProgressController extends Notifier<ProjectProgressState> {
     final steps = _steps;
 
     for (int i = 0; i < _steps.length; i++) {
-      await Future.delayed(Duration(seconds: 1));
+      if (state.isCompleted == true) {
+        _timer?.cancel();
+        return;
+      }
+      await Future.delayed(Duration(seconds: 2));
       if (_isDisposed) return;
       state = ProjectProgressState(
         percent: steps[i].percent,
@@ -60,6 +85,7 @@ class ProgressController extends Notifier<ProjectProgressState> {
       percent: 1.0,
       stepIndex: _steps.length,
       message: '완료되었습니다.',
+      isCompleted: true,
     );
 
     await Future.delayed(Duration(seconds: 1));

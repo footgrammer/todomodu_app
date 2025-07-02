@@ -19,6 +19,11 @@ class ActivityHistoryRepositoryImpl implements ActivityHistoryRepository {
   Future<Result<List<ActivityHistory>>> getByProject(String projectId) {
     return _dataSource.fetchByProjectId(projectId);
   }
+  
+  @override
+  Stream<List<ActivityHistory>> subscribe(String projectId) {
+    return _dataSource.subscribe(projectId);
+  }
 }
 
 

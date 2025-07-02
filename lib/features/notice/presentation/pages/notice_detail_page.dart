@@ -34,7 +34,7 @@ class _NoticeDetailPageState extends ConsumerState<NoticeDetailPage> {
     if (isChecked) return;
 
     final vm = ref.read(noticeListViewModelProvider.notifier);
-    vm.markAsRead(notice: widget.notice, user: widget.currentUser);
+    vm.markAsRead(notice: widget.notice,);
 
     setState(() {
       isChecked = true;

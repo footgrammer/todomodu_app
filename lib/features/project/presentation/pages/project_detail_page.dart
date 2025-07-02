@@ -124,7 +124,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
                 ),
                 Expanded(
                   child: ProjectTabBar(
-                    projectId: widget.project.id,
+                    project: widget.project,
                     tabController: _tabController,
                   ),
                 ),
@@ -153,6 +153,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
             .execute(projectId: projectId);
 
         ref.read(projectListViewModelProvider.notifier).fetchProjectsByUserId();
+        ref.read(noticeListViewModelProvider.notifier).initializeWithoutUserParam();
         replaceAllWithPage(context, MainPage());
       },
     );

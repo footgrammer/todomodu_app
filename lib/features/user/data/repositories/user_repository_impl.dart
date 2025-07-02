@@ -75,4 +75,24 @@ class UserRepositoryImpl implements UserRepository {
       log('파일 업로드 실패: $e');
     }
   }
+
+  @override
+  Future<Result<UserEntity>> getUserFutureById(String userId) async {
+    final result = await _userDataSource.getFutureUserResultByUserId(userId);
+
+    return switch (result) {
+      Ok(value: final dto) => Result.ok(dto.toEntity()),
+      Error(:final error) => Result.error(error),
+    };
+  }
+
+  @override
+  Future<Result<UserEntity>> getCurrentUserFuture() async {
+    final result = await _userDataSource.getCurrentUserFuture();
+
+    return switch (result) {
+      Ok(value: final dto) => Result.ok(dto.toEntity()),
+      Error(:final error) => Result.error(error),
+    };
+  }
 }

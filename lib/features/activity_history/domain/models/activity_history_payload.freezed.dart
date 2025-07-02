@@ -28,20 +28,20 @@ ActivityHistoryPayload _$ActivityHistoryPayloadFromJson(
           return NoticePostedPayload.fromJson(
             json
           );
-                case 'taskAdded':
-          return TaskAddedPayload.fromJson(
+                case 'todoAdded':
+          return TodoAddedPayload.fromJson(
             json
           );
-                case 'taskUpdated':
-          return TaskUpdatedPayload.fromJson(
+                case 'todoUpdated':
+          return TodoUpdatedPayload.fromJson(
             json
           );
-                case 'taskCompleted':
-          return TaskCompletedPayload.fromJson(
+                case 'todoCompleted':
+          return TodoCompletedPayload.fromJson(
             json
           );
-                case 'taskDeleted':
-          return TaskDeletedPayload.fromJson(
+                case 'todoDeleted':
+          return TodoDeletedPayload.fromJson(
             json
           );
                 case 'projectUpdated':
@@ -328,13 +328,12 @@ as String,
 /// @nodoc
 @JsonSerializable()
 
-class TaskAddedPayload extends ActivityHistoryPayload {
-  const TaskAddedPayload({required this.taskId, required this.title, required this.creatorId, final  String? $type}): $type = $type ?? 'taskAdded',super._();
-  factory TaskAddedPayload.fromJson(Map<String, dynamic> json) => _$TaskAddedPayloadFromJson(json);
+class TodoAddedPayload extends ActivityHistoryPayload {
+  const TodoAddedPayload({required this.todoId, required this.title, final  String? $type}): $type = $type ?? 'todoAdded',super._();
+  factory TodoAddedPayload.fromJson(Map<String, dynamic> json) => _$TodoAddedPayloadFromJson(json);
 
- final  String taskId;
+ final  String todoId;
  final  String title;
- final  String creatorId;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -344,36 +343,36 @@ final String $type;
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$TaskAddedPayloadCopyWith<TaskAddedPayload> get copyWith => _$TaskAddedPayloadCopyWithImpl<TaskAddedPayload>(this, _$identity);
+$TodoAddedPayloadCopyWith<TodoAddedPayload> get copyWith => _$TodoAddedPayloadCopyWithImpl<TodoAddedPayload>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$TaskAddedPayloadToJson(this, );
+  return _$TodoAddedPayloadToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TaskAddedPayload&&(identical(other.taskId, taskId) || other.taskId == taskId)&&(identical(other.title, title) || other.title == title)&&(identical(other.creatorId, creatorId) || other.creatorId == creatorId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoAddedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId)&&(identical(other.title, title) || other.title == title));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,taskId,title,creatorId);
+int get hashCode => Object.hash(runtimeType,todoId,title);
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.taskAdded(taskId: $taskId, title: $title, creatorId: $creatorId)';
+  return 'ActivityHistoryPayload.todoAdded(todoId: $todoId, title: $title)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $TaskAddedPayloadCopyWith<$Res> implements $ActivityHistoryPayloadCopyWith<$Res> {
-  factory $TaskAddedPayloadCopyWith(TaskAddedPayload value, $Res Function(TaskAddedPayload) _then) = _$TaskAddedPayloadCopyWithImpl;
+abstract mixin class $TodoAddedPayloadCopyWith<$Res> implements $ActivityHistoryPayloadCopyWith<$Res> {
+  factory $TodoAddedPayloadCopyWith(TodoAddedPayload value, $Res Function(TodoAddedPayload) _then) = _$TodoAddedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String taskId, String title, String creatorId
+ String todoId, String title
 });
 
 
@@ -381,20 +380,19 @@ $Res call({
 
 }
 /// @nodoc
-class _$TaskAddedPayloadCopyWithImpl<$Res>
-    implements $TaskAddedPayloadCopyWith<$Res> {
-  _$TaskAddedPayloadCopyWithImpl(this._self, this._then);
+class _$TodoAddedPayloadCopyWithImpl<$Res>
+    implements $TodoAddedPayloadCopyWith<$Res> {
+  _$TodoAddedPayloadCopyWithImpl(this._self, this._then);
 
-  final TaskAddedPayload _self;
-  final $Res Function(TaskAddedPayload) _then;
+  final TodoAddedPayload _self;
+  final $Res Function(TodoAddedPayload) _then;
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? taskId = null,Object? title = null,Object? creatorId = null,}) {
-  return _then(TaskAddedPayload(
-taskId: null == taskId ? _self.taskId : taskId // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? todoId = null,Object? title = null,}) {
+  return _then(TodoAddedPayload(
+todoId: null == todoId ? _self.todoId : todoId // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,creatorId: null == creatorId ? _self.creatorId : creatorId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -405,12 +403,12 @@ as String,
 /// @nodoc
 @JsonSerializable()
 
-class TaskUpdatedPayload extends ActivityHistoryPayload {
-  const TaskUpdatedPayload({required this.taskId, required this.updaterId, required final  Map<String, dynamic> changes, final  String? $type}): _changes = changes,$type = $type ?? 'taskUpdated',super._();
-  factory TaskUpdatedPayload.fromJson(Map<String, dynamic> json) => _$TaskUpdatedPayloadFromJson(json);
+class TodoUpdatedPayload extends ActivityHistoryPayload {
+  const TodoUpdatedPayload({required this.todoId, required this.title, required final  Map<String, dynamic> changes, final  String? $type}): _changes = changes,$type = $type ?? 'todoUpdated',super._();
+  factory TodoUpdatedPayload.fromJson(Map<String, dynamic> json) => _$TodoUpdatedPayloadFromJson(json);
 
- final  String taskId;
- final  String updaterId;
+ final  String todoId;
+ final  String title;
  final  Map<String, dynamic> _changes;
  Map<String, dynamic> get changes {
   if (_changes is EqualUnmodifiableMapView) return _changes;
@@ -427,36 +425,36 @@ final String $type;
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$TaskUpdatedPayloadCopyWith<TaskUpdatedPayload> get copyWith => _$TaskUpdatedPayloadCopyWithImpl<TaskUpdatedPayload>(this, _$identity);
+$TodoUpdatedPayloadCopyWith<TodoUpdatedPayload> get copyWith => _$TodoUpdatedPayloadCopyWithImpl<TodoUpdatedPayload>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$TaskUpdatedPayloadToJson(this, );
+  return _$TodoUpdatedPayloadToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TaskUpdatedPayload&&(identical(other.taskId, taskId) || other.taskId == taskId)&&(identical(other.updaterId, updaterId) || other.updaterId == updaterId)&&const DeepCollectionEquality().equals(other._changes, _changes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoUpdatedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId)&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other._changes, _changes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,taskId,updaterId,const DeepCollectionEquality().hash(_changes));
+int get hashCode => Object.hash(runtimeType,todoId,title,const DeepCollectionEquality().hash(_changes));
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.taskUpdated(taskId: $taskId, updaterId: $updaterId, changes: $changes)';
+  return 'ActivityHistoryPayload.todoUpdated(todoId: $todoId, title: $title, changes: $changes)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $TaskUpdatedPayloadCopyWith<$Res> implements $ActivityHistoryPayloadCopyWith<$Res> {
-  factory $TaskUpdatedPayloadCopyWith(TaskUpdatedPayload value, $Res Function(TaskUpdatedPayload) _then) = _$TaskUpdatedPayloadCopyWithImpl;
+abstract mixin class $TodoUpdatedPayloadCopyWith<$Res> implements $ActivityHistoryPayloadCopyWith<$Res> {
+  factory $TodoUpdatedPayloadCopyWith(TodoUpdatedPayload value, $Res Function(TodoUpdatedPayload) _then) = _$TodoUpdatedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String taskId, String updaterId, Map<String, dynamic> changes
+ String todoId, String title, Map<String, dynamic> changes
 });
 
 
@@ -464,19 +462,19 @@ $Res call({
 
 }
 /// @nodoc
-class _$TaskUpdatedPayloadCopyWithImpl<$Res>
-    implements $TaskUpdatedPayloadCopyWith<$Res> {
-  _$TaskUpdatedPayloadCopyWithImpl(this._self, this._then);
+class _$TodoUpdatedPayloadCopyWithImpl<$Res>
+    implements $TodoUpdatedPayloadCopyWith<$Res> {
+  _$TodoUpdatedPayloadCopyWithImpl(this._self, this._then);
 
-  final TaskUpdatedPayload _self;
-  final $Res Function(TaskUpdatedPayload) _then;
+  final TodoUpdatedPayload _self;
+  final $Res Function(TodoUpdatedPayload) _then;
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? taskId = null,Object? updaterId = null,Object? changes = null,}) {
-  return _then(TaskUpdatedPayload(
-taskId: null == taskId ? _self.taskId : taskId // ignore: cast_nullable_to_non_nullable
-as String,updaterId: null == updaterId ? _self.updaterId : updaterId // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? todoId = null,Object? title = null,Object? changes = null,}) {
+  return _then(TodoUpdatedPayload(
+todoId: null == todoId ? _self.todoId : todoId // ignore: cast_nullable_to_non_nullable
+as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,changes: null == changes ? _self._changes : changes // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>,
   ));
@@ -488,11 +486,12 @@ as Map<String, dynamic>,
 /// @nodoc
 @JsonSerializable()
 
-class TaskCompletedPayload extends ActivityHistoryPayload {
-  const TaskCompletedPayload({required this.taskId, required this.completedById, final  String? $type}): $type = $type ?? 'taskCompleted',super._();
-  factory TaskCompletedPayload.fromJson(Map<String, dynamic> json) => _$TaskCompletedPayloadFromJson(json);
+class TodoCompletedPayload extends ActivityHistoryPayload {
+  const TodoCompletedPayload({required this.todoId, required this.title, required this.completedById, final  String? $type}): $type = $type ?? 'todoCompleted',super._();
+  factory TodoCompletedPayload.fromJson(Map<String, dynamic> json) => _$TodoCompletedPayloadFromJson(json);
 
- final  String taskId;
+ final  String todoId;
+ final  String title;
  final  String completedById;
 
 @JsonKey(name: 'runtimeType')
@@ -503,36 +502,36 @@ final String $type;
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$TaskCompletedPayloadCopyWith<TaskCompletedPayload> get copyWith => _$TaskCompletedPayloadCopyWithImpl<TaskCompletedPayload>(this, _$identity);
+$TodoCompletedPayloadCopyWith<TodoCompletedPayload> get copyWith => _$TodoCompletedPayloadCopyWithImpl<TodoCompletedPayload>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$TaskCompletedPayloadToJson(this, );
+  return _$TodoCompletedPayloadToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TaskCompletedPayload&&(identical(other.taskId, taskId) || other.taskId == taskId)&&(identical(other.completedById, completedById) || other.completedById == completedById));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoCompletedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId)&&(identical(other.title, title) || other.title == title)&&(identical(other.completedById, completedById) || other.completedById == completedById));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,taskId,completedById);
+int get hashCode => Object.hash(runtimeType,todoId,title,completedById);
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.taskCompleted(taskId: $taskId, completedById: $completedById)';
+  return 'ActivityHistoryPayload.todoCompleted(todoId: $todoId, title: $title, completedById: $completedById)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $TaskCompletedPayloadCopyWith<$Res> implements $ActivityHistoryPayloadCopyWith<$Res> {
-  factory $TaskCompletedPayloadCopyWith(TaskCompletedPayload value, $Res Function(TaskCompletedPayload) _then) = _$TaskCompletedPayloadCopyWithImpl;
+abstract mixin class $TodoCompletedPayloadCopyWith<$Res> implements $ActivityHistoryPayloadCopyWith<$Res> {
+  factory $TodoCompletedPayloadCopyWith(TodoCompletedPayload value, $Res Function(TodoCompletedPayload) _then) = _$TodoCompletedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String taskId, String completedById
+ String todoId, String title, String completedById
 });
 
 
@@ -540,18 +539,19 @@ $Res call({
 
 }
 /// @nodoc
-class _$TaskCompletedPayloadCopyWithImpl<$Res>
-    implements $TaskCompletedPayloadCopyWith<$Res> {
-  _$TaskCompletedPayloadCopyWithImpl(this._self, this._then);
+class _$TodoCompletedPayloadCopyWithImpl<$Res>
+    implements $TodoCompletedPayloadCopyWith<$Res> {
+  _$TodoCompletedPayloadCopyWithImpl(this._self, this._then);
 
-  final TaskCompletedPayload _self;
-  final $Res Function(TaskCompletedPayload) _then;
+  final TodoCompletedPayload _self;
+  final $Res Function(TodoCompletedPayload) _then;
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? taskId = null,Object? completedById = null,}) {
-  return _then(TaskCompletedPayload(
-taskId: null == taskId ? _self.taskId : taskId // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? todoId = null,Object? title = null,Object? completedById = null,}) {
+  return _then(TodoCompletedPayload(
+todoId: null == todoId ? _self.todoId : todoId // ignore: cast_nullable_to_non_nullable
+as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,completedById: null == completedById ? _self.completedById : completedById // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -563,12 +563,11 @@ as String,
 /// @nodoc
 @JsonSerializable()
 
-class TaskDeletedPayload extends ActivityHistoryPayload {
-  const TaskDeletedPayload({required this.taskId, required this.deletedById, final  String? $type}): $type = $type ?? 'taskDeleted',super._();
-  factory TaskDeletedPayload.fromJson(Map<String, dynamic> json) => _$TaskDeletedPayloadFromJson(json);
+class TodoDeletedPayload extends ActivityHistoryPayload {
+  const TodoDeletedPayload({required this.todoId, final  String? $type}): $type = $type ?? 'todoDeleted',super._();
+  factory TodoDeletedPayload.fromJson(Map<String, dynamic> json) => _$TodoDeletedPayloadFromJson(json);
 
- final  String taskId;
- final  String deletedById;
+ final  String todoId;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -578,36 +577,36 @@ final String $type;
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$TaskDeletedPayloadCopyWith<TaskDeletedPayload> get copyWith => _$TaskDeletedPayloadCopyWithImpl<TaskDeletedPayload>(this, _$identity);
+$TodoDeletedPayloadCopyWith<TodoDeletedPayload> get copyWith => _$TodoDeletedPayloadCopyWithImpl<TodoDeletedPayload>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$TaskDeletedPayloadToJson(this, );
+  return _$TodoDeletedPayloadToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TaskDeletedPayload&&(identical(other.taskId, taskId) || other.taskId == taskId)&&(identical(other.deletedById, deletedById) || other.deletedById == deletedById));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoDeletedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,taskId,deletedById);
+int get hashCode => Object.hash(runtimeType,todoId);
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.taskDeleted(taskId: $taskId, deletedById: $deletedById)';
+  return 'ActivityHistoryPayload.todoDeleted(todoId: $todoId)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $TaskDeletedPayloadCopyWith<$Res> implements $ActivityHistoryPayloadCopyWith<$Res> {
-  factory $TaskDeletedPayloadCopyWith(TaskDeletedPayload value, $Res Function(TaskDeletedPayload) _then) = _$TaskDeletedPayloadCopyWithImpl;
+abstract mixin class $TodoDeletedPayloadCopyWith<$Res> implements $ActivityHistoryPayloadCopyWith<$Res> {
+  factory $TodoDeletedPayloadCopyWith(TodoDeletedPayload value, $Res Function(TodoDeletedPayload) _then) = _$TodoDeletedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String taskId, String deletedById
+ String todoId
 });
 
 
@@ -615,19 +614,18 @@ $Res call({
 
 }
 /// @nodoc
-class _$TaskDeletedPayloadCopyWithImpl<$Res>
-    implements $TaskDeletedPayloadCopyWith<$Res> {
-  _$TaskDeletedPayloadCopyWithImpl(this._self, this._then);
+class _$TodoDeletedPayloadCopyWithImpl<$Res>
+    implements $TodoDeletedPayloadCopyWith<$Res> {
+  _$TodoDeletedPayloadCopyWithImpl(this._self, this._then);
 
-  final TaskDeletedPayload _self;
-  final $Res Function(TaskDeletedPayload) _then;
+  final TodoDeletedPayload _self;
+  final $Res Function(TodoDeletedPayload) _then;
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? taskId = null,Object? deletedById = null,}) {
-  return _then(TaskDeletedPayload(
-taskId: null == taskId ? _self.taskId : taskId // ignore: cast_nullable_to_non_nullable
-as String,deletedById: null == deletedById ? _self.deletedById : deletedById // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? todoId = null,}) {
+  return _then(TodoDeletedPayload(
+todoId: null == todoId ? _self.todoId : todoId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -639,10 +637,11 @@ as String,
 @JsonSerializable()
 
 class ProjectUpdatedPayload extends ActivityHistoryPayload {
-  const ProjectUpdatedPayload({required this.updaterId, required final  Map<String, dynamic> changes, final  String? $type}): _changes = changes,$type = $type ?? 'projectUpdated',super._();
+  const ProjectUpdatedPayload({required this.updaterId, required this.title, required final  Map<String, dynamic> changes, final  String? $type}): _changes = changes,$type = $type ?? 'projectUpdated',super._();
   factory ProjectUpdatedPayload.fromJson(Map<String, dynamic> json) => _$ProjectUpdatedPayloadFromJson(json);
 
  final  String updaterId;
+ final  String title;
  final  Map<String, dynamic> _changes;
  Map<String, dynamic> get changes {
   if (_changes is EqualUnmodifiableMapView) return _changes;
@@ -668,16 +667,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectUpdatedPayload&&(identical(other.updaterId, updaterId) || other.updaterId == updaterId)&&const DeepCollectionEquality().equals(other._changes, _changes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectUpdatedPayload&&(identical(other.updaterId, updaterId) || other.updaterId == updaterId)&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other._changes, _changes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,updaterId,const DeepCollectionEquality().hash(_changes));
+int get hashCode => Object.hash(runtimeType,updaterId,title,const DeepCollectionEquality().hash(_changes));
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.projectUpdated(updaterId: $updaterId, changes: $changes)';
+  return 'ActivityHistoryPayload.projectUpdated(updaterId: $updaterId, title: $title, changes: $changes)';
 }
 
 
@@ -688,7 +687,7 @@ abstract mixin class $ProjectUpdatedPayloadCopyWith<$Res> implements $ActivityHi
   factory $ProjectUpdatedPayloadCopyWith(ProjectUpdatedPayload value, $Res Function(ProjectUpdatedPayload) _then) = _$ProjectUpdatedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String updaterId, Map<String, dynamic> changes
+ String updaterId, String title, Map<String, dynamic> changes
 });
 
 
@@ -705,9 +704,10 @@ class _$ProjectUpdatedPayloadCopyWithImpl<$Res>
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? updaterId = null,Object? changes = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? updaterId = null,Object? title = null,Object? changes = null,}) {
   return _then(ProjectUpdatedPayload(
 updaterId: null == updaterId ? _self.updaterId : updaterId // ignore: cast_nullable_to_non_nullable
+as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,changes: null == changes ? _self._changes : changes // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>,
   ));
@@ -720,10 +720,11 @@ as Map<String, dynamic>,
 @JsonSerializable()
 
 class AssigneeAssignedPayload extends ActivityHistoryPayload {
-  const AssigneeAssignedPayload({required this.taskId, required this.assigneeId, required this.assignedById, final  String? $type}): $type = $type ?? 'assigneeAssigned',super._();
+  const AssigneeAssignedPayload({required this.todoId, required this.title, required this.assigneeId, required this.assignedById, final  String? $type}): $type = $type ?? 'assigneeAssigned',super._();
   factory AssigneeAssignedPayload.fromJson(Map<String, dynamic> json) => _$AssigneeAssignedPayloadFromJson(json);
 
- final  String taskId;
+ final  String todoId;
+ final  String title;
  final  String assigneeId;
  final  String assignedById;
 
@@ -744,16 +745,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssigneeAssignedPayload&&(identical(other.taskId, taskId) || other.taskId == taskId)&&(identical(other.assigneeId, assigneeId) || other.assigneeId == assigneeId)&&(identical(other.assignedById, assignedById) || other.assignedById == assignedById));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssigneeAssignedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId)&&(identical(other.title, title) || other.title == title)&&(identical(other.assigneeId, assigneeId) || other.assigneeId == assigneeId)&&(identical(other.assignedById, assignedById) || other.assignedById == assignedById));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,taskId,assigneeId,assignedById);
+int get hashCode => Object.hash(runtimeType,todoId,title,assigneeId,assignedById);
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.assigneeAssigned(taskId: $taskId, assigneeId: $assigneeId, assignedById: $assignedById)';
+  return 'ActivityHistoryPayload.assigneeAssigned(todoId: $todoId, title: $title, assigneeId: $assigneeId, assignedById: $assignedById)';
 }
 
 
@@ -764,7 +765,7 @@ abstract mixin class $AssigneeAssignedPayloadCopyWith<$Res> implements $Activity
   factory $AssigneeAssignedPayloadCopyWith(AssigneeAssignedPayload value, $Res Function(AssigneeAssignedPayload) _then) = _$AssigneeAssignedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String taskId, String assigneeId, String assignedById
+ String todoId, String title, String assigneeId, String assignedById
 });
 
 
@@ -781,9 +782,10 @@ class _$AssigneeAssignedPayloadCopyWithImpl<$Res>
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? taskId = null,Object? assigneeId = null,Object? assignedById = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? todoId = null,Object? title = null,Object? assigneeId = null,Object? assignedById = null,}) {
   return _then(AssigneeAssignedPayload(
-taskId: null == taskId ? _self.taskId : taskId // ignore: cast_nullable_to_non_nullable
+todoId: null == todoId ? _self.todoId : todoId // ignore: cast_nullable_to_non_nullable
+as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,assigneeId: null == assigneeId ? _self.assigneeId : assigneeId // ignore: cast_nullable_to_non_nullable
 as String,assignedById: null == assignedById ? _self.assignedById : assignedById // ignore: cast_nullable_to_non_nullable
 as String,
@@ -797,10 +799,11 @@ as String,
 @JsonSerializable()
 
 class AssigneeChangedPayload extends ActivityHistoryPayload {
-  const AssigneeChangedPayload({required this.taskId, required this.oldAssigneeId, required this.newAssigneeId, required this.changedById, final  String? $type}): $type = $type ?? 'assigneeChanged',super._();
+  const AssigneeChangedPayload({required this.todoId, required this.title, required this.oldAssigneeId, required this.newAssigneeId, required this.changedById, final  String? $type}): $type = $type ?? 'assigneeChanged',super._();
   factory AssigneeChangedPayload.fromJson(Map<String, dynamic> json) => _$AssigneeChangedPayloadFromJson(json);
 
- final  String taskId;
+ final  String todoId;
+ final  String title;
  final  String oldAssigneeId;
  final  String newAssigneeId;
  final  String changedById;
@@ -822,16 +825,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssigneeChangedPayload&&(identical(other.taskId, taskId) || other.taskId == taskId)&&(identical(other.oldAssigneeId, oldAssigneeId) || other.oldAssigneeId == oldAssigneeId)&&(identical(other.newAssigneeId, newAssigneeId) || other.newAssigneeId == newAssigneeId)&&(identical(other.changedById, changedById) || other.changedById == changedById));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssigneeChangedPayload&&(identical(other.todoId, todoId) || other.todoId == todoId)&&(identical(other.title, title) || other.title == title)&&(identical(other.oldAssigneeId, oldAssigneeId) || other.oldAssigneeId == oldAssigneeId)&&(identical(other.newAssigneeId, newAssigneeId) || other.newAssigneeId == newAssigneeId)&&(identical(other.changedById, changedById) || other.changedById == changedById));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,taskId,oldAssigneeId,newAssigneeId,changedById);
+int get hashCode => Object.hash(runtimeType,todoId,title,oldAssigneeId,newAssigneeId,changedById);
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.assigneeChanged(taskId: $taskId, oldAssigneeId: $oldAssigneeId, newAssigneeId: $newAssigneeId, changedById: $changedById)';
+  return 'ActivityHistoryPayload.assigneeChanged(todoId: $todoId, title: $title, oldAssigneeId: $oldAssigneeId, newAssigneeId: $newAssigneeId, changedById: $changedById)';
 }
 
 
@@ -842,7 +845,7 @@ abstract mixin class $AssigneeChangedPayloadCopyWith<$Res> implements $ActivityH
   factory $AssigneeChangedPayloadCopyWith(AssigneeChangedPayload value, $Res Function(AssigneeChangedPayload) _then) = _$AssigneeChangedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String taskId, String oldAssigneeId, String newAssigneeId, String changedById
+ String todoId, String title, String oldAssigneeId, String newAssigneeId, String changedById
 });
 
 
@@ -859,9 +862,10 @@ class _$AssigneeChangedPayloadCopyWithImpl<$Res>
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? taskId = null,Object? oldAssigneeId = null,Object? newAssigneeId = null,Object? changedById = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? todoId = null,Object? title = null,Object? oldAssigneeId = null,Object? newAssigneeId = null,Object? changedById = null,}) {
   return _then(AssigneeChangedPayload(
-taskId: null == taskId ? _self.taskId : taskId // ignore: cast_nullable_to_non_nullable
+todoId: null == todoId ? _self.todoId : todoId // ignore: cast_nullable_to_non_nullable
+as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,oldAssigneeId: null == oldAssigneeId ? _self.oldAssigneeId : oldAssigneeId // ignore: cast_nullable_to_non_nullable
 as String,newAssigneeId: null == newAssigneeId ? _self.newAssigneeId : newAssigneeId // ignore: cast_nullable_to_non_nullable
 as String,changedById: null == changedById ? _self.changedById : changedById // ignore: cast_nullable_to_non_nullable
@@ -876,10 +880,11 @@ as String,
 @JsonSerializable()
 
 class ProjectCompletedPayload extends ActivityHistoryPayload {
-  const ProjectCompletedPayload({required this.completedById, final  String? $type}): $type = $type ?? 'projectCompleted',super._();
+  const ProjectCompletedPayload({required this.completedById, required this.title, final  String? $type}): $type = $type ?? 'projectCompleted',super._();
   factory ProjectCompletedPayload.fromJson(Map<String, dynamic> json) => _$ProjectCompletedPayloadFromJson(json);
 
  final  String completedById;
+ final  String title;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -898,16 +903,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectCompletedPayload&&(identical(other.completedById, completedById) || other.completedById == completedById));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectCompletedPayload&&(identical(other.completedById, completedById) || other.completedById == completedById)&&(identical(other.title, title) || other.title == title));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,completedById);
+int get hashCode => Object.hash(runtimeType,completedById,title);
 
 @override
 String toString() {
-  return 'ActivityHistoryPayload.projectCompleted(completedById: $completedById)';
+  return 'ActivityHistoryPayload.projectCompleted(completedById: $completedById, title: $title)';
 }
 
 
@@ -918,7 +923,7 @@ abstract mixin class $ProjectCompletedPayloadCopyWith<$Res> implements $Activity
   factory $ProjectCompletedPayloadCopyWith(ProjectCompletedPayload value, $Res Function(ProjectCompletedPayload) _then) = _$ProjectCompletedPayloadCopyWithImpl;
 @useResult
 $Res call({
- String completedById
+ String completedById, String title
 });
 
 
@@ -935,9 +940,10 @@ class _$ProjectCompletedPayloadCopyWithImpl<$Res>
 
 /// Create a copy of ActivityHistoryPayload
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? completedById = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? completedById = null,Object? title = null,}) {
   return _then(ProjectCompletedPayload(
 completedById: null == completedById ? _self.completedById : completedById // ignore: cast_nullable_to_non_nullable
+as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

@@ -5,11 +5,13 @@ class NoticeCreateModel {
   final String projectId;
   final String title;
   final String content;
+  final UserEntity author;
   final bool isSubmitting;
   final String? error;
 
   const NoticeCreateModel({
     required this.projectId,
+    required this.author,
     this.title = '',
     this.content = '',
     this.isSubmitting = false,
@@ -20,11 +22,13 @@ class NoticeCreateModel {
     String? projectId,
     String? title,
     String? content,
+    UserEntity? author,
     bool? isSubmitting,
     String? error,
   }) {
     return NoticeCreateModel(
       projectId: projectId ?? this.projectId,
+      author: author ?? this.author,
       title: title ?? this.title,
       content: content ?? this.content,
       isSubmitting: isSubmitting ?? this.isSubmitting,
@@ -34,7 +38,7 @@ class NoticeCreateModel {
 
   @override
   String toString() {
-    return 'NoticeCreateModel(projectId: $projectId, title: $title, content: $content, isSubmitting: $isSubmitting, error: $error)';
+    return 'NoticeCreateModel(projectId: $projectId, title: $title, content: $content, author: ${author.userId}, isSubmitting: $isSubmitting, error: $error)';
   }
 
   Notice toEntity({
@@ -47,6 +51,7 @@ class NoticeCreateModel {
       projectId: projectId,
       title: title,
       content: content,
+      author: author,
       checkedUsers: checkedUsers,
       createdAt: createdAt,
     );
@@ -60,6 +65,7 @@ class NoticeCreateModel {
           projectId == other.projectId &&
           title == other.title &&
           content == other.content &&
+          author == other.author &&
           isSubmitting == other.isSubmitting &&
           error == other.error;
 
@@ -68,6 +74,7 @@ class NoticeCreateModel {
       projectId.hashCode ^
       title.hashCode ^
       content.hashCode ^
+      author.hashCode ^
       isSubmitting.hashCode ^
       error.hashCode;
 }
