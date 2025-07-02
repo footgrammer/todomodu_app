@@ -19,7 +19,8 @@ class ActivityHistoryListElement extends StatelessWidget {
     return Container(
       padding: EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
+        border: Border.all(color: AppColors.grey300),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -32,13 +33,11 @@ class ActivityHistoryListElement extends StatelessWidget {
                 projectName,
                 style: Theme.of(
                   context,
-                ).textTheme.titleSmall!.copyWith(color: AppColors.grey700),
+                ).textTheme.titleSmall!.copyWith(color: AppColors.grey500),
               ),
               Text(
                 timeAgo(history.createdAt),
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall!.copyWith(color: AppColors.grey700),
+                style: AppTextStyles.subtitle4.copyWith(color: AppColors.grey500),
               ),
             ],
           ),
