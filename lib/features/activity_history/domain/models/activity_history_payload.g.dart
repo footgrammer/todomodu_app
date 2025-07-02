@@ -46,72 +46,68 @@ Map<String, dynamic> _$NoticePostedPayloadToJson(
   'runtimeType': instance.$type,
 };
 
-TaskAddedPayload _$TaskAddedPayloadFromJson(Map<String, dynamic> json) =>
-    TaskAddedPayload(
-      taskId: json['taskId'] as String,
+TodoAddedPayload _$TodoAddedPayloadFromJson(Map<String, dynamic> json) =>
+    TodoAddedPayload(
+      todoId: json['todoId'] as String,
       title: json['title'] as String,
-      creatorId: json['creatorId'] as String,
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$TaskAddedPayloadToJson(TaskAddedPayload instance) =>
+Map<String, dynamic> _$TodoAddedPayloadToJson(TodoAddedPayload instance) =>
     <String, dynamic>{
-      'taskId': instance.taskId,
+      'todoId': instance.todoId,
       'title': instance.title,
-      'creatorId': instance.creatorId,
       'runtimeType': instance.$type,
     };
 
-TaskUpdatedPayload _$TaskUpdatedPayloadFromJson(Map<String, dynamic> json) =>
-    TaskUpdatedPayload(
-      taskId: json['taskId'] as String,
-      updaterId: json['updaterId'] as String,
+TodoUpdatedPayload _$TodoUpdatedPayloadFromJson(Map<String, dynamic> json) =>
+    TodoUpdatedPayload(
+      todoId: json['todoId'] as String,
+      title: json['title'] as String,
       changes: json['changes'] as Map<String, dynamic>,
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$TaskUpdatedPayloadToJson(TaskUpdatedPayload instance) =>
+Map<String, dynamic> _$TodoUpdatedPayloadToJson(TodoUpdatedPayload instance) =>
     <String, dynamic>{
-      'taskId': instance.taskId,
-      'updaterId': instance.updaterId,
+      'todoId': instance.todoId,
+      'title': instance.title,
       'changes': instance.changes,
       'runtimeType': instance.$type,
     };
 
-TaskCompletedPayload _$TaskCompletedPayloadFromJson(
+TodoCompletedPayload _$TodoCompletedPayloadFromJson(
   Map<String, dynamic> json,
-) => TaskCompletedPayload(
-  taskId: json['taskId'] as String,
+) => TodoCompletedPayload(
+  todoId: json['todoId'] as String,
+  title: json['title'] as String,
   completedById: json['completedById'] as String,
   $type: json['runtimeType'] as String?,
 );
 
-Map<String, dynamic> _$TaskCompletedPayloadToJson(
-  TaskCompletedPayload instance,
+Map<String, dynamic> _$TodoCompletedPayloadToJson(
+  TodoCompletedPayload instance,
 ) => <String, dynamic>{
-  'taskId': instance.taskId,
+  'todoId': instance.todoId,
+  'title': instance.title,
   'completedById': instance.completedById,
   'runtimeType': instance.$type,
 };
 
-TaskDeletedPayload _$TaskDeletedPayloadFromJson(Map<String, dynamic> json) =>
-    TaskDeletedPayload(
-      taskId: json['taskId'] as String,
-      deletedById: json['deletedById'] as String,
+TodoDeletedPayload _$TodoDeletedPayloadFromJson(Map<String, dynamic> json) =>
+    TodoDeletedPayload(
+      todoId: json['todoId'] as String,
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$TaskDeletedPayloadToJson(TaskDeletedPayload instance) =>
-    <String, dynamic>{
-      'taskId': instance.taskId,
-      'deletedById': instance.deletedById,
-      'runtimeType': instance.$type,
-    };
+Map<String, dynamic> _$TodoDeletedPayloadToJson(TodoDeletedPayload instance) =>
+    <String, dynamic>{'todoId': instance.todoId, 'runtimeType': instance.$type};
 
 ProjectUpdatedPayload _$ProjectUpdatedPayloadFromJson(
   Map<String, dynamic> json,
 ) => ProjectUpdatedPayload(
   updaterId: json['updaterId'] as String,
+  title: json['title'] as String,
   changes: json['changes'] as Map<String, dynamic>,
   $type: json['runtimeType'] as String?,
 );
@@ -120,6 +116,7 @@ Map<String, dynamic> _$ProjectUpdatedPayloadToJson(
   ProjectUpdatedPayload instance,
 ) => <String, dynamic>{
   'updaterId': instance.updaterId,
+  'title': instance.title,
   'changes': instance.changes,
   'runtimeType': instance.$type,
 };
@@ -127,7 +124,8 @@ Map<String, dynamic> _$ProjectUpdatedPayloadToJson(
 AssigneeAssignedPayload _$AssigneeAssignedPayloadFromJson(
   Map<String, dynamic> json,
 ) => AssigneeAssignedPayload(
-  taskId: json['taskId'] as String,
+  todoId: json['todoId'] as String,
+  title: json['title'] as String,
   assigneeId: json['assigneeId'] as String,
   assignedById: json['assignedById'] as String,
   $type: json['runtimeType'] as String?,
@@ -136,7 +134,8 @@ AssigneeAssignedPayload _$AssigneeAssignedPayloadFromJson(
 Map<String, dynamic> _$AssigneeAssignedPayloadToJson(
   AssigneeAssignedPayload instance,
 ) => <String, dynamic>{
-  'taskId': instance.taskId,
+  'todoId': instance.todoId,
+  'title': instance.title,
   'assigneeId': instance.assigneeId,
   'assignedById': instance.assignedById,
   'runtimeType': instance.$type,
@@ -145,7 +144,8 @@ Map<String, dynamic> _$AssigneeAssignedPayloadToJson(
 AssigneeChangedPayload _$AssigneeChangedPayloadFromJson(
   Map<String, dynamic> json,
 ) => AssigneeChangedPayload(
-  taskId: json['taskId'] as String,
+  todoId: json['todoId'] as String,
+  title: json['title'] as String,
   oldAssigneeId: json['oldAssigneeId'] as String,
   newAssigneeId: json['newAssigneeId'] as String,
   changedById: json['changedById'] as String,
@@ -155,7 +155,8 @@ AssigneeChangedPayload _$AssigneeChangedPayloadFromJson(
 Map<String, dynamic> _$AssigneeChangedPayloadToJson(
   AssigneeChangedPayload instance,
 ) => <String, dynamic>{
-  'taskId': instance.taskId,
+  'todoId': instance.todoId,
+  'title': instance.title,
   'oldAssigneeId': instance.oldAssigneeId,
   'newAssigneeId': instance.newAssigneeId,
   'changedById': instance.changedById,
@@ -166,6 +167,7 @@ ProjectCompletedPayload _$ProjectCompletedPayloadFromJson(
   Map<String, dynamic> json,
 ) => ProjectCompletedPayload(
   completedById: json['completedById'] as String,
+  title: json['title'] as String,
   $type: json['runtimeType'] as String?,
 );
 
@@ -173,5 +175,6 @@ Map<String, dynamic> _$ProjectCompletedPayloadToJson(
   ProjectCompletedPayload instance,
 ) => <String, dynamic>{
   'completedById': instance.completedById,
+  'title': instance.title,
   'runtimeType': instance.$type,
 };

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_loading_view_model.dart';
@@ -21,7 +23,7 @@ class ProjectLoadingPage extends ConsumerWidget {
     // ✅ 상태 변경은 build 이후에 수행
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = ref.read(projectProgressProvider.notifier);
-      final progress = ref.read(projectProgressProvider);
+      final progress = ref.watch(projectProgressProvider);
 
       if (progress.percent == 0.0) {
         controller.resetAndStart();

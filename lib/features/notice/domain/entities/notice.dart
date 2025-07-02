@@ -7,6 +7,7 @@ class Notice {
   String content;
   List<UserEntity> checkedUsers;
   DateTime createdAt;
+  UserEntity author;
 
   Notice({
     required this.id,
@@ -15,6 +16,7 @@ class Notice {
     required this.content,
     required this.checkedUsers,
     required this.createdAt,
+    required this.author,
   });
 
   Notice copyWith({
@@ -24,6 +26,7 @@ class Notice {
     String? content,
     List<UserEntity>? checkedUsers,
     DateTime? createdAt,
+    UserEntity? author,
   }) {
     return Notice(
       id: id ?? this.id,
@@ -32,6 +35,7 @@ class Notice {
       content: content ?? this.content,
       checkedUsers: checkedUsers ?? this.checkedUsers,
       createdAt: createdAt ?? this.createdAt,
+      author: author ?? this.author,
     );
   }
 }

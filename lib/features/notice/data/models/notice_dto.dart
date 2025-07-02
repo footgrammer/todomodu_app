@@ -8,6 +8,7 @@ class NoticeDto {
   String content;
   List<String> checkedUsers;
   DateTime createdAt;
+  String authorId;
 
   NoticeDto({
     required this.id,
@@ -16,6 +17,7 @@ class NoticeDto {
     required this.content,
     required this.checkedUsers,
     required this.createdAt,
+    required this.authorId,
   });
 
   Map<String, dynamic> toJson() {
@@ -26,6 +28,7 @@ class NoticeDto {
       'content': content,
       'checkedUsers': checkedUsers,
       'createdAt': createdAt.toIso8601String(),
+      'authorId' : authorId,
     };
   }
 
@@ -37,12 +40,13 @@ class NoticeDto {
       content: map['content'] as String,
       checkedUsers: List<String>.from(map['checkedUsers'] ?? []),
       createdAt: DateTime.parse(map['createdAt']),
+      authorId: map['authorId'] as String,
     );
   }
 
   /// `checkedUsers`에는 userId만 있으므로,
   /// 실제 UserEntity 리스트는 외부에서 주입받아야 함
-  Notice toEntity({required List<UserEntity> fullCheckedUsers}) {
+  Notice toEntity({required List<UserEntity> fullCheckedUsers, required UserEntity author}) {
     return Notice(
       id: id,
       projectId: projectId,
@@ -50,6 +54,7 @@ class NoticeDto {
       content: content,
       checkedUsers: fullCheckedUsers,
       createdAt: createdAt,
+      author: author,
     );
   }
 
@@ -61,6 +66,7 @@ class NoticeDto {
       content: entity.content,
       checkedUsers: entity.checkedUsers.map((e) => e.userId).toList(),
       createdAt: entity.createdAt,
+      authorId: entity.author.userId,
     );
   }
 
@@ -71,6 +77,7 @@ class NoticeDto {
     String? content,
     List<String>? checkedUsers,
     DateTime? createdAt,
+    String? authorId,
   }) {
     return NoticeDto(
       id: id ?? this.id,
@@ -79,6 +86,7 @@ class NoticeDto {
       content: content ?? this.content,
       checkedUsers: checkedUsers ?? List.from(this.checkedUsers),
       createdAt: createdAt ?? this.createdAt,
+      authorId: authorId ?? this.authorId,
     );
   }
 }

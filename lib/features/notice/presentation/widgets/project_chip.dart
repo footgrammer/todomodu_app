@@ -47,7 +47,7 @@ class ProjectChip extends ConsumerWidget {
             }
           },
         ),
-        if (vm.hasUnreadNotices(project, currentUser))
+        if (vm.hasUnreadNotices(project))
           const Positioned(
             top: 1, // 위치는 필요에 따라 조절
             right: 1, // 위치는 필요에 따라 조절

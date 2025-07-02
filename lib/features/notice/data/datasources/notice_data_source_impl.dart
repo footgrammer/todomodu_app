@@ -125,6 +125,7 @@ class NoticeDataSourceImpl implements NoticeDatasource {
         content: noticeDto.content,
         checkedUsers: updatedCheckedUsers,
         createdAt: noticeDto.createdAt,
+        authorId: noticeDto.authorId,
       );
 
       final docRef = _firestore
