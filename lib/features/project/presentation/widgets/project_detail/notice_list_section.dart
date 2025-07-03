@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/notice_list_widget.dart';
+import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 
 class NoticeListSection extends ConsumerWidget {
-  const NoticeListSection({required this.projectId, super.key});
-  final String projectId;
+  const NoticeListSection({required this.project, super.key});
+  final Project project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +19,7 @@ class NoticeListSection extends ConsumerWidget {
     }
 
     final currentUser = userAsync.value!;
-    final notices = viewModel.getNoticesByProject(projectId); // ✅ ViewModel 사용
+    final notices = viewModel.getNoticesByProject(project.id); // ✅ ViewModel 사용
     final _ = ref.watch(noticeListViewModelProvider); // 상태변경을 위해 선언만
 
     return Padding(
