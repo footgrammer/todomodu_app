@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yourcompany.todomodu_app">
+    package="com.todomodu.app">
 
     <application
         android:label="투두모두"
