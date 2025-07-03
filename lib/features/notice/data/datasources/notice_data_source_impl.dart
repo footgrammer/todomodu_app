@@ -16,8 +16,6 @@ class NoticeDataSourceImpl implements NoticeDatasource {
   ) async {
     try {
       final List<NoticeDto> allNotices = [];
-
-      // 각 projectId에 대해 병렬적으로 fetch 수행
       final futures = ids.map((projectId) async {
         final snapshot =
             await _firestore
@@ -30,12 +28,10 @@ class NoticeDataSourceImpl implements NoticeDatasource {
           final data = doc.data()..['id'] = doc.id;
           return NoticeDto.fromJson(data);
         });
-
         allNotices.addAll(notices);
       });
 
       await Future.wait(futures);
-
       return Result.ok(allNotices);
     } catch (e) {
       return Result.error(Exception('Failed to fetch notices: $e'));
@@ -56,10 +52,7 @@ class NoticeDataSourceImpl implements NoticeDatasource {
               .doc(noticeId)
               .get();
 
-      if (!doc.exists) {
-        return Result.error(Exception('Notice not found'));
-      }
-
+      if (!doc.exists) return Result.error(Exception('Notice not found'));
       final dto = NoticeDto.fromJson(doc.data()!..['id'] = doc.id);
       return Result.ok(dto);
     } catch (e) {
@@ -69,18 +62,16 @@ class NoticeDataSourceImpl implements NoticeDatasource {
 
   @override
   Future<Result<NoticeDto>> createNotice(NoticeDto notice) async {
-    print('projectId: ${notice.projectId}');
     try {
       final docRef =
           _firestore
               .collection('projects')
               .doc(notice.projectId)
               .collection('notices')
-              .doc(); // <- 여기 인자를 넣지 않으면 Firestore가 자동 ID 생성
+              .doc();
 
       final noticeWithId = notice.copyWith(id: docRef.id);
       await docRef.set(noticeWithId.toJson());
-
       return Result.ok(noticeWithId);
     } catch (e) {
       return Result.error(Exception('Failed to create notice: $e'));
@@ -97,7 +88,6 @@ class NoticeDataSourceImpl implements NoticeDatasource {
           .doc(noticeDto.id);
 
       await docRef.set(noticeDto.toJson(), SetOptions(merge: true));
-
       return Result.ok(noticeDto);
     } catch (e) {
       return Result.error(Exception('Failed to update notice: $e'));
@@ -111,23 +101,13 @@ class NoticeDataSourceImpl implements NoticeDatasource {
   }) async {
     try {
       final updatedCheckedUsers = List<String>.from(noticeDto.checkedUsers);
-
       if (!updatedCheckedUsers.contains(userDto.userId)) {
         updatedCheckedUsers.add(userDto.userId);
       } else {
         return Result.ok(noticeDto);
       }
 
-      final updatedDto = NoticeDto(
-        id: noticeDto.id,
-        projectId: noticeDto.projectId,
-        title: noticeDto.title,
-        content: noticeDto.content,
-        checkedUsers: updatedCheckedUsers,
-        createdAt: noticeDto.createdAt,
-        authorId: noticeDto.authorId,
-      );
-
+      final updatedDto = noticeDto.copyWith(checkedUsers: updatedCheckedUsers);
       final docRef = _firestore
           .collection('projects')
           .doc(updatedDto.projectId)
@@ -135,7 +115,6 @@ class NoticeDataSourceImpl implements NoticeDatasource {
           .doc(updatedDto.id);
 
       await docRef.set(updatedDto.toJson(), SetOptions(merge: true));
-
       return Result.ok(updatedDto);
     } catch (e) {
       return Result.error(Exception('Failed to mark notice as read: $e'));
@@ -149,8 +128,6 @@ class NoticeDataSourceImpl implements NoticeDatasource {
     if (projectIds.isEmpty) {
       return Stream.value(Result.ok([]));
     }
-
-    // Firestore의 whereIn 제한
     if (projectIds.length > 10) {
       return Stream.error(Exception('Firestore whereIn은 최대 10개까지 지원됩니다.'));
     }
@@ -158,7 +135,6 @@ class NoticeDataSourceImpl implements NoticeDatasource {
     final query = _firestore
         .collectionGroup('notices')
         .where('projectId', whereIn: projectIds);
-
     return query
         .snapshots()
         .map<Result<List<NoticeDto>>>((snapshot) {
@@ -168,15 +144,34 @@ class NoticeDataSourceImpl implements NoticeDatasource {
                   final data = doc.data() as Map<String, dynamic>;
                   return NoticeDto.fromJson({...data, 'id': doc.id});
                 }).toList();
-
             return Result.ok(dtos);
           } catch (e) {
             return Result.error(Exception('NoticeDto 변환 중 오류: $e'));
           }
         })
         .handleError((e) {
-          // 스트림 외부 오류 처리
           return Result.error(Exception('Firestore 스트림 오류: $e'));
         });
+  }
+
+  @override
+  Stream<Result<List<NoticeDto>>> watchNoticesByProjectId(String projectId) {
+    final query = _firestore
+        .collection('projects')
+        .doc(projectId)
+        .collection('notices');
+
+    return query.snapshots().map<Result<List<NoticeDto>>>((snapshot) {
+      try {
+        final dtos =
+            snapshot.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              return NoticeDto.fromJson({...data, 'id': doc.id});
+            }).toList();
+        return Result.ok(dtos);
+      } catch (e) {
+        return Result.error(Exception('NoticeDto 변환 오류: $e'));
+      }
+    });
   }
 }
