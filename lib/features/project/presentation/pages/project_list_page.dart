@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:app_links/app_links.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:todomodu_app/features/project/presentation/pages/project_create_page.dart';
 import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
@@ -13,19 +13,17 @@ import 'package:todomodu_app/features/project/presentation/widgets/project/proje
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
-// 테스트 코드
-// xcrun simctl openurl booted "todomodu:///invite?code=12345"
-
 class ProjectListPage extends ConsumerStatefulWidget {
-  ProjectListPage({Key? key}) : super(key: key);
+  const ProjectListPage({super.key});
 
   @override
   ConsumerState<ProjectListPage> createState() => _ProjectListPageState();
 }
 
 class _ProjectListPageState extends ConsumerState<ProjectListPage> {
-  StreamSubscription? _sub;
+  StreamSubscription<Uri>? _sub;
   final projectCodeController = TextEditingController();
+  final AppLinks _appLinks = AppLinks(); // app_links 사용
 
   @override
   void initState() {
@@ -33,14 +31,16 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handleInitialLink();
+      _listenToIncomingLinks();
       ref.read(projectListViewModelProvider.notifier).fetchProjectsByUserId();
     });
   }
 
+  /// 앱 처음 시작 시 딥링크 처리
   Future<void> _handleInitialLink() async {
     try {
-      final initialUri = await getInitialUri();
-      log('getInitialUri 결과: $initialUri');
+      final initialUri = await _appLinks.getInitialLink();
+      log('getInitialAppLink 결과: $initialUri');
       if (!mounted) return;
       if (initialUri != null) {
         _processUri(initialUri);
@@ -50,6 +50,20 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
     }
   }
 
+  /// 앱 실행 중 새 딥링크 수신 처리
+  void _listenToIncomingLinks() {
+    _sub = _appLinks.uriLinkStream.listen(
+      (uri) {
+        log('새로운 딥링크 수신: $uri');
+        _processUri(uri);
+      },
+      onError: (err) {
+        log('딥링크 수신 중 오류 발생: $err');
+      },
+    );
+  }
+
+  /// URI 분석 및 초대코드 추출
   void _processUri(Uri uri) {
     log('URI 처리 시작: $uri');
     log('pathSegments: ${uri.pathSegments}');
@@ -68,6 +82,7 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
     }
   }
 
+  /// 초대 코드 기반 프로젝트 참가 처리
   void _runInviteLogic(String code) async {
     log('초대코드 로직 실행: $code');
     final viewModel = ref.read(projectListViewModelProvider.notifier);
@@ -75,7 +90,7 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
     await viewModel.getProjectByInvitationCode(code.trim());
 
     final projects = ref.read(projectListViewModelProvider).projects;
-    if (projects!.isNotEmpty) {
+    if (projects != null && projects.isNotEmpty) {
       final project = projects.first;
       final projectId = project.id;
       log('프로젝트 ID: $projectId');
