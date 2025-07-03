@@ -16,13 +16,6 @@ import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 // 테스트 코드
 // xcrun simctl openurl booted "todomodu:///invite?code=12345"
 
-final projectCodeControllerProvider =
-    Provider.autoDispose<TextEditingController>(
-      (ref) => TextEditingController(),
-    );
-
-final inviteCodeProvider = StateProvider<String?>((ref) => null);
-
 class ProjectListPage extends ConsumerStatefulWidget {
   ProjectListPage({Key? key}) : super(key: key);
 
@@ -32,6 +25,7 @@ class ProjectListPage extends ConsumerStatefulWidget {
 
 class _ProjectListPageState extends ConsumerState<ProjectListPage> {
   StreamSubscription? _sub;
+  final projectCodeController = TextEditingController();
 
   @override
   void initState() {
@@ -39,20 +33,8 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handleInitialLink();
+      ref.read(projectListViewModelProvider.notifier).fetchProjectsByUserId();
     });
-
-    // 실행 중인 앱에 들어오는 URI 처리
-    _sub = uriLinkStream.listen(
-      (Uri? uri) {
-        if (uri != null) {
-          log('uriLinkStream 수신: $uri');
-          _processUri(uri);
-        }
-      },
-      onError: (error) {
-        log('딥링크 처리 중 오류 발생: $error');
-      },
-    );
   }
 
   Future<void> _handleInitialLink() async {
@@ -77,7 +59,6 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
       final code = uri.queryParameters['code'];
       if (code != null) {
         log('초대코드 수신: $code');
-        ref.read(inviteCodeProvider.notifier).state = code;
         _runInviteLogic(code);
       } else {
         log('쿼리 파라미터에 code 없음');
@@ -108,6 +89,7 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
   @override
   void dispose() {
     _sub?.cancel();
+    projectCodeController.dispose();
     super.dispose();
   }
 
@@ -115,7 +97,6 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(projectListViewModelProvider);
     final viewModel = ref.read(projectListViewModelProvider.notifier);
-    // final inviteCode = ref.watch(inviteCodeProvider);
     final hasFetched = ref.watch(hasFetchedProvider);
 
     if (!hasFetched) {
@@ -124,8 +105,6 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
         viewModel.fetchProjectsByUserId();
       });
     }
-
-    final controller = ref.watch(projectCodeControllerProvider);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -145,7 +124,7 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
             },
             child: Column(
               children: [
-                ProjectSearchBar(controller: controller),
+                ProjectSearchBar(controller: projectCodeController),
                 const SizedBox(height: 16),
                 ProjectCardList(projects: state.projects),
               ],

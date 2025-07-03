@@ -99,7 +99,8 @@ class ProjectCard extends ConsumerWidget {
           ref.read(projectListViewModelProvider.notifier)
               .addMemberToProject(projectId: project.id, userId: user.userId);
 
-          replaceAllWithPage(context, ProjectDetailPage(project: project));
+          Navigator.pop(context);
+          navigateToPage(context, ProjectDetailPage(project: project));
         },
         onNegativePressed: () {
           Navigator.pop(context);

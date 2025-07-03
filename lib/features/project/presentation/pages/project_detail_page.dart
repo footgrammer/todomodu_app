@@ -117,7 +117,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
                     children: [
                       ProjectInfoHeader(project: project),
                       const SizedBox(height: 32),
-                      ProjectMemberSection(members: project.members),
+                      ProjectMemberSection(project: project),
                       const SizedBox(height: 24),
                     ],
                   ),
@@ -153,7 +153,9 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
             .execute(projectId: projectId);
 
         ref.read(projectListViewModelProvider.notifier).fetchProjectsByUserId();
-        ref.read(noticeListViewModelProvider.notifier).initializeWithoutUserParam();
+        ref
+            .read(noticeListViewModelProvider.notifier)
+            .initializeWithoutUserParam();
         replaceAllWithPage(context, MainPage());
       },
     );
