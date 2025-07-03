@@ -87,8 +87,18 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
     log('초대코드 로직 실행: $code');
     final viewModel = ref.read(projectListViewModelProvider.notifier);
 
-    viewModel.setFetchType('invitationCode');
     await viewModel.getProjectByInvitationCode(code.trim());
+
+    final projects = ref.read(projectListViewModelProvider).projects;
+    if (projects!.isNotEmpty) {
+      final project = projects.first;
+      final projectId = project.id;
+      log('프로젝트 ID: $projectId');
+      final card = ProjectCard(index: 0, project: project);
+      card.handleJoinProject(ref, context, project);
+    } else {
+      log('프로젝트가 없습니다.');
+    }
   }
 
   @override
