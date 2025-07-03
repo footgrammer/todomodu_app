@@ -33,6 +33,7 @@ class ProjectSearchBar extends ConsumerWidget {
                 final viewModel = ref.read(
                   projectListViewModelProvider.notifier,
                 );
+                controller.clear();
                 if (code.trim() == '') {
                   viewModel.setFetchType('myProjects');
                   viewModel.fetchProjectsByUserId();
