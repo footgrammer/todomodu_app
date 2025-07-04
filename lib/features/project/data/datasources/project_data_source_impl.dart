@@ -120,25 +120,27 @@ class ProjectDataSourceImpl implements ProjectDataSource {
   }
 
   @override
-  Stream<List<ProjectDto>> watchProjectsByUserId(String userId) {
-    return _projectsRef
-        .where('memberIds', arrayContains: userId)
-        .snapshots()
-        .map(
-          (snap) =>
-              snap.docs
-                  .map(
-                    (doc) => ProjectDto.fromJson({...doc.data(), 'id': doc.id}),
-                  )
-                  .toList(),
-        );
-  }
-
-  @override
   Stream<List<String>> watchProjectIdsByUserId(String userId) {
     return _projectsRef
         .where('memberIds', arrayContains: userId)
         .snapshots()
         .map((snap) => snap.docs.map((doc) => doc.id).toList());
+  }
+
+  @override
+  Stream<List<ProjectDto>> watchProjectDtosByUserId(String userId) {
+    return _firestore
+        .collection('projects')
+        .where('memberIds', arrayContains: userId)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            return ProjectDto.fromJson({
+              ...data,
+              'id': doc.id, // id는 문서 ID로 수동 삽입
+            });
+          }).toList();
+        });
   }
 }

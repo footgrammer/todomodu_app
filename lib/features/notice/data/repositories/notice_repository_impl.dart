@@ -298,4 +298,44 @@ class NoticeRepositoryImpl implements NoticeRepository {
   Future<Result<List<Notice>>> fetchNoticesbyProjects(List<Project> projects) {
     return getNoticesByProjects(projects);
   }
+
+  @override
+  Stream<List<Notice>> watchNoticesByProjectIds(List<String> ids) {
+    return _dataSource.watchNoticesByProjectIds(ids).asyncMap((result) async {
+      if (result is! Result<List<NoticeDto>>) {
+        return []; // 예외 상황 방어 코드
+      }
+      return await result.when(
+        ok: (dtos) async {
+          final allUserIds = <String>{
+            ...dtos.map((dto) => dto.authorId),
+            ...dtos.expand((dto) => dto.checkedUsers),
+          };
+
+          final usersResult = await _userRepository.getUsersByIds(
+            allUserIds.toList(),
+          );
+          return usersResult.when(
+            ok: (users) {
+              final userMap = {for (var u in users) u.userId: u};
+              return dtos.map((dto) {
+                final author = userMap[dto.authorId] ?? UserEntity.unknown();
+                final checkedUsers =
+                    dto.checkedUsers
+                        .map((id) => userMap[id] ?? UserEntity.unknown())
+                        .toList();
+
+                return dto.toEntity(
+                  author: author,
+                  fullCheckedUsers: checkedUsers,
+                );
+              }).toList();
+            },
+            error: (_) => [],
+          );
+        },
+        error: (_) => [],
+      );
+    });
+  }
 }

@@ -25,9 +25,10 @@ abstract interface class ProjectRepository {
     required String userId,
   });
 
-  Future<Result<List<SimpleProjectInfo>>> getSimpleProjectInfosByIds(
-    List<String> ids,
-  );
   // 사용자가 속한 프로젝트 ID들을 실시간으로 스트리밍
   Stream<List<String>> watchProjectIdsByUser(UserEntity user);
+  
+  Stream<List<SimpleProjectInfo>> watchSimpleProjectInfosByUser(
+    UserEntity user,
+  );
 }

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
@@ -201,7 +202,13 @@ class ProjectRepositoryImpl implements ProjectRepository {
       ok:
           (dtos) => Result.ok(
             dtos
-                .map((dto) => SimpleProjectInfo(id: dto.id, title: dto.title))
+                .map(
+                  (dto) => SimpleProjectInfo(
+                    id: dto.id,
+                    title: dto.title,
+                    color: Color(dto.color),
+                  ),
+                )
                 .toList(),
           ),
       error: (e) => Result.error(e),
@@ -264,5 +271,20 @@ class ProjectRepositoryImpl implements ProjectRepository {
     } catch (e) {
       return Result.error(Exception('Mapping error: $e'));
     }
+  }
+
+  @override
+  Stream<List<SimpleProjectInfo>> watchSimpleProjectInfosByUser(
+    UserEntity user,
+  ) {
+    return _dataSource.watchProjectDtosByUserId(user.userId).map((dtos) {
+      return dtos.map((dto) {
+        return SimpleProjectInfo(
+          id: dto.id,
+          title: dto.title,
+          color: Color(dto.color),
+        );
+      }).toList();
+    });
   }
 }

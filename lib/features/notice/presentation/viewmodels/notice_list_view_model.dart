@@ -1,227 +1,118 @@
-import 'dart:developer';
+import 'dart:async';
 
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
-import 'package:todomodu_app/features/notice/domain/extensions/notice_extension.dart';
-import 'package:todomodu_app/features/notice/domain/usecase/retrieve_notices_by_projects_usecase.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/mark_notice_as_read_usecase.dart';
+import 'package:todomodu_app/features/notice/domain/usecase/watch_notices_by_simple_projects_usecase.dart';
 import 'package:todomodu_app/features/notice/presentation/models/notice_list_model.dart';
-import 'package:todomodu_app/features/project/domain/entities/project.dart';
-import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_usecase.dart';
+import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
+import 'package:todomodu_app/features/project/domain/entities/simple_project_info.dart';
+import 'package:todomodu_app/features/project/domain/usecases/watch_simple_project_by_user_usecase.dart';
+import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
-import 'package:todomodu_app/shared/types/result.dart';
+import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/shared/types/result_extension.dart';
 
-class NoticeListViewModel extends StateNotifier<NoticeListModel> {
-  final RetrieveNoticesByProjectsUsecase _retrieveUsecase;
-  final MarkNoticeAsReadUsecase _markAsReadUsecase;
-  final FetchProjectsByUserUsecase _fetchProjectsUsecase;
+class NoticeListViewModel extends AutoDisposeAsyncNotifier<NoticeListModel> {
+  late final WatchSimpleProjectsByUserUsecase _watchProjectsUsecase;
+  late final WatchNoticesBySimpleProjectsUsecase _watchNoticesUsecase;
+  late final MarkNoticeAsReadUsecase _markAsReadUsecase;
 
-  NoticeListViewModel({
-    required RetrieveNoticesByProjectsUsecase retrieveUsecase,
-    required MarkNoticeAsReadUsecase markAsReadUsecase,
-    required FetchProjectsByUserUsecase fetchProjectsUsecase,
-  }) : _retrieveUsecase = retrieveUsecase,
-       _markAsReadUsecase = markAsReadUsecase,
-       _fetchProjectsUsecase = fetchProjectsUsecase,
-       super(NoticeListModel.initial());
+  StreamSubscription<List<SimpleProjectInfo>>? _projectSub;
+  StreamSubscription<List<Notice>>? _noticeSub;
 
-  /// 앱 초기화 시 사용자 기준 프로젝트 + 공지 불러오기
-  /// 내부에서 실제 초기화를 처리하는 공통 함수
-  Future<void> _initializeInternal(UserEntity user) async {
-    state = state.copyWith(isLoading: true, error: null);
+  @override
+  FutureOr<NoticeListModel> build() {
+    _watchProjectsUsecase = ref.read(watchSimpleProjectsByUserUsecaseProvider);
+    _watchNoticesUsecase = ref.read(watchNoticesByProjectIdsUsecaseProvider);
+    _markAsReadUsecase = ref.read(markNoticeAsReadUsecase);
 
-    final projectResult = await _fetchProjectsUsecase.execute(user);
+    final userAsync = ref.watch(userProvider);
+    if (userAsync is! AsyncData<UserEntity>) {
+      return NoticeListModel.initial();
+    }
 
-    if (projectResult case Ok<List<Project>>(:final value)) {
-      final projects = value;
+    final user = userAsync.value;
 
-      final noticeResult = await _retrieveUsecase.execute(projects);
-
-      state = switch (noticeResult) {
-        Ok(value: final notices) => state.copyWith(
-          currentUser: user,
+    _projectSub = _watchProjectsUsecase.execute(user: user).listen((projects) {
+      // 상태에 프로젝트 반영
+      state = AsyncData(
+        (state.value ?? NoticeListModel.initial()).copyWith(
           projects: projects,
-          selectedProjects: List.from(projects),
-          notices: notices,
-          selectedNotices: List.from(notices),
-          isLoading: false,
+          selectedProjects: projects,
         ),
-        Error(:final error) => state.copyWith(
-          isLoading: false,
-          error: error.toString(),
-        ),
-      };
-    } else if (projectResult case Error(:final error)) {
-      state = state.copyWith(isLoading: false, error: error.toString());
-    }
-  }
-
-  /// 외부에서 유저를 전달받는 초기화
-  Future<void> initialize(UserEntity user) async {
-    await _initializeInternal(user);
-  }
-
-  /// 내부에 저장된 유저 정보를 바탕으로 초기화
-  Future<void> initializeWithoutUserParam() async {
-    final currentUser = state.currentUser;
-    if (currentUser == null) {
-      state = state.copyWith(error: '사용자 정보가 없습니다.');
-      return;
-    }
-    await _initializeInternal(currentUser);
-  }
-
-  void addProject(Project project) {
-    final updatedProjects = [...state.selectedProjects, project];
-    state = state.copyWith(selectedProjects: updatedProjects);
-    // _refreshNotices();
-    filterNoticesBySelection();
-  }
-
-  void removeProject(Project project) {
-    final updatedProjects =
-        state.selectedProjects.where((p) => p.id != project.id).toList();
-    state = state.copyWith(selectedProjects: updatedProjects);
-    // _refreshNotices();
-    filterNoticesBySelection();
-  }
-
-  Future<void> _refreshNotices() async {
-    state = state.copyWith(isLoading: true, error: null);
-
-    final result = await _retrieveUsecase.execute(state.selectedProjects);
-
-    state = switch (result) {
-      Ok(value: final notices) => state.copyWith(
-        notices: notices,
-        isLoading: false,
-      ),
-      Error(:final error) => state.copyWith(
-        isLoading: false,
-        error: error.toString(),
-      ),
-    };
-  }
-
-  Future<void> markAsRead({
-    required Notice notice,
-    // required UserEntity user,
-  }) async {
-    final result = await _markAsReadUsecase.execute(
-      notice: notice,
-      user: state.currentUser!,
-    );
-
-    if (result is Ok<Notice>) {
-      final updated = result.value;
-
-      final updatedNotices =
-          state.notices.map((n) => n.id == updated.id ? updated : n).toList();
-
-      final updatedSelected =
-          state.selectedNotices
-              .map((n) => n.id == updated.id ? updated : n)
-              .toList();
-
-      state = state.copyWith(
-        notices: updatedNotices,
-        selectedNotices: updatedSelected, // ✅ 이것도 함께 갱신
       );
-    }
+
+      // 이전 공지 스트림 해제
+      _noticeSub?.cancel();
+
+      // 새로운 프로젝트 기준 공지사항 구독
+      _noticeSub = _watchNoticesUsecase.execute(projects: projects).listen((
+        notices,
+      ) {
+        state = AsyncData(
+          (state.value ?? NoticeListModel.initial()).copyWith(
+            notices: notices,
+            selectedNotices: notices,
+            isLoading: false,
+          ),
+        );
+      });
+    });
+
+    ref.onDispose(() {
+      _projectSub?.cancel();
+      _noticeSub?.cancel();
+    });
+
+    return NoticeListModel.initial().copyWith(isLoading: true);
   }
 
-  void filterNoticesBySelection() {
-    final filtered =
-        state.notices
-            .where(
-              (notice) =>
-                  state.selectedProjects.any((p) => p.id == notice.projectId),
-            )
-            .toList();
+  void toggleProjectFilter(SimpleProjectInfo project) {
+    final current = state.value!;
+    final selected = [...current.selectedProjects];
 
-    state = state.copyWith(selectedNotices: filtered);
-  }
-
-  Color getColorByNotice(Notice notice) {
-    return state.projects.firstWhere((p) => p.id == notice.projectId).color;
-  }
-
-  void onClickAllChip() {
-    if (state.selectedProjects.length != state.projects.length) {
-      state = state.copyWith(selectedProjects: List.from(state.projects));
+    if (selected.contains(project)) {
+      selected.remove(project);
     } else {
-      state = state.copyWith(selectedNotices: []);
+      selected.add(project);
     }
-    filterNoticesBySelection();
-  }
 
-  bool isAllProjectsSelected() {
-    return state.selectedProjects.length != state.projects.length;
-  }
+    final filteredNotices = current.notices
+        .where((n) => selected.any((p) => p.id == n.projectId))
+        .toList();
 
-  bool hasUnreadNotices(Project project) {
-    final unreadedNotices = state.notices.where(
-      (n) => n.isUnread(state.currentUser!.userId),
-    );
-    final unreadedProjects = unreadedNotices.map((e) => e.projectId);
-    return unreadedProjects.contains(project.id);
-  }
-
-  bool hasUnreadNoticesforDetail(String projectId) {
-    final unreadedNotices = state.notices.where(
-      (n) => n.isUnread(state.currentUser!.userId),
-    );
-    final unreadedProjects = unreadedNotices.map((e) => e.projectId);
-    return unreadedProjects.contains(projectId);
-  }
-
-  List<Notice> getNoticesByProject(String projectId) {
-    return state.notices.where((n) => n.projectId == projectId).toList();
-  }
-
-  Notice? getNoticeById(String id) {
-    return state.notices.firstWhereOrNull((n) => n.id == id);
-  }
-
-  bool isUnread(Notice notice) {
-    final latest = getNoticeById(notice.id);
-    return latest?.isUnread(state.currentUser!.userId) ?? false;
-  }
-
-  void addNotice(Notice notice) {
-    final updatedNotices = [notice, ...state.notices];
-    final updatedSelected =
-        state.selectedProjects.any((p) => p.id == notice.projectId)
-            ? [notice, ...state.selectedNotices]
-            : state.selectedNotices;
-
-    state = state.copyWith(
-      notices: updatedNotices,
-      selectedNotices: updatedSelected,
+    state = AsyncData(
+      current.copyWith(
+        selectedProjects: selected,
+        selectedNotices: filteredNotices,
+      ),
     );
   }
 
-  void addCreatedNotice(Notice notice) {
-    final updatedNotices = [notice, ...state.notices];
+  Future<void> markNoticeAsRead(Notice notice, UserEntity user) async {
+    final result = await _markAsReadUsecase.execute(notice: notice, user: user);
 
-    final shouldIncludeInSelected = state.selectedProjects.any(
-      (p) => p.id == notice.projectId,
+    result.when(
+      ok: (updatedNotice) {
+        final newNotices = state.value!.notices.map((n) {
+          return n.id == updatedNotice.id ? updatedNotice : n;
+        }).toList();
+
+        final newSelected = state.value!.selectedNotices.map((n) {
+          return n.id == updatedNotice.id ? updatedNotice : n;
+        }).toList();
+
+        state = AsyncData(
+          state.value!.copyWith(
+            notices: newNotices,
+            selectedNotices: newSelected,
+          ),
+        );
+      },
+      error: (e) {
+        print('⚠️ markNoticeAsRead 실패: $e');
+      },
     );
-
-    final updatedSelectedNotices =
-        shouldIncludeInSelected
-            ? [notice, ...state.selectedNotices]
-            : state.selectedNotices;
-
-    state = state.copyWith(
-      notices: updatedNotices,
-      selectedNotices: updatedSelectedNotices,
-    );
-  }
-
-  void updateUser(UserEntity currentUser) {
-    state = state.copyWith(currentUser: currentUser);
   }
 }

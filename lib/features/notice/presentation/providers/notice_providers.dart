@@ -6,6 +6,7 @@ import 'package:todomodu_app/features/notice/data/repositories/notice_repository
 import 'package:todomodu_app/features/notice/domain/usecase/create_notice_usecase.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/mark_notice_as_read_usecase.dart';
 import 'package:todomodu_app/features/notice/domain/usecase/retrieve_notices_by_projects_usecase.dart';
+import 'package:todomodu_app/features/notice/domain/usecase/watch_notices_by_simple_projects_usecase.dart';
 import 'package:todomodu_app/features/notice/presentation/models/notice_create_model.dart';
 import 'package:todomodu_app/features/notice/presentation/models/notice_list_model.dart';
 import 'package:todomodu_app/features/notice/presentation/viewmodels/notice_create_view_model.dart';
@@ -52,11 +53,17 @@ final noticeCreateViewModelProvider = AsyncNotifierProvider.family<
   String
 >(NoticeCreateViewModel.new);
 
+final watchNoticesByProjectIdsUsecaseProvider =
+    Provider<WatchNoticesBySimpleProjectsUsecase>(
+  (ref) {
+    final noticeRepository = ref.read(noticeRepositoryProvider);
+    return WatchNoticesBySimpleProjectsUsecase(repository: noticeRepository);
+  },
+);
+
+// features/notice/presentation/providers/notice_providers.dart
+
 final noticeListViewModelProvider =
-    StateNotifierProvider<NoticeListViewModel, NoticeListModel>((ref) {
-      return NoticeListViewModel(
-        retrieveUsecase: ref.watch(retrieveNoticesByProjectsUsecase),
-        markAsReadUsecase: ref.watch(markNoticeAsReadUsecase),
-        fetchProjectsUsecase: ref.watch(fetchProjectsByUserUsecaseProvider),
-      );
-    });
+    AutoDisposeAsyncNotifierProvider<NoticeListViewModel, NoticeListModel>(
+  () => NoticeListViewModel(),
+);

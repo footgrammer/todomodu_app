@@ -128,30 +128,29 @@ class NoticeDataSourceImpl implements NoticeDatasource {
     if (projectIds.isEmpty) {
       return Stream.value(Result.ok([]));
     }
+
     if (projectIds.length > 10) {
-      return Stream.error(Exception('Firestore whereIn은 최대 10개까지 지원됩니다.'));
+      return Stream.value(
+        Result.error(Exception('Firestore whereIn은 최대 10개까지 지원됩니다.')),
+      );
     }
 
     final query = _firestore
         .collectionGroup('notices')
         .where('projectId', whereIn: projectIds);
-    return query
-        .snapshots()
-        .map<Result<List<NoticeDto>>>((snapshot) {
-          try {
-            final dtos =
-                snapshot.docs.map((doc) {
-                  final data = doc.data() as Map<String, dynamic>;
-                  return NoticeDto.fromJson({...data, 'id': doc.id});
-                }).toList();
-            return Result.ok(dtos);
-          } catch (e) {
-            return Result.error(Exception('NoticeDto 변환 중 오류: $e'));
-          }
-        })
-        .handleError((e) {
-          return Result.error(Exception('Firestore 스트림 오류: $e'));
-        });
+
+    return query.snapshots().map((snapshot) {
+      try {
+        final dtos =
+            snapshot.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              return NoticeDto.fromJson({...data, 'id': doc.id});
+            }).toList();
+        return Result.ok(dtos);
+      } catch (e) {
+        return Result.error(Exception('NoticeDto 변환 중 오류: $e'));
+      }
+    });
   }
 
   @override

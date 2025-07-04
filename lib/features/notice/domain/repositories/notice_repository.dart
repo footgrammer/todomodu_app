@@ -46,4 +46,6 @@ abstract interface class NoticeRepository {
 
   /// `getNoticesByProjects`와 동일, 대체용
   Future<Result<List<Notice>>> fetchNoticesbyProjects(List<Project> projects);
+
+  Stream<List<Notice>> watchNoticesByProjectIds(List<String> ids);
 }
