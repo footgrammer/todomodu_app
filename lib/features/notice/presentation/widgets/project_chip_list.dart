@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/project_chip.dart';
-import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/entities/simple_project_info.dart';
 
 
 class ProjectChipList extends StatelessWidget {
   const ProjectChipList({required this.projects, required this.selectedProjects ,super.key});
   
-  final List<Project> projects;
-  final List<Project> selectedProjects;
+  final List<SimpleProjectInfo> projects;
+  final List<SimpleProjectInfo> selectedProjects;
 
   // final List<String> projectNames = ['전체', '프로젝트1', '프로젝트2', '프로젝트 명이 너무 길면 어떻게 되는가'];
 

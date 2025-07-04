@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/red_dot.dart';
-import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/entities/simple_project_info.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
 import 'package:todomodu_app/shared/constants/app_colors.dart';
 
 class ProjectChip extends ConsumerWidget {
   const ProjectChip({required this.project, super.key});
 
-  final Project project;
+  final SimpleProjectInfo project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
