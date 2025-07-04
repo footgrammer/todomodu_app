@@ -104,7 +104,8 @@ class InviteMemberDialog extends StatelessWidget {
 Future<void> _shareInvitationCode(String inviteCode) async {
   final result = await SharePlus.instance.share(
     ShareParams(
-      text: '투두모두 초대코드: todomodu:///invite?code=$inviteCode',
+      text:
+          '투두모두 초대코드: https://k-ouz.github.io/todomodu_deep_link/?invitecode=$inviteCode',
       subject: '투두모두 프로젝트 팀원 초대',
       sharePositionOrigin: Rect.fromLTWH(0, 0, 100, 100),
     ),
