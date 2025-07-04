@@ -153,7 +153,6 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
             .execute(projectId: projectId);
 
         ref.read(projectListViewModelProvider.notifier).fetchProjectsByUserId();
-        ref.read(noticeListViewModelProvider.notifier).initializeWithoutUserParam();
         replaceAllWithPage(context, MainPage());
       },
     );

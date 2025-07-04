@@ -2,28 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/project_chip.dart';
 import 'package:todomodu_app/features/project/domain/entities/simple_project_info.dart';
 
-
 class ProjectChipList extends StatelessWidget {
-  const ProjectChipList({required this.projects, required this.selectedProjects ,super.key});
-  
+  const ProjectChipList({
+    required this.projects,
+    required this.selectedProjects,
+    required this.onSelectedChanged,
+    super.key,
+  });
+
   final List<SimpleProjectInfo> projects;
   final List<SimpleProjectInfo> selectedProjects;
-
-  // final List<String> projectNames = ['전체', '프로젝트1', '프로젝트2', '프로젝트 명이 너무 길면 어떻게 되는가'];
+  final void Function(List<SimpleProjectInfo>) onSelectedChanged;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxHeight: 40),
+      constraints: const BoxConstraints(maxHeight: 40),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return ProjectChip(project: projects[index]);
-        },
-        separatorBuilder: (context, index) {
-          return SizedBox(width: 10);
-        },
         itemCount: projects.length,
+        itemBuilder: (context, index) {
+          final project = projects[index];
+          final isSelected = selectedProjects.contains(project);
+
+          return ProjectChip(
+            project: project,
+            selected: isSelected,
+            onTap: () {
+              final newSelected = List<SimpleProjectInfo>.from(
+                selectedProjects,
+              );
+
+              if (isSelected) {
+                newSelected.remove(project);
+              } else {
+                newSelected.add(project);
+              }
+
+              onSelectedChanged(newSelected);
+            },
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
       ),
     );
   }

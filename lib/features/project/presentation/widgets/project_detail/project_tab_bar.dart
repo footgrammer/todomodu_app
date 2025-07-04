@@ -39,7 +39,7 @@ class ProjectTabBar extends StatelessWidget {
                     Positioned(
                       top: -5,
                       right: -10,
-                      child: PositionedReddotForTab(projectId: project.id),
+                      child: PositionedRedDotForTab(projectId: project.id),
                     ),
                   ],
                 ),
@@ -53,7 +53,7 @@ class ProjectTabBar extends StatelessWidget {
             controller: tabController, // ✅ 연결
             children: [
               TodoListSection(projectId: project.id),
-              NoticeListSection(project: project),
+              NoticeListSection(projectId: project.id),
               TimeLineSection(project: project),
             ],
           ),

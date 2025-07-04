@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
-import 'package:todomodu_app/features/notice/domain/extensions/notice_extension.dart';
 import 'package:todomodu_app/features/notice/presentation/providers/notice_providers.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_form.dart';
 import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/expanded_text_box/notice_check_button.dart';
@@ -27,14 +26,16 @@ class _NoticeDetailPageState extends ConsumerState<NoticeDetailPage> {
   @override
   void initState() {
     super.initState();
-    isChecked = !widget.notice.isUnread(widget.currentUser.userId);
+    isChecked = widget.notice.checkedUsers.any(
+      (user) => user.userId == widget.currentUser.userId,
+    );
   }
 
   void handleCheck() {
     if (isChecked) return;
 
     final vm = ref.read(noticeListViewModelProvider.notifier);
-    vm.markAsRead(notice: widget.notice,);
+    vm.markNoticeAsRead(widget.notice); // ✅ ViewModel 내부에서 userProvider 사용
 
     setState(() {
       isChecked = true;

@@ -48,4 +48,6 @@ abstract interface class NoticeRepository {
   Future<Result<List<Notice>>> fetchNoticesbyProjects(List<Project> projects);
 
   Stream<List<Notice>> watchNoticesByProjectIds(List<String> ids);
+
+  Stream<List<Notice>> watchNoticesByProjectId(String projectId);
 }

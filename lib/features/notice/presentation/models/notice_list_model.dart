@@ -1,57 +1,40 @@
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
-import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/domain/entities/simple_project_info.dart';
+import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class NoticeListModel {
+  final List<Notice> notices;
   final List<SimpleProjectInfo> projects;
   final List<SimpleProjectInfo> selectedProjects;
-  final List<Notice> notices;
-  final List<Notice> selectedNotices;
-  final bool isLoading;
-  final String? error;
+  final UserEntity currentUser;
 
   NoticeListModel({
-    required this.projects,
     required this.notices,
-    required this.isLoading,
-    List<SimpleProjectInfo>? selectedProjects,
-    List<Notice>? selectedNotices,
-    this.error,
-  }) : selectedProjects =
-           selectedProjects ?? List<SimpleProjectInfo>.from(projects),
-       selectedNotices = selectedNotices ?? List<Notice>.from(notices);
+    required this.projects,
+    required this.selectedProjects,
+    required this.currentUser,
+  });
 
-  /// ✅ 초기 상태 생성자
-  factory NoticeListModel.initial() {
+  factory NoticeListModel.initial({required UserEntity currentUser}) {
     return NoticeListModel(
-      projects: [],
       notices: [],
-      isLoading: false,
+      projects: [],
       selectedProjects: [],
-      selectedNotices: [],
-      error: null,
+      currentUser: currentUser,
     );
   }
 
   NoticeListModel copyWith({
+    List<Notice>? notices,
     List<SimpleProjectInfo>? projects,
     List<SimpleProjectInfo>? selectedProjects,
-    List<Notice>? notices,
-    List<Notice>? selectedNotices,
-    bool? isLoading,
-    String? error,
+    UserEntity? currentUser,
   }) {
     return NoticeListModel(
+      notices: notices ?? this.notices,
       projects: projects ?? this.projects,
       selectedProjects: selectedProjects ?? this.selectedProjects,
-      notices: notices ?? this.notices,
-      selectedNotices: selectedNotices ?? this.selectedNotices,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
+      currentUser: currentUser ?? this.currentUser,
     );
-  }
-
-  List<Notice> getNoticesByProject(String projectId) {
-    return notices.where((n) => n.projectId == projectId).toList();
   }
 }
