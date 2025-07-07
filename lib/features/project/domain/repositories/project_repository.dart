@@ -1,4 +1,5 @@
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/entities/simple_project_info.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
@@ -23,4 +24,11 @@ abstract interface class ProjectRepository {
     required String projectId,
     required String userId,
   });
+
+  // 사용자가 속한 프로젝트 ID들을 실시간으로 스트리밍
+  Stream<List<String>> watchProjectIdsByUser(UserEntity user);
+  
+  Stream<List<SimpleProjectInfo>> watchSimpleProjectInfosByUser(
+    UserEntity user,
+  );
 }

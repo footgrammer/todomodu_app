@@ -15,6 +15,17 @@ class UserEntity {
     required this.createdAt,
   });
 
+  /// 알 수 없는 사용자용 정적 생성자
+  factory UserEntity.unknown() {
+    return UserEntity(
+      userId: 'unknown',
+      name: '알 수 없음',
+      profileImageUrl: '',
+      email: '',
+      createdAt: DateTime(2000), // 오래된 기본값
+    );
+  }
+
   UserEntity.fromJson(Map<String, dynamic> map)
       : this(
           userId: map['userId'] ?? '',

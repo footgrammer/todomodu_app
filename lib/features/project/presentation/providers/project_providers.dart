@@ -11,6 +11,7 @@ import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_
 import 'package:todomodu_app/features/project/domain/usecases/fetch_projects_by_user_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/fetch_project_by_id_usecase.dart';
 import 'package:todomodu_app/features/project/domain/usecases/get_project_by_invitation_code_usecase.dart';
+import 'package:todomodu_app/features/project/domain/usecases/watch_simple_project_by_user_usecase.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_create_state.dart';
 import 'package:todomodu_app/features/project/presentation/models/project_list_state.dart';
 import 'package:todomodu_app/features/project/presentation/viewmodels/project_create_view_model.dart';
@@ -102,3 +103,11 @@ final addMemberToProjectUsecaseProvider = Provider<AddMemberToProjectUsecase>((
 final deleteProjectUsecaseProvider = Provider<DeleteProjectUsecase>((ref) {
   return DeleteProjectUsecase(ref.read(projectRepositoryProvider));
 });
+
+final watchSimpleProjectsByUserUsecaseProvider =
+    Provider<WatchSimpleProjectsByUserUsecase>(
+  (ref) {
+    final projectRepository = ref.read(projectRepositoryProvider);
+    return WatchSimpleProjectsByUserUsecase(repository: projectRepository);
+  },
+);

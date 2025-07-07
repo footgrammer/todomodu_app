@@ -16,4 +16,8 @@ abstract interface class NoticeDatasource {
 
   Future<Result<NoticeDto>> updateNotice(NoticeDto noticeDto);
 
+  Stream<Result<List<NoticeDto>>> watchNoticesByProjectIds(List<String> projectIds);
+
+  Stream<Result<List<NoticeDto>>> watchNoticesByProjectId(String projectId);
+
 }

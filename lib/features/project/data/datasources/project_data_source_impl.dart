@@ -1,210 +1,146 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todomodu_app/features/project/data/datasources/project_data_source.dart';
 import 'package:todomodu_app/features/project/data/models/project_dto.dart';
-import 'package:todomodu_app/features/todo/domain/entities/todo.dart';
 import 'package:todomodu_app/shared/types/result.dart';
 
 class ProjectDataSourceImpl implements ProjectDataSource {
   final FirebaseFirestore _firestore;
 
-  ProjectDataSourceImpl({required FirebaseFirestore firestore})
-    : _firestore = firestore;
+  ProjectDataSourceImpl({FirebaseFirestore? firestore})
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  @override
-  Future<List<ProjectDto>> fetchProjectsByUserId(String userId) async {
-    try {
-      // 1. userId로 members 문서들 조회
-      final memberDocs =
-          await _firestore
-              .collectionGroup('members')
-              .where('userId', isEqualTo: userId)
-              .get();
-      // 2. 각 member 문서의 상위 projectId 추출
-      final projectIds =
-          memberDocs.docs
-              .map((doc) => doc.reference.parent.parent?.id)
-              .whereType<String>()
-              .toSet();
-
-      if (projectIds.isEmpty) return [];
-
-      // 3. projectId로 projects 문서들 불러오기
-      final projectList = await Future.wait(
-        projectIds.map((id) async {
-          final doc = await _firestore.collection('projects').doc(id).get();
-          if (!doc.exists) return null;
-
-          final data = doc.data();
-          if (data == null) return null;
-
-          return ProjectDto.fromJson({...data, 'id': doc.id});
-        }),
-      );
-
-      //4. 유효한 프로젝트만 필터링
-      return projectList.whereType<ProjectDto>().toList();
-    } catch (e, stack) {
-      log('🔥 프로젝트 불러오기 실패: $e\n$stack');
-      return [];
-    }
-  }
+  CollectionReference<Map<String, dynamic>> get _projectsRef =>
+      _firestore.collection('projects');
 
   @override
   Future<Result<List<ProjectDto>>> getProjectsByUserId(String userId) async {
     try {
-      final memberDocs =
-          await _firestore
-              .collectionGroup('members')
-              .where('userId', isEqualTo: userId)
-              .get();
+      final query =
+          await _projectsRef.where('memberIds', arrayContains: userId).get();
 
-      final projectIds =
-          memberDocs.docs
-              .map((doc) => doc.reference.parent.parent?.id)
-              .whereType<String>()
-              .toSet()
+      final dtos =
+          query.docs
+              .map((doc) => ProjectDto.fromJson({...doc.data(), 'id': doc.id}))
               .toList();
-
-      if (projectIds.isEmpty) {
-        return Result.ok([]);
-      }
-
-      final futures = projectIds.map((projectId) async {
-        final projectDoc =
-            await _firestore.collection('projects').doc(projectId).get();
-        if (!projectDoc.exists) return null;
-        return ProjectDto.fromJson(projectDoc.data()!..['id'] = projectDoc.id);
-      });
-
-      final projectList = await Future.wait(futures);
-      final validProjects = projectList.whereType<ProjectDto>().toList();
-      return Result.ok(validProjects);
+      return Result.ok(dtos);
     } catch (e) {
-      return Result.error(Exception('Failed to load projects: $e'));
+      return Result.error(Exception('getProjectsByUserId failed: $e'));
     }
   }
 
   @override
   Future<ProjectDto?> getProjectDtoById(String projectId) async {
-    try {
-      final doc = await _firestore.collection('projects').doc(projectId).get();
-      if (!doc.exists) return null;
-      return ProjectDto.fromJson(doc.data()!..['id'] = doc.id);
-    } catch (e) {
-      rethrow;
-    }
-  } //추가
+    final doc = await _projectsRef.doc(projectId).get();
+    if (!doc.exists) return null;
 
-  @override
-  Future<Result<List<String>>> getMemberIdsByProjectId(String projectId) async {
-    try {
-      final snapshot =
-          await _firestore
-              .collection('projects')
-              .doc(projectId)
-              .collection('members')
-              .get();
-
-      final ids = snapshot.docs.map((doc) => doc['userId'] as String).toList();
-      return Result.ok(ids);
-    } catch (e) {
-      return Result.error(Exception('Failed to fetch memberIds: $e'));
-    }
+    return ProjectDto.fromJson({...doc.data()!, 'id': doc.id});
   }
 
   @override
-  Future<void> createProject(ProjectDto projectDto, List<Todo> todos) async {
-    try {
-      // 프로젝트 생성
-      final projectRef = await _firestore
-          .collection('projects')
-          .add(projectDto.toJson());
-      await projectRef.update({'id': projectRef.id});
-      //members 생성
-      final memberRef = projectRef
-          .collection('members')
-          .doc(projectDto.ownerId);
-      memberRef.set({'userId': projectDto.ownerId});
+  Future<List<ProjectDto>> fetchProjectsByUserId(String userId) async {
+    final query =
+        await _projectsRef.where('memberIds', arrayContains: userId).get();
 
-      // todo 생성
-      for (final todo in todos) {
-        final todoRef = projectRef.collection('todos').doc();
-        await todoRef.set({
-          'id': todoRef.id,
-          'projectId': projectRef.id,
-          'title': todo.title,
-          'startDate': Timestamp.fromDate(todo.startDate),
-          'endDate': Timestamp.fromDate(todo.endDate),
-          'isDone': false,
-        });
-
-        // subtask 생성
-        for (final subtask in todo.subtasks) {
-          final subtaskRef = projectRef.collection('subtasks').doc();
-          await subtaskRef.set({
-            'id': subtaskRef.id,
-            'todoId': todoRef.id,
-            'projectId': projectRef.id,
-            'title': subtask.title,
-            'assigneeId': '',
-            'isDone': false,
-          });
-        }
-      }
-    } catch (error) {
-      log('error : $error');
-    }
+    return query.docs
+        .map((doc) => ProjectDto.fromJson({...doc.data(), 'id': doc.id}))
+        .toList();
   }
 
   @override
-  Future<ProjectDto?> getProjectByInvitationCode(String code) async {
-    try {
-      final query =
-          await _firestore
-              .collection('projects')
-              .where('invitationCode', isEqualTo: code)
-              .limit(1)
-              .get();
-
-      if (query.docs.isEmpty) return null;
-      final doc = query.docs.first;
-      return ProjectDto.fromJson({...doc.data(), 'id': doc.id});
-    } catch (error) {
-      log('project_data_source_impl/getProjectByInvitationCode error : $error');
-    }
+  Future<void> createProject(ProjectDto projectDto, List todos) async {
+    final docRef = _projectsRef.doc(projectDto.id);
+    await docRef.set(projectDto.toJson());
   }
 
-  //팀원 추가하기
+  @override
+  Future<void> deleteProject(String projectId) async {
+    await _projectsRef.doc(projectId).delete();
+  }
+
   @override
   Future<void> addMemberToProject({
     required String projectId,
     required String userId,
   }) async {
-    final memberRef = _firestore
-        .collection('projects')
-        .doc(projectId)
-        .collection('members')
-        .doc(userId);
-
-    await memberRef.set({'userId': userId});
+    final docRef = _projectsRef.doc(projectId);
+    await docRef.update({
+      'memberIds': FieldValue.arrayUnion([userId]),
+    });
   }
 
   @override
-  Future<void> deleteProject(String projectId) async {
-    final projectRef = _firestore.collection('projects').doc(projectId);
+  Future<ProjectDto?> getProjectByInvitationCode(String code) async {
+    final query =
+        await _projectsRef
+            .where('invitationCode', isEqualTo: code)
+            .limit(1)
+            .get();
 
-    // 1. 서브컬렉션 삭제
-    final subCollections = ['todos', 'notices', 'members', 'subtasks'];
-    for (final name in subCollections) {
-      final querySnapshot = await projectRef.collection(name).get();
-      for (final doc in querySnapshot.docs) {
-        await doc.reference.delete();
-      }
+    if (query.docs.isEmpty) return null;
+
+    final doc = query.docs.first;
+    return ProjectDto.fromJson({...doc.data(), 'id': doc.id});
+  }
+
+  @override
+  Future<Result<List<String>>> getMemberIdsByProjectId(String projectId) async {
+    try {
+      final doc = await _projectsRef.doc(projectId).get();
+      if (!doc.exists) return Result.error(Exception('Project not found'));
+
+      final data = doc.data();
+      final List<String> memberIds = List<String>.from(
+        data?['memberIds'] ?? [],
+      );
+      return Result.ok(memberIds);
+    } catch (e) {
+      return Result.error(Exception('getMemberIdsByProjectId failed: $e'));
     }
+  }
 
-    // 2. 최종적으로 project 문서 삭제
-    await projectRef.delete();
+  @override
+  Future<Result<List<ProjectDto>>> getProjectDtosByIds(List<String> ids) async {
+    try {
+      if (ids.isEmpty) return Result.ok([]);
+
+      final snapshots = await Future.wait(
+        ids.map((id) => _projectsRef.doc(id).get()),
+      );
+
+      final dtos =
+          snapshots
+              .where((doc) => doc.exists)
+              .map((doc) => ProjectDto.fromJson({...doc.data()!, 'id': doc.id}))
+              .toList();
+
+      return Result.ok(dtos);
+    } catch (e) {
+      return Result.error(Exception('getProjectDtosByIds failed: $e'));
+    }
+  }
+
+  @override
+  Stream<List<String>> watchProjectIdsByUserId(String userId) {
+    return _projectsRef
+        .where('memberIds', arrayContains: userId)
+        .snapshots()
+        .map((snap) => snap.docs.map((doc) => doc.id).toList());
+  }
+
+  @override
+  Stream<List<ProjectDto>> watchProjectDtosByUserId(String userId) {
+    return _firestore
+        .collection('projects')
+        .where('memberIds', arrayContains: userId)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            return ProjectDto.fromJson({
+              ...data,
+              'id': doc.id, // id는 문서 ID로 수동 삽입
+            });
+          }).toList();
+        });
   }
 }

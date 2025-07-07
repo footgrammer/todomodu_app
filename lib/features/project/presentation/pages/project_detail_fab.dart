@@ -55,18 +55,13 @@ Widget buildFab({
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100),
             ),
-            onPressed: () async {
-              final result = await Navigator.push(
+            onPressed: () {
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => NoticeCreatePage(projectId: projectId),
                 ),
               );
-              if (result is Notice) {
-                ref
-                    .read(noticeListViewModelProvider.notifier)
-                    .addCreatedNotice(result);
-              }
             },
             icon: const Icon(Icons.add),
             label: Text('공지 작성', style: AppTextStyles.subtitle1),

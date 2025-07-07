@@ -1,59 +1,40 @@
 import 'package:todomodu_app/features/notice/domain/entities/notice.dart';
-import 'package:todomodu_app/features/project/domain/entities/project.dart';
+import 'package:todomodu_app/features/project/domain/entities/simple_project_info.dart';
 import 'package:todomodu_app/features/user/domain/entities/user_entity.dart';
 
 class NoticeListModel {
-  final List<Project> projects;
-  final List<Project> selectedProjects;
   final List<Notice> notices;
-  final List<Notice> selectedNotices;
-  final bool isLoading;
-  final String? error;
-  final UserEntity? currentUser;
+  final List<SimpleProjectInfo> projects;
+  final List<SimpleProjectInfo> selectedProjects;
+  final UserEntity currentUser;
 
   NoticeListModel({
-    required this.projects,
     required this.notices,
-    List<Project>? selectedProjects,
-    List<Notice>? selectedNotices,
+    required this.projects,
+    required this.selectedProjects,
     required this.currentUser,
-    required this.isLoading,
-    this.error,
-  }) :
-    selectedProjects = selectedProjects ?? List<Project>.from(projects),
-    selectedNotices = selectedNotices ?? List<Notice>.from(notices);
+  });
 
-  NoticeListModel copyWith({
-    List<Project>? projects,
-    List<Project>? selectedProjects,
-    List<Notice>? notices,
-    List<Notice>? selectedNotices,
-    UserEntity? currentUser,
-    bool? isLoading,
-    String? error,
-  }) {
-    final newProjects = projects ?? this.projects;
-    final newNotices = notices ?? this.notices;
+  factory NoticeListModel.initial({required UserEntity currentUser}) {
     return NoticeListModel(
-      projects: newProjects,
-      selectedProjects: selectedProjects ?? this.selectedProjects,
-      notices: newNotices,
-      selectedNotices: selectedNotices ?? this.selectedNotices,
-      isLoading: isLoading ?? this.isLoading,
-      currentUser: currentUser ?? this.currentUser,
-      error: error ?? this.error,
+      notices: [],
+      projects: [],
+      selectedProjects: [],
+      currentUser: currentUser,
     );
   }
 
-  factory NoticeListModel.initial() {
+  NoticeListModel copyWith({
+    List<Notice>? notices,
+    List<SimpleProjectInfo>? projects,
+    List<SimpleProjectInfo>? selectedProjects,
+    UserEntity? currentUser,
+  }) {
     return NoticeListModel(
-      projects: [],
-      selectedProjects: [],
-      notices: [],
-      selectedNotices: [],
-      isLoading: false,
-      currentUser: null,
-      error: null,
+      notices: notices ?? this.notices,
+      projects: projects ?? this.projects,
+      selectedProjects: selectedProjects ?? this.selectedProjects,
+      currentUser: currentUser ?? this.currentUser,
     );
   }
 }

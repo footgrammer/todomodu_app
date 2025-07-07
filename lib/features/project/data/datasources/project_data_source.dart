@@ -14,4 +14,8 @@ abstract interface class ProjectDataSource {
     required String userId,
   });
   Future<void> deleteProject(String projectId);
+  Future<Result<List<ProjectDto>>> getProjectDtosByIds(List<String> ids);
+  Stream<List<String>> watchProjectIdsByUserId(String userId);
+  Stream<List<ProjectDto>> watchProjectDtosByUserId(String userId);
+
 }
