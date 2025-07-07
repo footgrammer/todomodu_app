@@ -117,7 +117,7 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage>
                     children: [
                       ProjectInfoHeader(project: project),
                       const SizedBox(height: 32),
-                      ProjectMemberSection(members: project.members),
+                      ProjectMemberSection(project: project),
                       const SizedBox(height: 24),
                     ],
                   ),

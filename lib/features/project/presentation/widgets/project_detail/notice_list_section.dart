@@ -5,6 +5,7 @@ import 'package:todomodu_app/features/notice/presentation/widgets/notice_list/no
 import 'package:todomodu_app/features/project/domain/entities/project.dart';
 import 'package:todomodu_app/features/project/domain/entities/simple_project_info.dart';
 import 'package:todomodu_app/features/user/presentation/providers/user_providers.dart';
+import 'package:todomodu_app/shared/constants/app_colors.dart';
 
 class NoticeListSection extends ConsumerWidget {
   const NoticeListSection({required this.project, super.key});
@@ -23,7 +24,10 @@ class NoticeListSection extends ConsumerWidget {
 
     final currentUser = userAsync.value!;
 
-    return Padding(
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.grey75,
+      ),
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 34),
       child: noticesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
