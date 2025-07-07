@@ -39,10 +39,7 @@ class InviteMemberDialog extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 76,
-                    vertical: 16,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
