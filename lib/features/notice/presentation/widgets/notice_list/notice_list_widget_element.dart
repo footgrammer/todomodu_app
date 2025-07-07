@@ -10,11 +10,13 @@ class NoticeListWidgetElement extends StatelessWidget {
   const NoticeListWidgetElement({
     required this.notice,
     required this.currentUser,
+    this.projectColor = AppColors.grey100,
     super.key,
   });
 
   final Notice notice;
   final UserEntity currentUser;
+  final Color projectColor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class NoticeListWidgetElement extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
-        color: AppColors.grey100,
+        color: projectColor ?? AppColors.grey100,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(

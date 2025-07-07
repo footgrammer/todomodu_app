@@ -39,6 +39,7 @@ class NoticeListPage extends ConsumerWidget {
                 child: NoticeListWidget(
                   notices: model.filteredNotices,
                   currentUser: model.currentUser,
+                  projects: model.projects,
                 ),
               ),
             ],
