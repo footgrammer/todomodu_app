@@ -59,6 +59,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- FCM설정 -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="default_channel"/>
     </application>
 
     <!-- Flutter 텍스트 처리 플러그인 관련 쿼리 -->
