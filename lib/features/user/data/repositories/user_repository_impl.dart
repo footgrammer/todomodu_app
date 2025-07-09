@@ -10,8 +10,9 @@ import 'package:todomodu_app/features/user/domain/repositories/user_repository.d
 import 'package:todomodu_app/shared/types/result.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  UserRepositoryImpl({required UserDataSource userDataSource})
-    : _userDataSource = userDataSource;
+  UserRepositoryImpl({
+    required UserDataSource userDataSource,
+  }) : _userDataSource = userDataSource;
 
   final UserDataSource _userDataSource;
   final userRef = FirebaseFirestore.instance.collection('users');
@@ -95,4 +96,10 @@ class UserRepositoryImpl implements UserRepository {
       Error(:final error) => Result.error(error),
     };
   }
+
+  @override
+  Future<void> saveFcmToken(String userId, String token) {
+    return _userDataSource.updateFcmToken(userId, token);
+  }
+
 }

@@ -8,4 +8,5 @@ abstract interface class UserDataSource {
   Future<UserDto?> getFutureUserByUserId(String userId);
   Future<Result<UserDto>> getFutureUserResultByUserId(String userId);
   Future<Result<UserDto>> getCurrentUserFuture();
+  Future<void> updateFcmToken(String userId, String token);
 }

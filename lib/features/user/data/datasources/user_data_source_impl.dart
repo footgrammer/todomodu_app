@@ -109,16 +109,24 @@ class UserDataSourceImpl implements UserDataSource {
 
       final doc =
           await _firestore.collection('users').doc(firebaseUser.uid).get();
-
       if (!doc.exists) {
         return Result.error(Exception('사용자 문서를 찾을 수 없습니다.'));
       }
 
       final data = doc.data()!..['userId'] = doc.id;
-      return Result.ok(UserDto.fromJson(data));
+      final user = UserDto.fromJson(data);
+
+      return Result.ok(user);
     } catch (e) {
       log('getCurrentUserFuture error: $e');
       return Result.error(Exception('현재 사용자 정보를 가져오는 데 실패했습니다: $e'));
     }
+  }
+
+  @override
+  Future<void> updateFcmToken(String userId, String token) async {
+    await _firestore.collection('users').doc(userId).update({
+      'fcmToken': token,
+    });
   }
 }

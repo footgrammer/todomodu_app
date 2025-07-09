@@ -10,4 +10,5 @@ abstract interface class UserRepository {
   Future<void> uploadProfileImage(String userId);
   Future<Result<UserEntity>> getUserFutureById(String userId);
   Future<Result<UserEntity>> getCurrentUserFuture();
+  Future<void> saveFcmToken(String userId, String token);
 }

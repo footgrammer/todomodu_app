@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todomodu_app/features/notification/data/datasources/fcm_data_source.dart';
+import 'package:todomodu_app/features/notification/data/datasources/fcm_data_source_impl.dart';
 import 'package:todomodu_app/features/user/data/datasources/user_data_source.dart';
 import 'package:todomodu_app/features/user/data/datasources/user_data_source_impl.dart';
 import 'package:todomodu_app/features/user/data/repositories/user_repository_impl.dart';
@@ -11,6 +14,7 @@ import 'package:todomodu_app/features/user/domain/usecases/get_current_user_futu
 import 'package:todomodu_app/features/user/domain/usecases/get_current_user_usecase_impl.dart';
 import 'package:todomodu_app/features/user/domain/usecases/get_user_by_user_id_usecase.dart';
 import 'package:todomodu_app/features/user/domain/usecases/get_user_by_user_id_usecase_impl.dart';
+import 'package:todomodu_app/features/user/domain/usecases/register_fcm_token_usecase.dart';
 
 final _userDataSourceProvider = Provider<UserDataSource>((ref) {
   return UserDataSourceImpl(
@@ -18,6 +22,13 @@ final _userDataSourceProvider = Provider<UserDataSource>((ref) {
     firestore: FirebaseFirestore.instance,
   );
 });
+
+final _fcmDataSourceProvider = Provider<FcmDataSource>((ref) {
+  return FcmDataSourceImpl(
+    messaging : FirebaseMessaging.instance,
+    firestore : FirebaseFirestore.instance,
+  );
+},);
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   final userDataSource = ref.read(_userDataSourceProvider);
@@ -51,5 +62,11 @@ final userProvider = StreamProvider<UserEntity?>((ref) {
 final getCurrentUserFutureUsecaseProvider = Provider<GetCurrentUserFutureUsecase>((ref) {
   final userRepository = ref.watch(userRepositoryProvider);
   return GetCurrentUserFutureUsecaseImpl(userRepository: userRepository);
+});
+
+final registerFcmTokenUseCaseProvider = Provider<RegisterFcmTokenUseCase>((ref) {
+  final userRepository = ref.watch(userRepositoryProvider);
+  final fcmDataSource = ref.read(_fcmDataSourceProvider);
+  return RegisterFcmTokenUseCase(userRepository: userRepository, fcmDataSource: fcmDataSource);
 });
 

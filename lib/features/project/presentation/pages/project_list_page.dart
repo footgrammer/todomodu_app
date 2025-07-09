@@ -10,6 +10,7 @@ import 'package:todomodu_app/features/project/presentation/pages/project_create_
 import 'package:todomodu_app/features/project/presentation/providers/project_providers.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_card_list.dart';
 import 'package:todomodu_app/features/project/presentation/widgets/project/project_search_bar.dart';
+import 'package:todomodu_app/features/user/presentation/viewmodels/user_view_model.dart';
 import 'package:todomodu_app/shared/themes/app_theme.dart';
 import 'package:todomodu_app/shared/utils/navigate_to_page.dart';
 
@@ -113,6 +114,7 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
     final state = ref.watch(projectListViewModelProvider);
     final viewModel = ref.read(projectListViewModelProvider.notifier);
     final hasFetched = ref.watch(hasFetchedProvider);
+    final _ = ref.watch(userViewModelProvider);
 
     if (!hasFetched) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
